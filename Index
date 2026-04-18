@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Evrima Growth Sounds</title>
+    <style>
+        body { background-color: #121212; color: #e0e0e0; font-family: sans-serif; padding: 20px; }
+        .container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .table-section { flex: 1; min-width: 450px; }
+        
+        /* Header Colors */
+        .herb-header { background-color: #2e7d32; padding: 10px; font-weight: bold; }
+        .carn-header { background-color: #c62828; padding: 10px; font-weight: bold; }
+
+        table { width: 100%; border-collapse: collapse; background-color: #1e1e1e; margin-top: 5px; }
+        th, td { border: 1px solid #333; padding: 8px; text-align: center; font-size: 14px; }
+        th { background-color: #252525; }
+        
+        /* The Audio Button */
+        .play-btn { cursor: pointer; color: #4fc3f7; text-decoration: none; font-size: 18px; }
+        .play-btn:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <h2>Evrima Growth Sounds</h2>
+
+    <div class="container">
+        <div class="table-section">
+            <div class="herb-header">Herbivores</div>
+            <table>
+                <tr>
+                    <th>Species</th>
+                    <th>Class</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th><th>F</th>
+                </tr>
+                <tr>
+                    <td>Tenontosaurus</td>
+                    <td>Adult</td>
+                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
+                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
+                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
+                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
+                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="table-section">
+            <div class="carn-header">Carnivores</div>
+            <table>
+                <tr>
+                    <th>Species</th>
+                    <th>Class</th>
+                    <th>1</th><th>2</th><th>3</th><th>4</th><th>F</th>
+                </tr>
+                <tr>
+                    <td>Omniraptor</td>
+                    <td>Adult</td>
+                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
+                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
+                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
+                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
+                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let currentAudio = null;
+        function play(url) {
+            if (currentAudio) { currentAudio.pause(); }
+            currentAudio = new Audio(url);
+            currentAudio.play();
+        }
+    </script>
+</body>
+</html>
