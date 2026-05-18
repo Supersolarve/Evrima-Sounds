@@ -8,7 +8,7 @@
         /* Global Theme */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* 🟢 Fixes the deep background void */
+        /* Forces the deep background void to match */
         html, body { background-color: #1a2520; min-height: 100vh; }
         
         body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; }
@@ -34,6 +34,9 @@
         .controls-bar label { font-weight: bold; color: #a5d6b8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
         .volume-slider { flex-grow: 1; max-width: 250px; cursor: pointer; accent-color: #4ade80; }
         .spacer { width: 20px; border-right: 1px solid #23332c; height: 20px; }
+        
+        /* Pushes the FOV slider to the right */
+        .right-controls { margin-left: auto; display: flex; align-items: center; gap: 15px; }
 
         /* Toggle Switch */
         .toggle-wrapper { display: flex; align-items: center; gap: 10px; }
@@ -47,7 +50,6 @@
         /* Soundboard Grid */
         .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; }
         
-        /* 🟢 FIX: height and overflow limits actually completely deleted this time */
         .column-wrapper { flex: 1; min-width: 300px; height: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; }
         
         .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; }
@@ -142,17 +144,17 @@
     
     <div class="spacer"></div>
     
-    <label for="fovSlider">UI Scale (FOV)</label>
-    <input type="range" id="fovSlider" class="volume-slider" min="0.5" max="1.5" step="0.05" value="1">
-    
-    <div class="spacer"></div>
-    
     <div class="toggle-wrapper">
         <label class="switch">
             <input type="checkbox" id="infoToggle">
             <span class="slider"></span>
         </label>
         <label for="infoToggle">Show Details & Images</label>
+    </div>
+
+    <div class="right-controls">
+        <label for="fovSlider">UI Scale (FOV)</label>
+        <input type="range" id="fovSlider" class="volume-slider" min="0.7" max="1.2" step="0.05" value="1" style="max-width: 150px;">
     </div>
 </div>
 
