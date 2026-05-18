@@ -2,78 +2,349 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Evrima Growth Sounds</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evrima Soundboard | Noobz</title>
     <style>
-        body { background-color: #121212; color: #e0e0e0; font-family: sans-serif; padding: 20px; }
-        .container { display: flex; gap: 20px; flex-wrap: wrap; }
-        .table-section { flex: 1; min-width: 450px; }
+        /* Global Theme */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* Header Colors */
-        .herb-header { background-color: #2e7d32; padding: 10px; font-weight: bold; }
-        .carn-header { background-color: #c62828; padding: 10px; font-weight: bold; }
+        body {
+            background-color: #1a2520; 
+            color: #d8e3dd; 
+            font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif;
+            font-size: 13px;
+            padding: 15px;
+            overflow-x: hidden;
+        }
 
-        table { width: 100%; border-collapse: collapse; background-color: #1e1e1e; margin-top: 5px; }
-        th, td { border: 1px solid #333; padding: 8px; text-align: center; font-size: 14px; }
-        th { background-color: #252525; }
+        /* Banner */
+        .discord-banner {
+            background-color: #131b17; 
+            border: 1px solid #23332c; 
+            border-radius: 8px;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
         
-        /* The Audio Button */
-        .play-btn { cursor: pointer; color: #4fc3f7; text-decoration: none; font-size: 18px; }
-        .play-btn:hover { color: #fff; }
+        .discord-text {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff; 
+        }
+        
+        .discord-link {
+            background-color: #27a35b; 
+            color: #ffffff; 
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.2s ease;
+        }
+        
+        .discord-link:hover {
+            background-color: #1f8549; 
+        }
+
+        /* NEW: Control Bar for Volume */
+        .controls-bar {
+            background-color: #141d19;
+            border: 1px solid #23332c;
+            border-radius: 8px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .controls-bar label {
+            font-weight: bold;
+            color: #a5d6b8;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .volume-slider {
+            flex-grow: 1;
+            max-width: 250px;
+            cursor: pointer;
+            accent-color: #4ade80; /* Matches the neon green of your play buttons */
+        }
+
+        /* Grid Layout */
+        .soundboard-grid {
+            display: flex;
+            align-items: flex-start; /* Wraps bottom tightly */
+            gap: 15px;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Column Containers */
+        .column-wrapper {
+            flex: 1;
+            min-width: 300px;
+            height: auto; 
+            max-height: 85vh; /* Scrollbar appears only if needed */
+            overflow-y: auto; 
+            background-color: #141d19; 
+            border: 1px solid #23332c; 
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        /* Headers */
+        .column-title {
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .herb-column .column-title { background-color: #2a4734; color: #a5d6b8; }
+        .carn-column .column-title { background-color: #4a2727; color: #d6a5a5; }
+        .omni-column .column-title { background-color: #3b2a47; color: #c4a5d6; }
+
+        /* Accordion Styles */
+        .dino-card {
+            background-color: #1b2822; 
+            border: 1px solid #283a32; 
+            margin-bottom: 8px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+        .dino-toggle {
+            width: 100%;
+            background-color: transparent;
+            border: none;
+            color: #ffffff; 
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+        
+        .dino-toggle:hover { background-color: #24352d; }
+        
+        .arrow {
+            font-size: 10px;
+            color: #728f80; 
+            transition: transform 0.3s ease;
+        }
+
+        /* Panel */
+        .dino-panel {
+            display: none;
+            background-color: #16201b; 
+            padding: 6px 10px;
+            border-top: 1px solid #23332c; 
+        }
+
+        /* Active States */
+        .dino-card.active { border-color: #3a5448; }
+        .dino-card.active .dino-toggle { background-color: #213029; }
+        .dino-card.active .dino-panel { display: block; }
+        .dino-card.active .arrow { transform: rotate(180deg); }
+
+        /* Rows */
+        .stage-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid #1f2d26; 
+        }
+        .stage-row:last-child { border-bottom: none; }
+        
+        .stage-label {
+            font-size: 11px;
+            color: #ffffff; 
+            font-weight: bold;
+            flex-shrink: 0;
+            width: 75px;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .call-btn {
+            background-color: #25382e; 
+            border: 1px solid #2e4539; 
+            color: #4ade80; 
+            font-weight: bold;
+            font-size: 11px;
+            border-radius: 4px;
+            padding: 4px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .call-btn:hover {
+            background-color: #314a3d; 
+            border-color: #4ade80; 
+            color: #ffffff; 
+            transform: translateY(-1px);
+        }
+        .call-btn:active { transform: translateY(1px); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #141d19; }
+        ::-webkit-scrollbar-thumb { background: #2a3d34; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #354d41; }
     </style>
 </head>
 <body>
 
-    <h2>Evrima Growth Sounds</h2>
+<div class="discord-banner">
+    <div class="discord-text">Looking for a pack or need help with The Isle?</div>
+    <a href="https://discord.gg/Noobz" target="_blank" class="discord-link">Join discord.gg/Noobz</a>
+</div>
 
-    <div class="container">
-        <div class="table-section">
-            <div class="herb-header">Herbivores</div>
-            <table>
-                <tr>
-                    <th>Species</th>
-                    <th>Class</th>
-                    <th>1</th><th>2</th><th>3</th><th>4</th><th>F</th>
-                </tr>
-                <tr>
-                    <td>Tenontosaurus</td>
-                    <td>Adult</td>
-                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
-                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
-                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
-                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
-                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
-                </tr>
-            </table>
-        </div>
+<div class="controls-bar">
+    <label for="masterVolume">Master Volume</label>
+    <input type="range" id="masterVolume" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
+</div>
 
-        <div class="table-section">
-            <div class="carn-header">Carnivores</div>
-            <table>
-                <tr>
-                    <th>Species</th>
-                    <th>Class</th>
-                    <th>1</th><th>2</th><th>3</th><th>4</th><th>F</th>
-                </tr>
-                <tr>
-                    <td>Omniraptor</td>
-                    <td>Adult</td>
-                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
-                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
-                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
-                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
-                    <td><span class="play-btn" onclick="play('URL_HERE')">♪</span></td>
-                </tr>
-            </table>
-        </div>
+<div class="soundboard-grid">
+    <div class="column-wrapper herb-column" id="herb-container">
+        <div class="column-title">Herbivores</div>
     </div>
+    <div class="column-wrapper carn-column" id="carn-container">
+        <div class="column-title">Carnivores</div>
+    </div>
+    <div class="column-wrapper omni-column" id="omni-container">
+        <div class="column-title">Omnivores</div>
+    </div>
+</div>
 
-    <script>
-        let currentAudio = null;
-        function play(url) {
-            if (currentAudio) { currentAudio.pause(); }
-            currentAudio = new Audio(url);
-            currentAudio.play();
+<script>
+    let activeAudio = null;
+    
+    // Grab the volume slider element and its current value
+    const volumeControl = document.getElementById('masterVolume');
+    let currentVolume = volumeControl.value;
+
+    // Listen for the user dragging the slider
+    volumeControl.addEventListener('input', function(e) {
+        currentVolume = e.target.value;
+        // If a dino is roaring right now, change its volume immediately
+        if (activeAudio) {
+            activeAudio.volume = currentVolume;
         }
-    </script>
+    });
+
+    function play(fileName) {
+        // This block ensures ONLY one sound plays at a time
+        if (activeAudio) {
+            activeAudio.pause();
+            activeAudio.currentTime = 0;
+        }
+        
+        const safePath = 'audio/' + encodeURIComponent(fileName) + '.mp3';
+        
+        activeAudio = new Audio(safePath);
+        
+        // Apply the master volume to the new sound BEFORE it plays
+        activeAudio.volume = currentVolume; 
+        
+        activeAudio.play().catch(err => {
+            console.error("Missing audio file:", safePath);
+            alert("File missing. Code is looking for exactly: " + fileName + ".mp3");
+        });
+    }
+
+    function toggleDino(btn) {
+        const currentCard = btn.parentElement;
+        const column = currentCard.parentElement;
+        const allCards = column.querySelectorAll('.dino-card');
+        
+        allCards.forEach(card => {
+            if (card !== currentCard) card.classList.remove('active');
+        });
+
+        currentCard.classList.toggle('active');
+    }
+
+    const dinos = {
+        herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"],
+        carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", "Rex", "Troodon"],
+        omnis: ["Beipi", "Galli"]
+    };
+
+    const stages = [
+        { label: "Juvie - 25%", num: "25" },
+        { label: "Sub - 50%", num: "50" },
+        { label: "Adult - 75%", num: "75" }
+    ];
+
+    const calls = ["1", "2", "3", "4", "F"];
+
+    function buildDinoCards(dinoList, containerId) {
+        const container = document.getElementById(containerId);
+        
+        dinoList.forEach(dino => {
+            let stagesHtml = '';
+
+            stages.forEach(stage => {
+                let buttonsHtml = '';
+                calls.forEach(call => {
+                    const fileName = `${dino} ${stage.num} ${call} Call`;
+                    buttonsHtml += `<button class="call-btn" onclick="play('${fileName}')">${call}</button>`;
+                });
+
+                stagesHtml += `
+                    <div class="stage-row">
+                        <span class="stage-label">${stage.label}</span>
+                        <div class="btn-group">
+                            ${buttonsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            const cardHtml = `
+                <div class="dino-card">
+                    <button class="dino-toggle" onclick="toggleDino(this)">
+                        <span>${dino}</span>
+                        <span class="arrow">▼</span>
+                    </button>
+                    <div class="dino-panel">
+                        ${stagesHtml}
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', cardHtml);
+        });
+    }
+
+    // Initialize UI
+    buildDinoCards(dinos.herbs, 'herb-container');
+    buildDinoCards(dinos.carns, 'carn-container');
+    buildDinoCards(dinos.omnis, 'omni-container');
+</script>
+
 </body>
 </html>
