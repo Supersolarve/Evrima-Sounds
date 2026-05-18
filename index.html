@@ -7,7 +7,11 @@
     <style>
         /* Global Theme */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #1a2520; color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; }
+        
+        /* 🟢 FIX: Forces the deep background to be green so the black void disappears */
+        html, body { background-color: #1a2520; min-height: 100vh; }
+        
+        body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; }
 
         /* Banner */
         .discord-banner { background-color: #131b17; border: 1px solid #23332c; border-radius: 8px; padding: 12px 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
@@ -40,9 +44,9 @@
         input:checked + .slider { background-color: #4ade80; }
         input:checked + .slider:before { transform: translateX(16px); background-color: #1a2520; }
 
-        /* Soundboard Grid (Reverted back to flex-start / snug fit) */
+        /* Soundboard Grid */
         .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; }
-        .column-wrapper { flex: 1; min-width: 300px; height: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; }
+        .column-wrapper { flex: 1; min-width: 300px; height: auto; max-height: 75vh; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; }
         .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; }
         .herb-column .column-title { background-color: #2a4734; color: #a5d6b8; }
         .carn-column .column-title { background-color: #4a2727; color: #d6a5a5; }
@@ -129,20 +133,27 @@
     <button class="tab-btn" onclick="switchTab('quiz')">Training Quiz</button>
 </div>
 
-<div id="soundboard-view" class="view-section active">
-    <div class="controls-bar">
-        <label for="masterVolume">Master Volume</label>
-        <input type="range" id="masterVolume" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
-        <div class="spacer"></div>
-        <div class="toggle-wrapper">
-            <label class="switch">
-                <input type="checkbox" id="infoToggle">
-                <span class="slider"></span>
-            </label>
-            <label for="infoToggle">Show Details & Images</label>
-        </div>
+<div class="controls-bar">
+    <label for="masterVolume">Master Volume</label>
+    <input type="range" id="masterVolume" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
+    
+    <div class="spacer"></div>
+    
+    <label for="fovSlider">UI Scale (FOV)</label>
+    <input type="range" id="fovSlider" class="volume-slider" min="0.5" max="1.5" step="0.05" value="1">
+    
+    <div class="spacer"></div>
+    
+    <div class="toggle-wrapper">
+        <label class="switch">
+            <input type="checkbox" id="infoToggle">
+            <span class="slider"></span>
+        </label>
+        <label for="infoToggle">Show Details & Images</label>
     </div>
+</div>
 
+<div id="soundboard-view" class="view-section active">
     <div class="soundboard-grid" id="main-grid">
         <div class="column-wrapper herb-column" id="herb-container">
             <div class="column-title">Herbivores</div>
@@ -230,7 +241,7 @@
 
 <script>
     // =========================================
-    // 1. DATA & DOM CACHE (Optimization: Speed up searches)
+    // 1. DATA & DOM CACHE 
     // =========================================
     const dinos = {
         herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"],
@@ -242,6 +253,7 @@
 
     const DOM = {
         volume: document.getElementById('masterVolume'),
+        fovScale: document.getElementById('fovSlider'), // NEW
         infoToggle: document.getElementById('infoToggle'),
         quizSetup: document.getElementById('quiz-setup'),
         quizActive: document.getElementById('active-quiz-area'),
@@ -251,11 +263,13 @@
         progressText: document.getElementById('quiz-progress-text'),
         guessGrid: document.getElementById('guess-grid'),
         finalScore: document.getElementById('final-score'),
-        finalPun: document.getElementById('final-pun')
+        finalPun: document.getElementById('final-pun'),
+        mainGrid: document.getElementById('main-grid'), // NEW
+        quizContainer: document.querySelector('.quiz-container') // NEW
     };
 
     // =========================================
-    // 2. AUDIO ENGINE
+    // 2. AUDIO ENGINE & FOV SCALER
     // =========================================
     let activeAudio = new Audio(); 
     let currentVolume = DOM.volume.value;
@@ -263,6 +277,13 @@
     DOM.volume.addEventListener('input', e => {
         currentVolume = e.target.value;
         activeAudio.volume = currentVolume;
+    });
+
+    // FOV Slider Logic
+    DOM.fovScale.addEventListener('input', e => {
+        const scaleValue = e.target.value;
+        DOM.mainGrid.style.zoom = scaleValue;
+        DOM.quizContainer.style.zoom = scaleValue;
     });
 
     DOM.infoToggle.addEventListener('change', e => {
@@ -275,7 +296,6 @@
         activeAudio.src = 'audio/' + encodeURIComponent(fileName) + '.mp3';
         activeAudio.volume = currentVolume; 
         
-        // Optimization: Catch rapid-click promises
         const playPromise = activeAudio.play();
         if (playPromise !== undefined) {
             playPromise.catch(err => {
@@ -292,7 +312,7 @@
     // =========================================
     function buildDinoCards(dinoList, containerId) {
         const container = document.getElementById(containerId);
-        let columnHtml = ''; // Optimization: Batch string building
+        let columnHtml = ''; 
 
         dinoList.forEach(dino => {
             let stagesHtml = '';
@@ -300,7 +320,6 @@
                 let buttonsHtml = '';
                 calls.forEach(call => {
                     const fileName = `${dino} ${stage.num} ${call} Call`;
-                    // Optimization: data-file replaces inline onclick
                     buttonsHtml += `<button class="call-btn" data-file="${fileName}">${call}</button>`;
                 });
                 stagesHtml += `
@@ -324,7 +343,6 @@
             columnHtml += `<div class="dino-card"><button class="dino-toggle"><span>${dino}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`;
         });
         
-        // Write to DOM only once per column
         container.insertAdjacentHTML('beforeend', columnHtml);
     }
 
@@ -332,8 +350,7 @@
     buildDinoCards(dinos.carns, 'carn-container');
     buildDinoCards(dinos.omnis, 'omni-container');
 
-    // Optimization: One single event listener for the entire soundboard
-    document.getElementById('main-grid').addEventListener('click', e => {
+    DOM.mainGrid.addEventListener('click', e => {
         if (e.target.classList.contains('call-btn')) {
             play(e.target.dataset.file);
         } else if (e.target.closest('.dino-toggle')) {
@@ -399,7 +416,6 @@
             });
         });
 
-        // Rebuild Guess Grid
         DOM.guessGrid.innerHTML = '';
         activeDinos.forEach(dino => {
             const btn = document.createElement('button');
