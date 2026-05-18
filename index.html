@@ -34,9 +34,6 @@
         .controls-bar label { font-weight: bold; color: #a5d6b8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
         .volume-slider { flex-grow: 1; max-width: 250px; cursor: pointer; accent-color: #4ade80; }
         .spacer { width: 20px; border-right: 1px solid #23332c; height: 20px; }
-        
-        /* Pushes the FOV slider to the right */
-        .right-controls { margin-left: auto; display: flex; align-items: center; gap: 15px; }
 
         /* Toggle Switch */
         .toggle-wrapper { display: flex; align-items: center; gap: 10px; }
@@ -151,11 +148,6 @@
         </label>
         <label for="infoToggle">Show Details & Images</label>
     </div>
-
-    <div class="right-controls">
-        <label for="fovSlider">UI Scale (FOV)</label>
-        <input type="range" id="fovSlider" class="volume-slider" min="0.7" max="1.2" step="0.05" value="1" style="max-width: 150px;">
-    </div>
 </div>
 
 <div id="soundboard-view" class="view-section active">
@@ -258,7 +250,6 @@
 
     const DOM = {
         volume: document.getElementById('masterVolume'),
-        fovScale: document.getElementById('fovSlider'), 
         infoToggle: document.getElementById('infoToggle'),
         quizSetup: document.getElementById('quiz-setup'),
         quizActive: document.getElementById('active-quiz-area'),
@@ -269,12 +260,11 @@
         guessGrid: document.getElementById('guess-grid'),
         finalScore: document.getElementById('final-score'),
         finalPun: document.getElementById('final-pun'),
-        mainGrid: document.getElementById('main-grid'),
-        quizContainer: document.querySelector('.quiz-container')
+        mainGrid: document.getElementById('main-grid')
     };
 
     // =========================================
-    // 2. AUDIO ENGINE & FOV SCALER
+    // 2. AUDIO ENGINE
     // =========================================
     let activeAudio = new Audio(); 
     let currentVolume = DOM.volume.value;
@@ -282,13 +272,6 @@
     DOM.volume.addEventListener('input', e => {
         currentVolume = e.target.value;
         activeAudio.volume = currentVolume;
-    });
-
-    // FOV Slider Logic
-    DOM.fovScale.addEventListener('input', e => {
-        const scaleValue = e.target.value;
-        DOM.mainGrid.style.zoom = scaleValue;
-        DOM.quizContainer.style.zoom = scaleValue;
     });
 
     DOM.infoToggle.addEventListener('change', e => {
