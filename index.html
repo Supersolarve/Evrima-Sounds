@@ -8,8 +8,8 @@
         /* Global Theme */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* 🟢 Deep background void fix */
-        html, body { background-color: #1a2520; min-height: 100vh; }
+        /* Deep background void fix */
+        html, body { background-color: #1a2520; min-height: 100vh; transition: background-color 0.3s ease; }
         body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; }
 
         /* Banner */
@@ -29,7 +29,7 @@
         .view-section.active { display: block; }
 
         /* Control Bar */
-        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; }
         .controls-bar label { font-weight: bold; color: #a5d6b8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
         .volume-slider { flex-grow: 1; max-width: 250px; cursor: pointer; accent-color: #4ade80; }
         .spacer { width: 20px; border-right: 1px solid #23332c; height: 20px; }
@@ -46,8 +46,8 @@
         /* Soundboard Grid */
         .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; }
         
-        /* 🟢 FIX: fit-content shrink-wraps the boxes, max-height forces internal scrollbar if they get too big */
-        .column-wrapper { flex: 1; min-width: 300px; height: fit-content; max-height: 85vh; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; }
+        /* fit-content shrink-wraps the boxes, max-height forces internal scrollbar */
+        .column-wrapper { flex: 1; min-width: 300px; height: fit-content; max-height: 85vh; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; transition: all 0.3s ease; }
         
         .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; }
         .herb-column .column-title { background-color: #2a4734; color: #a5d6b8; }
@@ -123,17 +123,32 @@
         ::-webkit-scrollbar-thumb:hover { background: #354d41; }
 
         /* ========================================= */
+        /* 🟢 MINI-MODE (OBS STREAMER DOCK)          */
+        /* ========================================= */
+        html.mini-mode, body.mini-mode { background-color: #000000; padding: 5px; }
+        body.mini-mode .discord-banner, 
+        body.mini-mode .tab-container,
+        body.mini-mode .column-title { display: none !important; }
+        
+        body.mini-mode .controls-bar { margin-bottom: 10px; padding: 5px; background: transparent; border: none; box-shadow: none; justify-content: flex-end; }
+        body.mini-mode .controls-bar > div:not(.mini-mode-wrapper) { display: none !important; }
+        body.mini-mode .controls-bar .spacer { display: none !important; }
+        
+        body.mini-mode .column-wrapper { border: none; background: transparent; padding: 0; margin-bottom: 0; max-height: calc(100vh - 60px); }
+        body.mini-mode .soundboard-grid { gap: 5px; }
+        body.mini-mode .dino-card { border-color: #1a2520; }
+
+        /* ========================================= */
         /* 🟢 MOBILE RESPONSIVENESS (PHONES/TABLETS) */
         /* ========================================= */
         @media (max-width: 768px) {
             body { padding: 10px; }
             
-            /* Stack banner elements */
             .discord-banner { flex-direction: column; text-align: center; gap: 12px; padding: 15px; }
             .discord-link { width: 100%; padding: 10px; }
             .tab-btn { flex: 1; text-align: center; }
 
-            /* 🟢 Compact Mobile Control Bar (Retained) */
+            /* Compact Mobile Control Bar */
             .controls-bar { 
                 flex-direction: row; 
                 flex-wrap: wrap; 
@@ -144,7 +159,9 @@
             }
             .controls-bar > div:first-child { flex: 1; min-width: 130px; display: flex; flex-direction: column; gap: 8px; }
             .volume-slider { width: 100%; max-width: 100%; margin: 0; }
-            .toggle-wrapper { flex: 1; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 130px; }
+            
+            /* Mini-Mode toggle wraps neatly next to details */
+            .toggle-wrapper { flex: 1; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 100px; }
             .controls-bar label { font-size: 11px; }
             .controls-bar .spacer { display: none; }
 
@@ -152,7 +169,6 @@
             .soundboard-grid { flex-direction: column; }
             .column-wrapper { width: 100%; max-height: none; overflow-y: visible; margin-bottom: 15px; }
             
-            /* Expand call buttons slightly for easier finger tapping */
             .call-btn { padding: 8px 12px; font-size: 12px; }
 
             /* Quiz Mobile Tweaks */
@@ -187,6 +203,16 @@
             <label for="infoToggle">Show Details</label>
             <label class="switch">
                 <input type="checkbox" id="infoToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div class="toggle-wrapper mini-mode-wrapper">
+            <label for="miniModeToggle">Mini-Mode</label>
+            <label class="switch">
+                <input type="checkbox" id="miniModeToggle">
                 <span class="slider"></span>
             </label>
         </div>
@@ -292,6 +318,7 @@
     const DOM = {
         volume: document.getElementById('masterVolume'),
         infoToggle: document.getElementById('infoToggle'),
+        miniModeToggle: document.getElementById('miniModeToggle'), // NEW
         quizSetup: document.getElementById('quiz-setup'),
         quizActive: document.getElementById('active-quiz-area'),
         quizResults: document.getElementById('quiz-results'),
@@ -305,7 +332,7 @@
     };
 
     // =========================================
-    // 2. AUDIO ENGINE
+    // 2. AUDIO ENGINE & TOGGLES
     // =========================================
     let activeAudio = new Audio(); 
     let currentVolume = DOM.volume.value;
@@ -317,6 +344,12 @@
 
     DOM.infoToggle.addEventListener('change', e => {
         document.body.classList.toggle('show-info', e.target.checked);
+    });
+
+    // Toggle Mini-Mode Class on Body and HTML
+    DOM.miniModeToggle.addEventListener('change', e => {
+        document.documentElement.classList.toggle('mini-mode', e.target.checked);
+        document.body.classList.toggle('mini-mode', e.target.checked);
     });
 
     function play(fileName) {
