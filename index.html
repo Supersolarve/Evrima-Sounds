@@ -54,17 +54,18 @@
 
         /* Accordion Styles */
         .dino-card { background-color: #1b2822; border: 2px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; }
-        
-        /* 🟢 RECENT ORDER BORDER COLORS */
-        .dino-card.recent-1 { border-color: #4ade80 !important; }
-        .dino-card.recent-2 { border-color: #27a35b !important; }
-        .dino-card.recent-3 { border-color: #1f8549 !important; }
+        .dino-card.active { border-color: #3a5448; }
+
+        /* 🟢 RECENT ORDER BAR COLORS */
+        .dino-card.recent-1 .dino-toggle { background-color: #316b46 !important; }
+        .dino-card.recent-2 .dino-toggle { background-color: #294b36 !important; }
+        .dino-card.recent-3 .dino-toggle { background-color: #213029 !important; }
 
         .dino-toggle { width: 100%; background-color: transparent; border: none; color: #ffffff; padding: 10px 14px; text-align: left; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.3s ease; }
         .dino-toggle:hover { background-color: #24352d; }
         .arrow { font-size: 10px; color: #728f80; transition: transform 0.3s ease; }
         .dino-panel { display: none; background-color: #16201b; padding: 6px 10px; border-top: 1px solid #23332c; transition: all 0.3s ease; }
-        .dino-card.active { border-color: #3a5448; }
+        
         .dino-card.active .dino-toggle { background-color: #213029; }
         .dino-card.active .dino-panel { display: block; }
         .dino-card.active .arrow { transform: rotate(180deg); }
@@ -369,7 +370,7 @@
     buildDinoCards(dinos.carns, 'carn-container');
     buildDinoCards(dinos.omnis, 'omni-container');
 
-    // 🟢 3-DINO LIMIT AND BORDER LOGIC
+    // 🟢 3-DINO LIMIT AND SHADING LOGIC
     let openCards = { herb: [], carn: [], omni: [] };
 
     DOM.mainGrid.addEventListener('click', e => {
