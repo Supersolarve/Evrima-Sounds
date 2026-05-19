@@ -16,7 +16,6 @@
         .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { background-color: #141d19; border: 1px solid #23332c; color: #728f80; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .tab-btn.active { background-color: #27a35b; color: #ffffff; }
-        .tab-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         /* Controls */
         .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
@@ -70,21 +69,13 @@
     </div>
 </div>
 
-<div id="quiz-view" class="view-section">
-    <div class="quiz-container" style="color:white; text-align:center; padding:20px;">
-        <h2>Quiz Area</h2>
-        <p>Training features are active here.</p>
-    </div>
-</div>
-
 <script>
-    console.log("Noobz Soundboard Loaded");
     const dinos = { 
         herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"], 
         carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", "Rex", "Troodon"], 
         omnis: ["Beipi", "Galli"] 
     };
-    
+
     // UI Builder
     Object.keys(dinos).forEach(type => {
         const container = document.getElementById(type.replace('s', '') + '-container');
@@ -97,24 +88,28 @@
         });
     });
 
-    // Toggles & Logic
+    // Dark Mode
     document.getElementById('darkModeToggle').addEventListener('change', e => document.body.classList.toggle('dark-mode', e.target.checked));
-    
+
+    // Party Mode
     let party = null;
     document.getElementById('partyToggle').addEventListener('change', e => {
-        if (e.target.checked) party = setInterval(() => { new Audio('audio/Rex 75 1 Call.mp3').play(); }, 1000);
-        else clearInterval(party);
+        if (e.target.checked) {
+            party = setInterval(() => { new Audio('audio/Rex 75 1 Call.mp3').play(); }, 1200);
+        } else {
+            clearInterval(party);
+        }
     });
 
-    // Tab Lock Logic
-    let isQuizActive = false;
-    function switchTab(tab) {
-        if (isQuizActive && tab === 'soundboard') return alert("Finish quiz first!");
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.id === 'tab-' + tab));
-        document.querySelectorAll('.view-section').forEach(v => v.classList.toggle('active', v.id === tab + '-view'));
-    }
-    document.getElementById('tab-soundboard').onclick = () => switchTab('soundboard');
-    document.getElementById('tab-quiz').onclick = () => switchTab('quiz');
+    // Tab Logic
+    document.getElementById('tab-soundboard').onclick = () => {
+        document.getElementById('soundboard-view').classList.add('active');
+        document.getElementById('quiz-view').classList.remove('active');
+    };
+    document.getElementById('tab-quiz').onclick = () => {
+        document.getElementById('soundboard-view').classList.remove('active');
+        document.getElementById('quiz-view').classList.add('active');
+    };
 </script>
 </body>
 </html>
