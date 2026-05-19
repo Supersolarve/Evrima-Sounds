@@ -192,14 +192,6 @@
                 <span class="slider"></span>
             </label>
         </div>
-        <div class="spacer"></div>
-        <div class="toggle-wrapper">
-            <label for="partyToggle">Party Mode</label>
-            <label class="switch">
-                <input type="checkbox" id="partyToggle">
-                <span class="slider"></span>
-            </label>
-        </div>
     </div>
     <div class="soundboard-grid" id="main-grid">
         <div class="column-wrapper herb-column" id="herb-container">
@@ -289,7 +281,6 @@
         volume: document.getElementById('masterVolume'),
         infoToggle: document.getElementById('infoToggle'),
         darkModeToggle: document.getElementById('darkModeToggle'),
-        partyToggle: document.getElementById('partyToggle'),
         quizSetup: document.getElementById('quiz-setup'),
         quizActive: document.getElementById('active-quiz-area'),
         quizResults: document.getElementById('quiz-results'),
@@ -319,30 +310,6 @@
         document.body.classList.toggle('dark-mode', e.target.checked);
     });
 
-    // 🟢 PARTY MODE ENGINE
-    const partyDinos = {
-        drums: ["Hypsi 25 1 Call", "Troodon 25 1 Call", "Dryo 25 2 Call"],
-        bass: ["Rex 75 1 Call", "Deino 75 1 Call", "Carno 75 3 Call"],
-        melody: ["Maia 75 1 Call", "Galli 75 2 Call", "Tenno 75 3 Call"]
-    };
-    let partyInterval = null;
-
-    DOM.partyToggle.addEventListener('change', e => {
-        if (e.target.checked) {
-            partyInterval = setInterval(() => {
-                const drum = partyDinos.drums[Math.floor(Math.random() * partyDinos.drums.length)];
-                const bass = partyDinos.bass[Math.floor(Math.random() * partyDinos.bass.length)];
-                const melo = partyDinos.melody[Math.floor(Math.random() * partyDinos.melody.length)];
-                
-                play(drum);
-                setTimeout(() => play(bass), 150);
-                setTimeout(() => play(melo), 300);
-            }, 600);
-        } else {
-            clearInterval(partyInterval);
-        }
-    });
-
     // --- TAB LOGIC WITH QUIZ LOCK ---
     function switchTab(tabName) {
         if (isQuizActive && tabName === 'soundboard') {
@@ -358,7 +325,7 @@
     DOM.tabSoundboard.addEventListener('click', () => switchTab('soundboard'));
     DOM.tabQuiz.addEventListener('click', () => switchTab('quiz'));
 
-    // 🟢 UPDATED PLAY FUNCTION (Multi-channel Audio)
+    // 🟢 PLAY FUNCTION (Multi-channel Audio enabled)
     function play(fileName) {
         const a = new Audio('audio/' + encodeURIComponent(fileName) + '.mp3');
         a.volume = currentVolume; 
