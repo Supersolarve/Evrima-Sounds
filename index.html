@@ -46,8 +46,8 @@
         /* Soundboard Grid */
         .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; }
         
-        /* fit-content shrink-wraps the boxes, max-height forces internal scrollbar */
-        .column-wrapper { flex: 1; min-width: 300px; height: fit-content; max-height: 85vh; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; transition: all 0.3s ease; }
+        /* 🟢 THE FIX: align-self: flex-start forces the box to stop stretching vertically */
+        .column-wrapper { flex: 1; min-width: 300px; align-self: flex-start; max-height: 85vh; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; transition: all 0.3s ease; }
         
         .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; }
         .herb-column .column-title { background-color: #2a4734; color: #a5d6b8; }
