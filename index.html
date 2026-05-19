@@ -8,29 +8,28 @@
         /* Global Theme */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* THE FLEXBOX LOCK (With 100dvh fix for mobile browser URL bars) */
-        html, body { background-color: #1a2520; height: 100vh; height: 100dvh; overflow: hidden; }
-        
-        body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; display: flex; flex-direction: column; }
+        /* 🟢 RESTORED DESKTOP: Fixes the dark void but removes the extreme vertical stretching */
+        html, body { background-color: #1a2520; min-height: 100vh; }
+        body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; }
 
         /* Banner */
-        .discord-banner { background-color: #131b17; border: 1px solid #23332c; border-radius: 8px; padding: 12px 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); flex-shrink: 0; }
+        .discord-banner { background-color: #131b17; border: 1px solid #23332c; border-radius: 8px; padding: 12px 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
         .discord-text { font-size: 14px; font-weight: bold; color: #ffffff; }
         .discord-link { background-color: #27a35b; color: #ffffff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; transition: background 0.2s ease; white-space: nowrap; }
         .discord-link:hover { background-color: #1f8549; }
 
         /* Tab Navigation */
-        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; flex-shrink: 0; }
-        .tab-btn { background-color: #141d19; border: 1px solid #23332c; color: #728f80; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 1px; flex: 1; text-align: center; }
+        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { background-color: #141d19; border: 1px solid #23332c; color: #728f80; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 1px; }
         .tab-btn:hover { background-color: #1b2822; color: #a5d6b8; }
         .tab-btn.active { background-color: #27a35b; border-color: #27a35b; color: #ffffff; box-shadow: 0 0 10px rgba(39, 163, 91, 0.3); }
 
         /* View Controllers */
-        .view-section { display: none; flex: 1; min-height: 0; overflow: hidden; }
-        .view-section.active { display: flex; flex-direction: column; }
+        .view-section { display: none; }
+        .view-section.active { display: block; }
 
         /* Control Bar */
-        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex-shrink: 0; }
+        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .controls-bar label { font-weight: bold; color: #a5d6b8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
         .volume-slider { flex-grow: 1; max-width: 250px; cursor: pointer; accent-color: #4ade80; }
         .spacer { width: 20px; border-right: 1px solid #23332c; height: 20px; }
@@ -45,17 +44,18 @@
         input:checked + .slider:before { transform: translateX(16px); background-color: #1a2520; }
 
         /* Soundboard Grid */
-        .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; flex: 1; min-height: 0; }
+        .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; }
         
-        .column-wrapper { flex: 1; min-width: 300px; height: 100%; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; }
+        /* 🟢 RESTORED: Snug wrapping on Desktop, with internal scrollbars if needed */
+        .column-wrapper { flex: 1; min-width: 300px; max-height: calc(100vh - 220px); overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; }
         
-        .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; }
+        .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; }
         .herb-column .column-title { background-color: #2a4734; color: #a5d6b8; }
         .carn-column .column-title { background-color: #4a2727; color: #d6a5a5; }
         .omni-column .column-title { background-color: #3b2a47; color: #c4a5d6; }
 
         /* Accordion Styles */
-        .dino-card { background-color: #1b2822; border: 1px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+        .dino-card { background-color: #1b2822; border: 1px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; }
         .dino-toggle { width: 100%; background-color: transparent; border: none; color: #ffffff; padding: 10px 14px; text-align: left; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .dino-toggle:hover { background-color: #24352d; }
         .arrow { font-size: 10px; color: #728f80; transition: transform 0.3s ease; }
@@ -71,7 +71,7 @@
         .stage-label { font-size: 11px; color: #ffffff; font-weight: bold; flex-shrink: 0; width: 75px; }
 
         .btn-group { display: flex; gap: 4px; }
-        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 6px 12px; cursor: pointer; transition: all 0.2s ease; }
+        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; }
         .call-btn:hover { background-color: #314a3d; border-color: #4ade80; color: #ffffff; transform: translateY(-1px); }
         .call-btn:active { transform: translateY(1px); }
 
@@ -83,25 +83,24 @@
         .info-text { color: #a5d6b8; font-size: 11px; line-height: 1.4; flex-grow: 1; }
 
         /* Quiz UI */
-        #quiz-view { overflow-y: auto; }
         .quiz-container { background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 30px; max-width: 900px; margin: 0 auto; text-align: center; }
         .quiz-setup { display: flex; flex-direction: column; gap: 20px; align-items: center; }
         .quiz-setting-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; width: 100%; border-top: 1px solid #23332c; padding-top: 20px; }
-        .quiz-setting { display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 16px; font-weight: bold; color: #a5d6b8; width: 100%; max-width: 250px; }
-        .quiz-setting select { background-color: #1a2520; color: #fff; border: 1px solid #2e4539; padding: 8px 12px; border-radius: 6px; font-size: 14px; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; }
+        .quiz-setting { display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 16px; font-weight: bold; color: #a5d6b8; }
+        .quiz-setting select { background-color: #1a2520; color: #fff; border: 1px solid #2e4539; padding: 8px 12px; border-radius: 6px; font-size: 14px; font-family: inherit; font-weight: bold; cursor: pointer; }
         
         .checkbox-group { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; font-size: 14px; color: #ffffff; font-weight: normal; background-color: #1a2520; padding: 12px 20px; border-radius: 8px; border: 1px solid #2e4539; width: 100%; }
         .checkbox-group label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
         .checkbox-group input[type="checkbox"] { cursor: pointer; width: 16px; height: 16px; accent-color: #4ade80; }
 
-        .action-btn { background-color: #27a35b; border: none; color: white; padding: 12px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: background 0.2s; margin-top: 10px; width: 100%; max-width: 300px; }
+        .action-btn { background-color: #27a35b; border: none; color: white; padding: 12px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: background 0.2s; margin-top: 10px; }
         .action-btn:hover { background-color: #1f8549; }
 
         .active-quiz-area { display: none; flex-direction: column; gap: 20px; align-items: center; }
         .quiz-header { display: flex; justify-content: space-between; width: 100%; font-size: 16px; font-weight: bold; color: #728f80; border-bottom: 1px solid #23332c; padding-bottom: 10px; }
         .attempts-text { color: #d6a5a5; }
 
-        .play-mystery-btn { background-color: #1b2822; border: 2px solid #4ade80; color: #4ade80; padding: 20px 40px; font-size: 20px; font-weight: bold; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; width: 100%; }
+        .play-mystery-btn { background-color: #1b2822; border: 2px solid #4ade80; color: #4ade80; padding: 20px 40px; font-size: 20px; font-weight: bold; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; width: 100%; max-width: 400px; margin: 0 auto; }
         .play-mystery-btn:hover { background-color: #24352d; box-shadow: 0 0 15px rgba(74, 222, 128, 0.2); }
 
         .guess-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; width: 100%; margin-top: 20px; }
@@ -132,16 +131,26 @@
             /* Stack banner elements */
             .discord-banner { flex-direction: column; text-align: center; gap: 12px; padding: 15px; }
             .discord-link { width: 100%; padding: 10px; }
+            .tab-btn { flex: 1; text-align: center; }
 
-            /* Stack controls and remove spacers */
-            .controls-bar { flex-direction: column; align-items: stretch; gap: 15px; text-align: center; padding: 15px; }
+            /* 🟢 FIX: Compact Mobile Control Bar */
+            .controls-bar { 
+                flex-direction: row; 
+                flex-wrap: wrap; 
+                justify-content: space-between; 
+                align-items: flex-end; 
+                padding: 12px 15px; 
+                gap: 15px;
+            }
+            .controls-bar > div:first-child { flex: 1; min-width: 130px; display: flex; flex-direction: column; gap: 8px; }
+            .volume-slider { width: 100%; max-width: 100%; margin: 0; }
+            .toggle-wrapper { flex: 1; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 130px; }
+            .controls-bar label { font-size: 11px; }
             .controls-bar .spacer { display: none; }
-            .volume-slider { max-width: 100%; margin-top: 5px; padding: 10px 0; }
-            .toggle-wrapper { justify-content: center; }
 
-            /* Change grid from 3 scrollable columns to 1 main scrollable page */
-            .soundboard-grid { flex-direction: column; overflow-y: auto; padding-right: 5px; padding-bottom: 20px; }
-            .column-wrapper { width: 100%; min-width: 100%; height: auto; overflow-y: visible; flex: none; margin-bottom: 15px; }
+            /* Mobile Grid: 1 main scrollable page */
+            .soundboard-grid { flex-direction: column; }
+            .column-wrapper { width: 100%; max-height: none; overflow-y: visible; margin-bottom: 15px; }
             
             /* Expand call buttons slightly for easier finger tapping */
             .call-btn { padding: 8px 12px; font-size: 12px; }
@@ -175,11 +184,11 @@
         <div class="spacer"></div>
         
         <div class="toggle-wrapper">
+            <label for="infoToggle">Show Details</label>
             <label class="switch">
                 <input type="checkbox" id="infoToggle">
                 <span class="slider"></span>
             </label>
-            <label for="infoToggle">Show Details & Images</label>
         </div>
     </div>
 
