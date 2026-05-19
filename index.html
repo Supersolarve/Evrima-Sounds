@@ -7,8 +7,6 @@
     <style>
         /* Global Theme */
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        /* Deep background void fix */
         html, body { background-color: #1a2520; min-height: 100vh; transition: background-color 0.3s ease; }
         body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; }
 
@@ -21,7 +19,7 @@
         /* Tab Navigation */
         .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
         .tab-btn { background-color: #141d19; border: 1px solid #23332c; color: #728f80; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; }
-        .tab-btn:hover { background-color: #1b2822; color: #a5d6b8; }
+        .tab-btn:hover:not(:disabled) { background-color: #1b2822; color: #a5d6b8; }
         .tab-btn.active { background-color: #27a35b; border-color: #27a35b; color: #ffffff; box-shadow: 0 0 10px rgba(39, 163, 91, 0.3); }
         .tab-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -47,7 +45,7 @@
         /* Soundboard Grid */
         .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
         
-        .column-wrapper { flex: 1; min-width: 300px; max-height: 85vh; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; transition: all 0.3s ease; }
+        .column-wrapper { flex: 1; min-width: 300px; height: fit-content; max-height: 85vh; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; transition: all 0.3s ease; }
         
         .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; }
         .herb-column .column-title { background-color: #2a4734; color: #a5d6b8; }
@@ -162,8 +160,8 @@
 </div>
 
 <div class="tab-container">
-    <button class="tab-btn active" id="tab-soundboard" onclick="switchTab('soundboard')">Soundboard</button>
-    <button class="tab-btn" id="tab-quiz" onclick="switchTab('quiz')">Training Quiz</button>
+    <button class="tab-btn active" id="tab-soundboard">Soundboard</button>
+    <button class="tab-btn" id="tab-quiz">Training Quiz</button>
 </div>
 
 <div id="soundboard-view" class="view-section active">
@@ -308,6 +306,22 @@
         document.body.classList.toggle('dark-mode', e.target.checked);
     });
 
+    // --- TAB LOGIC ---
+    function switchTab(tabName) {
+        if (isQuizActive && tabName === 'soundboard') {
+            alert("Finish your training first!");
+            return;
+        }
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        if (tabName === 'soundboard') DOM.tabSoundboard.classList.add('active');
+        else DOM.tabQuiz.classList.add('active');
+        document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+        document.getElementById(tabName + '-view').classList.add('active');
+        activeAudio.pause();
+    }
+    DOM.tabSoundboard.addEventListener('click', () => switchTab('soundboard'));
+    DOM.tabQuiz.addEventListener('click', () => switchTab('quiz'));
+
     function play(fileName) {
         activeAudio.pause();
         activeAudio.currentTime = 0;
@@ -315,13 +329,12 @@
         activeAudio.volume = currentVolume; 
         const playPromise = activeAudio.play();
         if (playPromise !== undefined) {
-            playPromise.catch(err => { if (err.name !== 'AbortError') alert("File missing: " + fileName + ".mp3"); });
+            playPromise.catch(err => { if (err.name !== 'AbortError') console.log("Audio not found: " + fileName); });
         }
     }
 
     function buildDinoCards(dinoList, containerId) {
         const container = document.getElementById(containerId);
-        let columnHtml = ''; 
         dinoList.forEach(dino => {
             let stagesHtml = '';
             stages.forEach(stage => {
@@ -348,9 +361,8 @@
                         </div>
                     </div>`;
             });
-            columnHtml += `<div class="dino-card"><button class="dino-toggle"><span>${dino}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`;
+            container.insertAdjacentHTML('beforeend', `<div class="dino-card"><button class="dino-toggle"><span>${dino}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`);
         });
-        container.insertAdjacentHTML('beforeend', columnHtml);
     }
 
     buildDinoCards(dinos.herbs, 'herb-container');
@@ -358,78 +370,45 @@
     buildDinoCards(dinos.omnis, 'omni-container');
 
     DOM.mainGrid.addEventListener('click', e => {
-        if (e.target.classList.contains('call-btn')) {
-            play(e.target.dataset.file);
-        } else if (e.target.closest('.dino-toggle')) {
+        if (e.target.classList.contains('call-btn')) play(e.target.dataset.file);
+        else if (e.target.closest('.dino-toggle')) {
             const currentCard = e.target.closest('.dino-card');
             const column = currentCard.parentElement;
-            if (currentCard.classList.contains('active')) {
-                currentCard.classList.remove('active');
-                return;
-            }
-            const openCards = column.querySelectorAll('.dino-card.active');
-            if (openCards.length >= 3) openCards[0].classList.remove('active');
+            if (currentCard.classList.contains('active')) { currentCard.classList.remove('active'); return; }
+            column.querySelectorAll('.dino-card.active').forEach(c => c.classList.remove('active'));
             currentCard.classList.add('active');
         }
     });
-
-    function switchTab(tabName) {
-        if (isQuizActive && tabName === 'soundboard') return; 
-
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        if (tabName === 'soundboard') DOM.tabSoundboard.classList.add('active');
-        else DOM.tabQuiz.classList.add('active');
-
-        document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
-        document.getElementById(tabName + '-view').classList.add('active');
-        activeAudio.pause();
-    }
 
     let currentQuizPool = [], currentQuestionIndex = 0, score = 0;
     let attemptsConfig = 3, currentAttemptsLeft = 3, isQuestionLocked = false;
 
     function startQuiz() {
-        const incHerbs = document.getElementById('toggle-herbs').checked;
-        const incCarns = document.getElementById('toggle-carns').checked;
-        const incOmnis = document.getElementById('toggle-omnis').checked;
-        const incJuvie = document.getElementById('toggle-juvie').checked;
-        const incSub = document.getElementById('toggle-sub').checked;
-        const incAdult = document.getElementById('toggle-adult').checked;
-        if (!incHerbs && !incCarns && !incOmnis) return alert("Please select at least one Diet!");
-        if (!incJuvie && !incSub && !incAdult) return alert("Please select at least one Growth Stage!");
+        const activeDinos = [...(document.getElementById('toggle-herbs').checked ? dinos.herbs : []), ...(document.getElementById('toggle-carns').checked ? dinos.carns : []), ...(document.getElementById('toggle-omnis').checked ? dinos.omnis : [])];
+        const activeStages = [...(document.getElementById('toggle-juvie').checked ? ["25"] : []), ...(document.getElementById('toggle-sub').checked ? ["50"] : []), ...(document.getElementById('toggle-adult').checked ? ["75"] : [])];
+        if (activeDinos.length === 0 || activeStages.length === 0) return alert("Select at least one Diet and Stage!");
         
         isQuizActive = true;
         DOM.tabSoundboard.disabled = true;
 
-        let activeDinos = [];
-        if (incHerbs) activeDinos = activeDinos.concat(dinos.herbs);
-        if (incCarns) activeDinos = activeDinos.concat(dinos.carns);
-        if (incOmnis) activeDinos = activeDinos.concat(dinos.omnis);
-        activeDinos.sort();
-        let activeStages = [];
-        if (incJuvie) activeStages.push("25");
-        if (incSub) activeStages.push("50");
-        if (incAdult) activeStages.push("75");
         let possibleCalls = [];
-        activeDinos.forEach(dino => {
-            activeStages.forEach(stageNum => {
-                calls.forEach(call => possibleCalls.push({ species: dino, file: `${dino} ${stageNum} ${call} Call` }));
-            });
-        });
+        activeDinos.forEach(dino => activeStages.forEach(s => calls.forEach(c => possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call` }))));
+        
         DOM.guessGrid.innerHTML = '';
-        activeDinos.forEach(dino => {
+        activeDinos.sort().forEach(dino => {
             const btn = document.createElement('button');
             btn.className = 'guess-btn';
             btn.innerText = dino;
             btn.onclick = () => handleGuess(dino, btn);
             DOM.guessGrid.appendChild(btn);
         });
+        
         DOM.quizSetup.style.display = 'none';
         DOM.quizActive.style.display = 'flex';
-        let lengthConfig = parseInt(document.getElementById('quizLength').value);
+        
+        let length = Math.min(parseInt(document.getElementById('quizLength').value), possibleCalls.length);
         attemptsConfig = parseInt(document.getElementById('quizAttempts').value);
-        if (lengthConfig > possibleCalls.length) lengthConfig = possibleCalls.length; 
-        currentQuizPool = [...possibleCalls].sort(() => 0.5 - Math.random()).slice(0, lengthConfig);
+        currentQuizPool = [...possibleCalls].sort(() => 0.5 - Math.random()).slice(0, length);
         currentQuestionIndex = 0;
         score = 0;
         loadQuestion();
@@ -452,41 +431,29 @@
 
     function updateAttemptsUI() {
         DOM.attemptsText.innerText = `Attempts Left: ${currentAttemptsLeft}`;
-        DOM.attemptsText.style.color = currentAttemptsLeft === 1 ? '#d6a5a5' : '#a5d6b8';
     }
 
-    function playMysteryCall() {
-        play(currentQuizPool[currentQuestionIndex].file);
-    }
+    function playMysteryCall() { play(currentQuizPool[currentQuestionIndex].file); }
 
-    function handleGuess(guessedSpecies, btnElement) {
+    function handleGuess(guessed, btn) {
         if (isQuestionLocked) return;
-        const correctSpecies = currentQuizPool[currentQuestionIndex].species;
-        if (guessedSpecies === correctSpecies) {
+        if (guessed === currentQuizPool[currentQuestionIndex].species) {
             isQuestionLocked = true;
             score++;
-            btnElement.style.backgroundColor = '#27a35b';
-            DOM.feedback.innerText = "Correct! Good ear.";
+            btn.style.backgroundColor = '#27a35b';
+            DOM.feedback.innerText = "Correct!";
             DOM.feedback.className = 'quiz-feedback feedback-correct';
             setTimeout(advanceQuiz, 1500);
         } else {
             currentAttemptsLeft--;
-            btnElement.disabled = true;
-            btnElement.style.backgroundColor = '#4a2727';
-            btnElement.style.borderColor = '#d6a5a5';
+            btn.disabled = true;
+            btn.style.backgroundColor = '#4a2727';
             if (currentAttemptsLeft <= 0) {
                 isQuestionLocked = true;
-                DOM.feedback.innerText = `Out of attempts! It was a ${correctSpecies}.`;
+                DOM.feedback.innerText = `It was a ${currentQuizPool[currentQuestionIndex].species}.`;
                 DOM.feedback.className = 'quiz-feedback feedback-wrong';
-                DOM.guessGrid.querySelectorAll('.guess-btn').forEach(btn => {
-                    if (btn.innerText === correctSpecies) btn.style.backgroundColor = '#27a35b';
-                });
                 setTimeout(advanceQuiz, 2500);
-            } else {
-                updateAttemptsUI();
-                DOM.feedback.innerText = "Incorrect. Try listening again!";
-                DOM.feedback.className = 'quiz-feedback feedback-warning';
-            }
+            } else updateAttemptsUI();
         }
     }
 
@@ -501,14 +468,8 @@
         DOM.tabSoundboard.disabled = false;
         DOM.quizActive.style.display = 'none';
         DOM.quizResults.style.display = 'flex';
-        const percentage = (score / currentQuizPool.length) * 100;
         DOM.finalScore.innerText = `${score} / ${currentQuizPool.length}`;
-        let pun = "";
-        if (percentage === 100) pun = "T-Rexcellent! You're an apex predator!";
-        else if (percentage >= 80) pun = "Dino-mite! You really know your roars.";
-        else if (percentage >= 50) pun = "Not bad, but you might want to hide in a bush.";
-        else pun = "You're acting like a juicy Dryosaurus right now. Time to study!";
-        DOM.finalPun.innerText = pun;
+        DOM.finalPun.innerText = score === currentQuizPool.length ? "Apex Predator!" : "Keep studying!";
     }
 
     function resetQuizUI() {
