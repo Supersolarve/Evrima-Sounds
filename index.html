@@ -5,57 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Evrima Soundboard | Noobz</title>
     <style>
-        /* Global Theme */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { background-color: #1a2520; min-height: 100vh; transition: background-color 0.3s ease; }
-        body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; }
+        body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; }
 
-        /* Banner & Tabs */
         .discord-banner { background-color: #131b17; border: 1px solid #23332c; border-radius: 8px; padding: 12px 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .discord-link { background-color: #27a35b; color: #ffffff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; }
-        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { background-color: #141d19; border: 1px solid #23332c; color: #728f80; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .tab-btn.active { background-color: #27a35b; border-color: #27a35b; color: #ffffff; }
+        .tab-btn { background-color: #141d19; border: 1px solid #23332c; color: #728f80; padding: 10px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .tab-btn.active { background-color: #27a35b; color: #ffffff; }
         .tab-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        /* Controls */
-        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-        .toggle-wrapper { display: flex; align-items: center; gap: 10px; }
-        .switch { position: relative; width: 36px; height: 20px; }
-        .switch input { opacity: 0; }
-        .slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #23332c; border-radius: 34px; transition: .3s; }
-        input:checked + .slider { background-color: #4ade80; }
-
-        /* Grid */
+        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; }
+        
         .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; flex-wrap: wrap; }
         .column-wrapper { flex: 1; min-width: 300px; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 15px; }
         .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; text-transform: uppercase; background: #23332c; }
 
-        /* Cards */
-        .dino-card { background-color: #1b2822; margin-bottom: 8px; border-radius: 8px; overflow: hidden; border: 2px solid #283a32; transition: all 0.3s ease; }
+        .dino-card { margin-bottom: 8px; border-radius: 8px; overflow: hidden; border: 2px solid #283a32; transition: all 0.3s ease; }
         .dino-toggle { width: 100%; background: none; border: none; color: #fff; padding: 10px; text-align: left; font-weight: bold; cursor: pointer; }
-        .dino-panel { display: none; padding: 10px; background: #16201b; }
-        .dino-card.active { border-color: #3a5448; }
+        .dino-panel { display: none; padding: 10px; }
         .dino-card.active .dino-panel { display: block; }
         .call-btn { background: #25382e; border: 1px solid #2e4539; color: #4ade80; padding: 4px 10px; cursor: pointer; margin: 2px; }
 
-        /* Color Shading Logic */
+        /* 🟢 DIET COLOR PALETTES */
+        .herb .dino-toggle { background: #213029; }
         .herb.recent-1 .dino-toggle { background: #316b46 !important; }
-        .herb.recent-2 .dino-toggle { background: #294b36 !important; }
-        .herb.recent-3 .dino-toggle { background: #213029 !important; }
-        .carn.recent-1 .dino-toggle { background: #4a2727 !important; }
-        .carn.recent-2 .dino-toggle { background: #3a1e1e !important; }
-        .carn.recent-3 .dino-toggle { background: #2a1515 !important; }
-        .omni.recent-1 .dino-toggle { background: #472a5a !important; }
-        .omni.recent-2 .dino-toggle { background: #351f43 !important; }
-        .omni.recent-3 .dino-toggle { background: #24152d !important; }
+        .herb .dino-panel { background: #16201b; }
 
-        /* View Control */
-        .view-section { display: none; }
-        .view-section.active { display: block; }
-        .quiz-container { background: #141d19; padding: 30px; border-radius: 12px; color: #fff; text-align: center; }
-        .active-quiz-area { display: none; flex-direction: column; gap: 10px; }
-        .guess-btn { padding: 10px; background: #1b2822; color: #fff; border: 1px solid #283a32; cursor: pointer; }
+        .carn .dino-toggle { background: #302121; }
+        .carn.recent-1 .dino-toggle { background: #4a2727 !important; }
+        .carn .dino-panel { background: #201616; }
+
+        .omni .dino-toggle { background: #282130; }
+        .omni.recent-1 .dino-toggle { background: #472a5a !important; }
+        .omni .dino-panel { background: #1c1620; }
+
+        body.dark-mode { background-color: #000; }
+        body.dark-mode .column-wrapper, body.dark-mode .controls-bar, body.dark-mode .tab-btn { background-color: #080c0a; }
 
         @media (max-width: 768px) { .soundboard-grid { flex-direction: column; } }
     </style>
@@ -64,7 +49,7 @@
 
 <div class="discord-banner">
     <div class="discord-text">Noobz Evrima Utility</div>
-    <a href="https://discord.gg/Noobz" target="_blank" class="discord-link">Join Discord</a>
+    <a href="https://discord.gg/Noobz" class="discord-link">Join Discord</a>
 </div>
 
 <div class="tab-container">
@@ -74,26 +59,13 @@
 
 <div id="soundboard-view" class="view-section active">
     <div class="controls-bar">
-        <div><label>Volume</label> <input type="range" id="masterVolume" min="0" max="1" step="0.01" value="0.5"></div>
-        <div class="toggle-wrapper"><label>Dark Mode</label> <label class="switch"><input type="checkbox" id="darkModeToggle"><span class="slider"></span></label></div>
+        <label>Volume <input type="range" id="masterVolume" min="0" max="1" step="0.01" value="0.5"></label>
+        <label><input type="checkbox" id="darkModeToggle"> Dark Mode</label>
     </div>
     <div class="soundboard-grid" id="main-grid">
         <div class="column-wrapper" id="herb-container"><div class="column-title">Herbivores</div></div>
         <div class="column-wrapper" id="carn-container"><div class="column-title">Carnivores</div></div>
         <div class="column-wrapper" id="omni-container"><div class="column-title">Omnivores</div></div>
-    </div>
-</div>
-
-<div id="quiz-view" class="view-section">
-    <div class="quiz-container">
-        <div id="quiz-setup">
-            <h2>Call Training</h2>
-            <button class="tab-btn" onclick="startQuiz()">Start Quiz</button>
-        </div>
-        <div id="active-quiz-area" class="active-quiz-area">
-            <button class="tab-btn" onclick="playMysteryCall()">Play Mystery Call</button>
-            <div id="guess-grid" class="guess-grid"></div>
-        </div>
     </div>
 </div>
 
@@ -104,7 +76,6 @@
         omnis: ["Beipi", "Galli"] 
     };
     
-    let isQuizActive = false;
     let openCards = { herb: [], carn: [], omni: [] };
 
     // Builder
@@ -114,40 +85,22 @@
         dinos[type].forEach(name => {
             const card = document.createElement('div');
             card.className = `dino-card ${diet}`;
-            card.innerHTML = `<button class="dino-toggle">${name}</button><div class="dino-panel"><button class="call-btn">Call 1</button></div>`;
+            card.innerHTML = `<button class="dino-toggle">${name}</button><div class="dino-panel"><button class="call-btn" onclick="new Audio('audio/${name} 75 1 Call.mp3').play()">Call 1</button></div>`;
             card.querySelector('.dino-toggle').onclick = () => {
                 if (card.classList.contains('active')) {
-                    card.classList.remove('active', 'recent-1', 'recent-2', 'recent-3');
+                    card.classList.remove('active', 'recent-1');
                     openCards[diet] = openCards[diet].filter(c => c !== card);
                 } else {
-                    if (openCards[diet].length >= 3) openCards[diet].shift().classList.remove('active', 'recent-1', 'recent-2', 'recent-3');
+                    if (openCards[diet].length >= 3) openCards[diet].shift().classList.remove('active', 'recent-1');
                     openCards[diet].push(card);
-                    card.classList.add('active');
+                    card.classList.add('active', 'recent-1');
                 }
-                openCards[diet].forEach((c, idx) => {
-                    c.classList.remove('recent-1', 'recent-2', 'recent-3');
-                    c.classList.add(`recent-${openCards[diet].length - idx}`);
-                });
             };
             container.appendChild(card);
         });
     });
 
-    // Tab & Quiz Logic
-    function switchTab(tab) {
-        if (isQuizActive && tab === 'soundboard') return alert("Finish quiz first!");
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.id === 'tab-' + tab));
-        document.querySelectorAll('.view-section').forEach(v => v.classList.toggle('active', v.id === tab + '-view'));
-    }
-    document.getElementById('tab-soundboard').onclick = () => switchTab('soundboard');
-    document.getElementById('tab-quiz').onclick = () => switchTab('quiz');
-
-    function startQuiz() {
-        isQuizActive = true;
-        document.getElementById('tab-soundboard').disabled = true;
-        document.getElementById('quiz-setup').style.display = 'none';
-        document.getElementById('active-quiz-area').style.display = 'flex';
-    }
+    document.getElementById('darkModeToggle').addEventListener('change', e => document.body.classList.toggle('dark-mode', e.target.checked));
 </script>
 </body>
 </html>
