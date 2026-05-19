@@ -10,61 +10,153 @@
         html, body { background-color: #1a2520; min-height: 100vh; transition: background-color 0.3s ease; }
         body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; }
 
-        /* Banner & Tabs */
+        /* Banner */
         .discord-banner { background-color: #131b17; border: 1px solid #23332c; border-radius: 8px; padding: 12px 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .discord-link { background-color: #27a35b; color: #ffffff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; }
+        .discord-text { font-size: 14px; font-weight: bold; color: #ffffff; }
+        .discord-link { background-color: #27a35b; color: #ffffff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; transition: background 0.2s ease; white-space: nowrap; }
+        .discord-link:hover { background-color: #1f8549; }
+
+        /* Tab Navigation */
         .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { background-color: #141d19; border: 1px solid #23332c; color: #728f80; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-        .tab-btn.active { background-color: #27a35b; border-color: #27a35b; color: #ffffff; }
+        .tab-btn { background-color: #141d19; border: 1px solid #23332c; color: #728f80; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; }
+        .tab-btn:hover:not(:disabled) { background-color: #1b2822; color: #a5d6b8; }
+        .tab-btn.active { background-color: #27a35b; border-color: #27a35b; color: #ffffff; box-shadow: 0 0 10px rgba(39, 163, 91, 0.3); }
         .tab-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        /* Controls */
-        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-        .toggle-wrapper { display: flex; align-items: center; gap: 10px; }
-        .switch { position: relative; width: 36px; height: 20px; }
-        .switch input { opacity: 0; }
-        .slider { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #23332c; border-radius: 34px; transition: .3s; }
-        input:checked + .slider { background-color: #4ade80; }
-
-        /* Grid */
-        .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; flex-wrap: wrap; }
-        .column-wrapper { flex: 1; min-width: 300px; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 15px; }
-        .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; text-transform: uppercase; background: #23332c; }
-
-        /* Cards */
-        .dino-card { background-color: #1b2822; margin-bottom: 8px; border-radius: 8px; overflow: hidden; border: 2px solid #283a32; transition: all 0.3s ease; }
-        .dino-toggle { width: 100%; background: none; border: none; color: #fff; padding: 10px; text-align: left; font-weight: bold; cursor: pointer; }
-        .dino-panel { display: none; padding: 10px; background: #16201b; }
-        .dino-card.active { border-color: #3a5448; }
-        .dino-card.active .dino-panel { display: block; }
-        .call-btn { background: #25382e; border: 1px solid #2e4539; color: #4ade80; padding: 4px 10px; cursor: pointer; margin: 2px; }
-
-        /* Color Shading Logic */
-        .herb.recent-1 .dino-toggle { background: #316b46 !important; }
-        .herb.recent-2 .dino-toggle { background: #294b36 !important; }
-        .herb.recent-3 .dino-toggle { background: #213029 !important; }
-        .carn.recent-1 .dino-toggle { background: #4a2727 !important; }
-        .carn.recent-2 .dino-toggle { background: #3a1e1e !important; }
-        .carn.recent-3 .dino-toggle { background: #2a1515 !important; }
-        .omni.recent-1 .dino-toggle { background: #472a5a !important; }
-        .omni.recent-2 .dino-toggle { background: #351f43 !important; }
-        .omni.recent-3 .dino-toggle { background: #24152d !important; }
-
-        /* View Control */
+        /* View Controllers */
         .view-section { display: none; }
         .view-section.active { display: block; }
-        .quiz-container { background: #141d19; padding: 30px; border-radius: 12px; color: #fff; text-align: center; }
-        .active-quiz-area { display: none; flex-direction: column; gap: 10px; }
-        .guess-btn { padding: 10px; background: #1b2822; color: #fff; border: 1px solid #283a32; cursor: pointer; }
 
-        @media (max-width: 768px) { .soundboard-grid { flex-direction: column; } }
+        /* Control Bar */
+        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+        .controls-bar label { font-weight: bold; color: #a5d6b8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+        .volume-slider { flex-grow: 1; max-width: 250px; cursor: pointer; accent-color: #4ade80; }
+        .spacer { width: 20px; border-right: 1px solid #23332c; height: 20px; transition: border-color 0.3s ease; }
+
+        /* Toggle Switch */
+        .toggle-wrapper { display: flex; align-items: center; gap: 10px; }
+        .switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #23332c; transition: .3s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: #728f80; transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background-color: #4ade80; }
+        input:checked + .slider:before { transform: translateX(16px); background-color: #1a2520; }
+
+        /* Soundboard Grid */
+        .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
+        
+        .column-wrapper { flex: 1; min-width: 300px; height: fit-content; max-height: 85vh; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; transition: all 0.3s ease; }
+        
+        .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; }
+        .herb-column .column-title { background-color: #2a4734; color: #a5d6b8; }
+        .carn-column .column-title { background-color: #4a2727; color: #d6a5a5; }
+        .omni-column .column-title { background-color: #3b2a47; color: #c4a5d6; }
+
+        /* Accordion Styles */
+        .dino-card { background-color: #1b2822; border: 1px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; }
+        .dino-toggle { width: 100%; background-color: transparent; border: none; color: #ffffff; padding: 10px 14px; text-align: left; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.3s ease; }
+        .dino-toggle:hover { background-color: #24352d; }
+        .arrow { font-size: 10px; color: #728f80; transition: transform 0.3s ease; }
+        .dino-panel { display: none; background-color: #16201b; padding: 6px 10px; border-top: 1px solid #23332c; transition: all 0.3s ease; }
+        .dino-card.active { border-color: #3a5448; }
+        .dino-card.active .dino-toggle { background-color: #213029; }
+        .dino-card.active .dino-panel { display: block; }
+        .dino-card.active .arrow { transform: rotate(180deg); }
+
+        .stage-row { display: flex; flex-direction: column; padding: 8px 0; border-bottom: 1px solid #1f2d26; transition: border-color 0.3s ease; }
+        .stage-row:last-child { border-bottom: none; }
+        .stage-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .stage-label { font-size: 11px; color: #ffffff; font-weight: bold; flex-shrink: 0; width: 75px; }
+
+        .btn-group { display: flex; gap: 4px; }
+        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; }
+        .call-btn:hover { background-color: #314a3d; border-color: #4ade80; color: #ffffff; transform: translateY(-1px); }
+        .call-btn:active { transform: translateY(1px); }
+
+        /* Info Boxes */
+        .stage-info { display: none; background-color: #131b17; border: 1px solid #1f2d26; border-radius: 6px; padding: 8px; margin-top: 8px; gap: 10px; transition: all 0.3s ease; }
+        body.show-info .stage-info { display: flex; }
+        .info-images { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+        .img-placeholder { width: 50px; height: 25px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
+        .info-text { color: #a5d6b8; font-size: 11px; line-height: 1.4; flex-grow: 1; }
+
+        /* Quiz UI */
+        .quiz-container { background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 30px; max-width: 900px; margin: 0 auto; text-align: center; transition: all 0.3s ease; }
+        .quiz-setup { display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        .quiz-setting-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; width: 100%; border-top: 1px solid #23332c; padding-top: 20px; transition: border-color 0.3s ease; }
+        .quiz-setting { display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 16px; font-weight: bold; color: #a5d6b8; }
+        .quiz-setting select { background-color: #1a2520; color: #fff; border: 1px solid #2e4539; padding: 8px 12px; border-radius: 6px; font-size: 14px; font-family: inherit; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        
+        .checkbox-group { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; font-size: 14px; color: #ffffff; font-weight: normal; background-color: #1a2520; padding: 12px 20px; border-radius: 8px; border: 1px solid #2e4539; width: 100%; transition: all 0.3s ease; }
+        .checkbox-group label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .checkbox-group input[type="checkbox"] { cursor: pointer; width: 16px; height: 16px; accent-color: #4ade80; }
+
+        .action-btn { background-color: #27a35b; border: none; color: white; padding: 12px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: background 0.2s; margin-top: 10px; }
+        .action-btn:hover { background-color: #1f8549; }
+
+        .active-quiz-area { display: none; flex-direction: column; gap: 20px; align-items: center; }
+        .quiz-header { display: flex; justify-content: space-between; width: 100%; font-size: 16px; font-weight: bold; color: #728f80; border-bottom: 1px solid #23332c; padding-bottom: 10px; transition: border-color 0.3s ease; }
+        .attempts-text { color: #d6a5a5; }
+
+        .play-mystery-btn { background-color: #1b2822; border: 2px solid #4ade80; color: #4ade80; padding: 20px 40px; font-size: 20px; font-weight: bold; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s; width: 100%; max-width: 400px; margin: 0 auto; }
+        .play-mystery-btn:hover { background-color: #24352d; box-shadow: 0 0 15px rgba(74, 222, 128, 0.2); }
+
+        .guess-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; width: 100%; margin-top: 20px; }
+        .guess-btn { background-color: #1b2822; border: 1px solid #283a32; color: #ffffff; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+        .guess-btn:hover { background-color: #2a4734; border-color: #4ade80; }
+        .guess-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .quiz-feedback { font-size: 18px; font-weight: bold; min-height: 24px; margin-top: 10px; text-align: center; }
+        .feedback-correct { color: #4ade80; }
+        .feedback-wrong { color: #d6a5a5; }
+        .feedback-warning { color: #d6c6a5; }
+
+        .quiz-results { display: none; flex-direction: column; gap: 15px; align-items: center; }
+        .score-text { font-size: 48px; font-weight: bold; color: #4ade80; }
+        .pun-text { font-size: 20px; font-weight: bold; color: #ffffff; font-style: italic; margin-bottom: 20px; text-align: center; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2a3d34; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #354d41; }
+
+        /* OLED DARK MODE */
+        body.dark-mode { background-color: #000000; }
+        body.dark-mode .discord-banner, body.dark-mode .controls-bar, body.dark-mode .column-wrapper, body.dark-mode .quiz-container, body.dark-mode .tab-btn { background-color: #080c0a; border-color: #141d19; }
+        body.dark-mode .dino-card { background-color: #0d1411; border-color: #1a2520; }
+        body.dark-mode .dino-panel { background-color: #050806; border-top-color: #141d19; }
+        body.dark-mode .stage-row, body.dark-mode .quiz-header, body.dark-mode .quiz-setting-row { border-color: #141d19; }
+        body.dark-mode .spacer { border-color: #141d19; }
+        body.dark-mode .stage-info { background-color: #0a0e0c; border-color: #141d19; }
+        body.dark-mode .img-placeholder { background-color: #050806; border-color: #1a2520; }
+        body.dark-mode .quiz-setting select, body.dark-mode .checkbox-group { background-color: #050806; border-color: #141d19; }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .discord-banner { flex-direction: column; text-align: center; gap: 12px; padding: 15px; }
+            .discord-link { width: 100%; padding: 10px; }
+            .tab-btn { flex: 1; text-align: center; }
+            .controls-bar { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; padding: 12px 15px; gap: 15px; }
+            .controls-bar > div:first-child { flex: 1; min-width: 130px; display: flex; flex-direction: column; gap: 8px; }
+            .volume-slider { width: 100%; margin: 0; }
+            .toggle-wrapper { flex: 1; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 100px; }
+            .controls-bar label { font-size: 11px; }
+            .controls-bar .spacer { display: none; }
+            .soundboard-grid { flex-direction: column; }
+            .column-wrapper { width: 100%; max-height: none; overflow-y: visible; margin-bottom: 15px; }
+            .call-btn { padding: 8px 12px; font-size: 12px; }
+            .quiz-container { padding: 20px 15px; }
+            .guess-grid { grid-template-columns: repeat(2, 1fr); }
+            .play-mystery-btn { padding: 15px; font-size: 16px; }
+        }
     </style>
 </head>
 <body>
 
 <div class="discord-banner">
-    <div class="discord-text">Noobz Evrima Utility</div>
-    <a href="https://discord.gg/Noobz" target="_blank" class="discord-link">Join Discord</a>
+    <div class="discord-text">Looking for a pack or need help with The Isle?</div>
+    <a href="https://discord.gg/Noobz" target="_blank" class="discord-link">Join discord.gg/Noobz</a>
 </div>
 
 <div class="tab-container">
@@ -74,79 +166,315 @@
 
 <div id="soundboard-view" class="view-section active">
     <div class="controls-bar">
-        <div><label>Volume</label> <input type="range" id="masterVolume" min="0" max="1" step="0.01" value="0.5"></div>
-        <div class="toggle-wrapper"><label>Dark Mode</label> <label class="switch"><input type="checkbox" id="darkModeToggle"><span class="slider"></span></label></div>
+        <div>
+            <label for="masterVolume">Master Volume</label>
+            <input type="range" id="masterVolume" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+        <div class="spacer"></div>
+        <div class="toggle-wrapper">
+            <label for="infoToggle">Show Details</label>
+            <label class="switch">
+                <input type="checkbox" id="infoToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="spacer"></div>
+        <div class="toggle-wrapper">
+            <label for="darkModeToggle">Dark Mode</label>
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
     </div>
     <div class="soundboard-grid" id="main-grid">
-        <div class="column-wrapper" id="herb-container"><div class="column-title">Herbivores</div></div>
-        <div class="column-wrapper" id="carn-container"><div class="column-title">Carnivores</div></div>
-        <div class="column-wrapper" id="omni-container"><div class="column-title">Omnivores</div></div>
+        <div class="column-wrapper herb-column" id="herb-container">
+            <div class="column-title">Herbivores</div>
+        </div>
+        <div class="column-wrapper carn-column" id="carn-container">
+            <div class="column-title">Carnivores</div>
+        </div>
+        <div class="column-wrapper omni-column" id="omni-container">
+            <div class="column-title">Omnivores</div>
+        </div>
     </div>
 </div>
 
 <div id="quiz-view" class="view-section">
     <div class="quiz-container">
-        <div id="quiz-setup">
-            <h2>Call Training</h2>
-            <button class="tab-btn" onclick="startQuiz()">Start Quiz</button>
+        <div id="quiz-setup" class="quiz-setup">
+            <h2 style="color: #ffffff; font-size: 24px; text-transform: uppercase;">Evrima Call Training</h2>
+            <p style="color: #728f80; margin-bottom: 10px;">Configure your training and press <strong>Start Quiz</strong> when ready.</p>
+            <div class="quiz-setting-row">
+                <div class="quiz-setting">
+                    <span>Quiz Length</span>
+                    <select id="quizLength">
+                        <option value="5">5 Calls (Quick Scout)</option>
+                        <option value="10" selected>10 Calls (Standard)</option>
+                        <option value="20">20 Calls (Endurance)</option>
+                        <option value="50">50 Calls (Extreme Mode)</option>
+                    </select>
+                </div>
+                <div class="quiz-setting">
+                    <span>Attempts per Call</span>
+                    <select id="quizAttempts">
+                        <option value="1">1 Attempt (Hardcore)</option>
+                        <option value="2">2 Attempts</option>
+                        <option value="3" selected>3 Attempts (Forgiving)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="quiz-setting-row" style="padding-top: 10px; border: none;">
+                <div class="quiz-setting">
+                    <span>Diets to Include</span>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="toggle-herbs" checked> Herbivores</label>
+                        <label><input type="checkbox" id="toggle-carns" checked> Carnivores</label>
+                        <label><input type="checkbox" id="toggle-omnis" checked> Omnivores</label>
+                    </div>
+                </div>
+                <div class="quiz-setting">
+                    <span>Stages to Include</span>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="toggle-juvie" checked> Juvie (25%)</label>
+                        <label><input type="checkbox" id="toggle-sub" checked> Sub (50%)</label>
+                        <label><input type="checkbox" id="toggle-adult" checked> Adult (75%)</label>
+                    </div>
+                </div>
+            </div>
+            <button class="action-btn" onclick="startQuiz()">Start Quiz</button>
         </div>
         <div id="active-quiz-area" class="active-quiz-area">
-            <button class="tab-btn" onclick="playMysteryCall()">Play Mystery Call</button>
+            <div class="quiz-header">
+                <span id="quiz-progress-text">Question 1 of 10</span>
+                <span id="quiz-attempts-text" class="attempts-text">Attempts Left: 3</span>
+            </div>
+            <button class="play-mystery-btn" onclick="playMysteryCall()">🔊 Play Mystery Call</button>
+            <div id="quiz-feedback" class="quiz-feedback"></div>
             <div id="guess-grid" class="guess-grid"></div>
+        </div>
+        <div id="quiz-results" class="quiz-results">
+            <h2 style="color: #ffffff; font-size: 24px;">Quiz Complete!</h2>
+            <div id="final-score" class="score-text">0 / 10</div>
+            <div id="final-pun" class="pun-text"></div>
+            <button class="action-btn" onclick="resetQuizUI()">Play Again</button>
         </div>
     </div>
 </div>
 
 <script>
-    const dinos = { 
-        herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"], 
-        carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", "Rex", "Troodon"], 
-        omnis: ["Beipi", "Galli"] 
+    const dinos = {
+        herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"],
+        carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", "Rex", "Troodon"],
+        omnis: ["Beipi", "Galli"]
     };
-    
-    let isQuizActive = false;
-    let openCards = { herb: [], carn: [], omni: [] };
+    const stages = [ { label: "Juvie - 25%", num: "25" }, { label: "Sub - 50%", num: "50" }, { label: "Adult - 75%", num: "75" } ];
+    const calls = ["1", "2", "3", "4", "F"];
 
-    // Builder
-    Object.keys(dinos).forEach(type => {
-        const diet = type.replace('s', '');
-        const container = document.getElementById(diet + '-container');
-        dinos[type].forEach(name => {
-            const card = document.createElement('div');
-            card.className = `dino-card ${diet}`;
-            card.innerHTML = `<button class="dino-toggle">${name}</button><div class="dino-panel"><button class="call-btn">Call 1</button></div>`;
-            card.querySelector('.dino-toggle').onclick = () => {
-                if (card.classList.contains('active')) {
-                    card.classList.remove('active', 'recent-1', 'recent-2', 'recent-3');
-                    openCards[diet] = openCards[diet].filter(c => c !== card);
-                } else {
-                    if (openCards[diet].length >= 3) openCards[diet].shift().classList.remove('active', 'recent-1', 'recent-2', 'recent-3');
-                    openCards[diet].push(card);
-                    card.classList.add('active');
-                }
-                openCards[diet].forEach((c, idx) => {
-                    c.classList.remove('recent-1', 'recent-2', 'recent-3');
-                    c.classList.add(`recent-${openCards[diet].length - idx}`);
-                });
-            };
-            container.appendChild(card);
-        });
+    const DOM = {
+        volume: document.getElementById('masterVolume'),
+        infoToggle: document.getElementById('infoToggle'),
+        darkModeToggle: document.getElementById('darkModeToggle'),
+        quizSetup: document.getElementById('quiz-setup'),
+        quizActive: document.getElementById('active-quiz-area'),
+        quizResults: document.getElementById('quiz-results'),
+        feedback: document.getElementById('quiz-feedback'),
+        attemptsText: document.getElementById('quiz-attempts-text'),
+        progressText: document.getElementById('quiz-progress-text'),
+        guessGrid: document.getElementById('guess-grid'),
+        finalScore: document.getElementById('final-score'),
+        finalPun: document.getElementById('final-pun'),
+        mainGrid: document.getElementById('main-grid'),
+        tabSoundboard: document.getElementById('tab-soundboard'),
+        tabQuiz: document.getElementById('tab-quiz')
+    };
+
+    let isQuizActive = false;
+    let activeAudio = new Audio(); 
+    let currentVolume = DOM.volume.value;
+
+    DOM.volume.addEventListener('input', e => {
+        currentVolume = e.target.value;
+        activeAudio.volume = currentVolume;
     });
 
-    // Tab & Quiz Logic
-    function switchTab(tab) {
-        if (isQuizActive && tab === 'soundboard') return alert("Finish quiz first!");
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.id === 'tab-' + tab));
-        document.querySelectorAll('.view-section').forEach(v => v.classList.toggle('active', v.id === tab + '-view'));
+    DOM.infoToggle.addEventListener('change', e => {
+        document.body.classList.toggle('show-info', e.target.checked);
+    });
+
+    DOM.darkModeToggle.addEventListener('change', e => {
+        document.body.classList.toggle('dark-mode', e.target.checked);
+    });
+
+    // --- TAB LOGIC ---
+    function switchTab(tabName) {
+        if (isQuizActive && tabName === 'soundboard') {
+            alert("Finish your training first!");
+            return;
+        }
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        if (tabName === 'soundboard') DOM.tabSoundboard.classList.add('active');
+        else DOM.tabQuiz.classList.add('active');
+        document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
+        document.getElementById(tabName + '-view').classList.add('active');
+        activeAudio.pause();
     }
-    document.getElementById('tab-soundboard').onclick = () => switchTab('soundboard');
-    document.getElementById('tab-quiz').onclick = () => switchTab('quiz');
+    DOM.tabSoundboard.addEventListener('click', () => switchTab('soundboard'));
+    DOM.tabQuiz.addEventListener('click', () => switchTab('quiz'));
+
+    function play(fileName) {
+        activeAudio.pause();
+        activeAudio.currentTime = 0;
+        activeAudio.src = 'audio/' + encodeURIComponent(fileName) + '.mp3';
+        activeAudio.volume = currentVolume; 
+        const playPromise = activeAudio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(err => { if (err.name !== 'AbortError') console.log("Audio not found: " + fileName); });
+        }
+    }
+
+    function buildDinoCards(dinoList, containerId) {
+        const container = document.getElementById(containerId);
+        dinoList.forEach(dino => {
+            let stagesHtml = '';
+            stages.forEach(stage => {
+                let buttonsHtml = '';
+                calls.forEach(call => {
+                    const fileName = `${dino} ${stage.num} ${call} Call`;
+                    buttonsHtml += `<button class="call-btn" data-file="${fileName}">${call}</button>`;
+                });
+                stagesHtml += `
+                    <div class="stage-row">
+                        <div class="stage-header">
+                            <span class="stage-label">${stage.label}</span>
+                            <div class="btn-group">${buttonsHtml}</div>
+                        </div>
+                        <div class="stage-info">
+                            <div class="info-images">
+                                <div class="img-placeholder">Base</div>
+                                <div class="img-placeholder">Prime</div>
+                            </div>
+                            <div class="info-text">
+                                <strong style="color: #ffffff;">${dino} (${stage.label.split(' ')[0]})</strong><br>
+                                Description, diet requirements, or stats can go here.
+                            </div>
+                        </div>
+                    </div>`;
+            });
+            container.insertAdjacentHTML('beforeend', `<div class="dino-card"><button class="dino-toggle"><span>${dino}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`);
+        });
+    }
+
+    buildDinoCards(dinos.herbs, 'herb-container');
+    buildDinoCards(dinos.carns, 'carn-container');
+    buildDinoCards(dinos.omnis, 'omni-container');
+
+    DOM.mainGrid.addEventListener('click', e => {
+        if (e.target.classList.contains('call-btn')) play(e.target.dataset.file);
+        else if (e.target.closest('.dino-toggle')) {
+            const currentCard = e.target.closest('.dino-card');
+            const column = currentCard.parentElement;
+            if (currentCard.classList.contains('active')) { currentCard.classList.remove('active'); return; }
+            column.querySelectorAll('.dino-card.active').forEach(c => c.classList.remove('active'));
+            currentCard.classList.add('active');
+        }
+    });
+
+    let currentQuizPool = [], currentQuestionIndex = 0, score = 0;
+    let attemptsConfig = 3, currentAttemptsLeft = 3, isQuestionLocked = false;
 
     function startQuiz() {
+        const activeDinos = [...(document.getElementById('toggle-herbs').checked ? dinos.herbs : []), ...(document.getElementById('toggle-carns').checked ? dinos.carns : []), ...(document.getElementById('toggle-omnis').checked ? dinos.omnis : [])];
+        const activeStages = [...(document.getElementById('toggle-juvie').checked ? ["25"] : []), ...(document.getElementById('toggle-sub').checked ? ["50"] : []), ...(document.getElementById('toggle-adult').checked ? ["75"] : [])];
+        if (activeDinos.length === 0 || activeStages.length === 0) return alert("Select at least one Diet and Stage!");
+        
         isQuizActive = true;
-        document.getElementById('tab-soundboard').disabled = true;
-        document.getElementById('quiz-setup').style.display = 'none';
-        document.getElementById('active-quiz-area').style.display = 'flex';
+        DOM.tabSoundboard.disabled = true;
+
+        let possibleCalls = [];
+        activeDinos.forEach(dino => activeStages.forEach(s => calls.forEach(c => possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call` }))));
+        
+        DOM.guessGrid.innerHTML = '';
+        activeDinos.sort().forEach(dino => {
+            const btn = document.createElement('button');
+            btn.className = 'guess-btn';
+            btn.innerText = dino;
+            btn.onclick = () => handleGuess(dino, btn);
+            DOM.guessGrid.appendChild(btn);
+        });
+        
+        DOM.quizSetup.style.display = 'none';
+        DOM.quizActive.style.display = 'flex';
+        
+        let length = Math.min(parseInt(document.getElementById('quizLength').value), possibleCalls.length);
+        attemptsConfig = parseInt(document.getElementById('quizAttempts').value);
+        currentQuizPool = [...possibleCalls].sort(() => 0.5 - Math.random()).slice(0, length);
+        currentQuestionIndex = 0;
+        score = 0;
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        isQuestionLocked = false;
+        currentAttemptsLeft = attemptsConfig;
+        DOM.progressText.innerText = `Question ${currentQuestionIndex + 1} of ${currentQuizPool.length}`;
+        updateAttemptsUI();
+        DOM.feedback.innerText = "";
+        DOM.feedback.className = 'quiz-feedback';
+        DOM.guessGrid.querySelectorAll('.guess-btn').forEach(btn => {
+            btn.disabled = false;
+            btn.style.backgroundColor = '#1b2822';
+            btn.style.borderColor = '#283a32';
+        });
+        setTimeout(playMysteryCall, 500);
+    }
+
+    function updateAttemptsUI() {
+        DOM.attemptsText.innerText = `Attempts Left: ${currentAttemptsLeft}`;
+    }
+
+    function playMysteryCall() { play(currentQuizPool[currentQuestionIndex].file); }
+
+    function handleGuess(guessed, btn) {
+        if (isQuestionLocked) return;
+        if (guessed === currentQuizPool[currentQuestionIndex].species) {
+            isQuestionLocked = true;
+            score++;
+            btn.style.backgroundColor = '#27a35b';
+            DOM.feedback.innerText = "Correct!";
+            DOM.feedback.className = 'quiz-feedback feedback-correct';
+            setTimeout(advanceQuiz, 1500);
+        } else {
+            currentAttemptsLeft--;
+            btn.disabled = true;
+            btn.style.backgroundColor = '#4a2727';
+            if (currentAttemptsLeft <= 0) {
+                isQuestionLocked = true;
+                DOM.feedback.innerText = `It was a ${currentQuizPool[currentQuestionIndex].species}.`;
+                DOM.feedback.className = 'quiz-feedback feedback-wrong';
+                setTimeout(advanceQuiz, 2500);
+            } else updateAttemptsUI();
+        }
+    }
+
+    function advanceQuiz() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex >= currentQuizPool.length) showResults();
+        else loadQuestion();
+    }
+
+    function showResults() {
+        isQuizActive = false;
+        DOM.tabSoundboard.disabled = false;
+        DOM.quizActive.style.display = 'none';
+        DOM.quizResults.style.display = 'flex';
+        DOM.finalScore.innerText = `${score} / ${currentQuizPool.length}`;
+        DOM.finalPun.innerText = score === currentQuizPool.length ? "Apex Predator!" : "Keep studying!";
+    }
+
+    function resetQuizUI() {
+        DOM.quizResults.style.display = 'none';
+        DOM.quizSetup.style.display = 'flex';
     }
 </script>
 </body>
