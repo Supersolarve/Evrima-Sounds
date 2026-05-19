@@ -8,29 +8,30 @@
         /* Global Theme */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* Forces the deep background void to match */
-        html, body { background-color: #1a2520; min-height: 100vh; }
+        /* 🟢 THE FLEXBOX LOCK: Locks the page to exactly 100% of your screen height */
+        html, body { background-color: #1a2520; height: 100vh; overflow: hidden; }
         
-        body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; }
+        /* Forces the body to stack items vertically and fill the screen */
+        body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; display: flex; flex-direction: column; }
 
         /* Banner */
-        .discord-banner { background-color: #131b17; border: 1px solid #23332c; border-radius: 8px; padding: 12px 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        .discord-banner { background-color: #131b17; border: 1px solid #23332c; border-radius: 8px; padding: 12px 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); flex-shrink: 0; }
         .discord-text { font-size: 14px; font-weight: bold; color: #ffffff; }
         .discord-link { background-color: #27a35b; color: #ffffff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; transition: background 0.2s ease; }
         .discord-link:hover { background-color: #1f8549; }
 
         /* Tab Navigation */
-        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; flex-shrink: 0; }
         .tab-btn { background-color: #141d19; border: 1px solid #23332c; color: #728f80; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 1px; }
         .tab-btn:hover { background-color: #1b2822; color: #a5d6b8; }
         .tab-btn.active { background-color: #27a35b; border-color: #27a35b; color: #ffffff; box-shadow: 0 0 10px rgba(39, 163, 91, 0.3); }
 
-        /* View Controllers */
-        .view-section { display: none; }
-        .view-section.active { display: block; }
+        /* View Controllers - Tells the active view to consume remaining screen space */
+        .view-section { display: none; flex: 1; min-height: 0; overflow: hidden; }
+        .view-section.active { display: flex; flex-direction: column; }
 
         /* Control Bar */
-        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex-shrink: 0; }
         .controls-bar label { font-weight: bold; color: #a5d6b8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
         .volume-slider { flex-grow: 1; max-width: 250px; cursor: pointer; accent-color: #4ade80; }
         .spacer { width: 20px; border-right: 1px solid #23332c; height: 20px; }
@@ -44,19 +45,19 @@
         input:checked + .slider { background-color: #4ade80; }
         input:checked + .slider:before { transform: translateX(16px); background-color: #1a2520; }
 
-        /* Soundboard Grid */
-        .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; }
+        /* Soundboard Grid - Expands to fill the remaining empty space */
+        .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; flex: 1; min-height: 0; }
         
-        /* 🟢 FIX: Dynamic height to fit the screen and overflow-y to bring back the sliders */
-        .column-wrapper { flex: 1; min-width: 300px; max-height: calc(100vh - 220px); overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; }
+        /* 🟢 THE SCROLL FIX: Forces columns to take 100% of grid height and scroll internally */
+        .column-wrapper { flex: 1; min-width: 300px; height: 100%; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; }
         
-        .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; }
+        .column-title { font-size: 16px; font-weight: bold; text-align: center; padding: 10px; margin-bottom: 10px; border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; flex-shrink: 0; }
         .herb-column .column-title { background-color: #2a4734; color: #a5d6b8; }
         .carn-column .column-title { background-color: #4a2727; color: #d6a5a5; }
         .omni-column .column-title { background-color: #3b2a47; color: #c4a5d6; }
 
         /* Accordion Styles */
-        .dino-card { background-color: #1b2822; border: 1px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; }
+        .dino-card { background-color: #1b2822; border: 1px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
         .dino-toggle { width: 100%; background-color: transparent; border: none; color: #ffffff; padding: 10px 14px; text-align: left; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .dino-toggle:hover { background-color: #24352d; }
         .arrow { font-size: 10px; color: #728f80; transition: transform 0.3s ease; }
@@ -83,7 +84,8 @@
         .img-placeholder { width: 50px; height: 25px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; }
         .info-text { color: #a5d6b8; font-size: 11px; line-height: 1.4; flex-grow: 1; }
 
-        /* Quiz UI */
+        /* Quiz UI - Allows the quiz to scroll naturally if it gets too long */
+        #quiz-view { overflow-y: auto; }
         .quiz-container { background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 30px; max-width: 900px; margin: 0 auto; text-align: center; }
         .quiz-setup { display: flex; flex-direction: column; gap: 20px; align-items: center; }
         .quiz-setting-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; width: 100%; border-top: 1px solid #23332c; padding-top: 20px; }
@@ -136,22 +138,22 @@
     <button class="tab-btn" onclick="switchTab('quiz')">Training Quiz</button>
 </div>
 
-<div class="controls-bar">
-    <label for="masterVolume">Master Volume</label>
-    <input type="range" id="masterVolume" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
-    
-    <div class="spacer"></div>
-    
-    <div class="toggle-wrapper">
-        <label class="switch">
-            <input type="checkbox" id="infoToggle">
-            <span class="slider"></span>
-        </label>
-        <label for="infoToggle">Show Details & Images</label>
-    </div>
-</div>
-
 <div id="soundboard-view" class="view-section active">
+    <div class="controls-bar">
+        <label for="masterVolume">Master Volume</label>
+        <input type="range" id="masterVolume" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
+        
+        <div class="spacer"></div>
+        
+        <div class="toggle-wrapper">
+            <label class="switch">
+                <input type="checkbox" id="infoToggle">
+                <span class="slider"></span>
+            </label>
+            <label for="infoToggle">Show Details & Images</label>
+        </div>
+    </div>
+
     <div class="soundboard-grid" id="main-grid">
         <div class="column-wrapper herb-column" id="herb-container">
             <div class="column-title">Herbivores</div>
