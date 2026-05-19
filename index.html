@@ -53,7 +53,13 @@
         .omni-column .column-title { background-color: #3b2a47; color: #c4a5d6; }
 
         /* Accordion Styles */
-        .dino-card { background-color: #1b2822; border: 1px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; }
+        .dino-card { background-color: #1b2822; border: 2px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; }
+        
+        /* 🟢 RECENT ORDER BORDER COLORS */
+        .dino-card.recent-1 { border-color: #4ade80 !important; }
+        .dino-card.recent-2 { border-color: #27a35b !important; }
+        .dino-card.recent-3 { border-color: #1f8549 !important; }
+
         .dino-toggle { width: 100%; background-color: transparent; border: none; color: #ffffff; padding: 10px 14px; text-align: left; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.3s ease; }
         .dino-toggle:hover { background-color: #24352d; }
         .arrow { font-size: 10px; color: #728f80; transition: transform 0.3s ease; }
@@ -186,6 +192,14 @@
                 <span class="slider"></span>
             </label>
         </div>
+        <div class="spacer"></div>
+        <div class="toggle-wrapper">
+            <label for="partyToggle">Party Mode</label>
+            <label class="switch">
+                <input type="checkbox" id="partyToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
     </div>
     <div class="soundboard-grid" id="main-grid">
         <div class="column-wrapper herb-column" id="herb-container">
@@ -275,6 +289,7 @@
         volume: document.getElementById('masterVolume'),
         infoToggle: document.getElementById('infoToggle'),
         darkModeToggle: document.getElementById('darkModeToggle'),
+        partyToggle: document.getElementById('partyToggle'),
         quizSetup: document.getElementById('quiz-setup'),
         quizActive: document.getElementById('active-quiz-area'),
         quizResults: document.getElementById('quiz-results'),
@@ -290,12 +305,10 @@
     };
 
     let isQuizActive = false;
-    let activeAudio = new Audio(); 
     let currentVolume = DOM.volume.value;
 
     DOM.volume.addEventListener('input', e => {
         currentVolume = e.target.value;
-        activeAudio.volume = currentVolume;
     });
 
     DOM.infoToggle.addEventListener('change', e => {
@@ -306,7 +319,31 @@
         document.body.classList.toggle('dark-mode', e.target.checked);
     });
 
-    // --- TAB LOGIC ---
+    // 🟢 PARTY MODE ENGINE
+    const partyDinos = {
+        drums: ["Hypsi 25 1 Call", "Troodon 25 1 Call", "Dryo 25 2 Call"],
+        bass: ["Rex 75 1 Call", "Deino 75 1 Call", "Carno 75 3 Call"],
+        melody: ["Maia 75 1 Call", "Galli 75 2 Call", "Tenno 75 3 Call"]
+    };
+    let partyInterval = null;
+
+    DOM.partyToggle.addEventListener('change', e => {
+        if (e.target.checked) {
+            partyInterval = setInterval(() => {
+                const drum = partyDinos.drums[Math.floor(Math.random() * partyDinos.drums.length)];
+                const bass = partyDinos.bass[Math.floor(Math.random() * partyDinos.bass.length)];
+                const melo = partyDinos.melody[Math.floor(Math.random() * partyDinos.melody.length)];
+                
+                play(drum);
+                setTimeout(() => play(bass), 150);
+                setTimeout(() => play(melo), 300);
+            }, 600);
+        } else {
+            clearInterval(partyInterval);
+        }
+    });
+
+    // --- TAB LOGIC WITH QUIZ LOCK ---
     function switchTab(tabName) {
         if (isQuizActive && tabName === 'soundboard') {
             alert("Finish your training first!");
@@ -317,22 +354,18 @@
         else DOM.tabQuiz.classList.add('active');
         document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
         document.getElementById(tabName + '-view').classList.add('active');
-        activeAudio.pause();
     }
     DOM.tabSoundboard.addEventListener('click', () => switchTab('soundboard'));
     DOM.tabQuiz.addEventListener('click', () => switchTab('quiz'));
 
+    // 🟢 UPDATED PLAY FUNCTION (Multi-channel Audio)
     function play(fileName) {
-        activeAudio.pause();
-        activeAudio.currentTime = 0;
-        activeAudio.src = 'audio/' + encodeURIComponent(fileName) + '.mp3';
-        activeAudio.volume = currentVolume; 
-        const playPromise = activeAudio.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(err => { if (err.name !== 'AbortError') console.log("Audio not found: " + fileName); });
-        }
+        const a = new Audio('audio/' + encodeURIComponent(fileName) + '.mp3');
+        a.volume = currentVolume; 
+        a.play().catch(err => { if (err.name !== 'AbortError') console.log("Audio not found: " + fileName); });
     }
 
+    // --- BUILD UI ---
     function buildDinoCards(dinoList, containerId) {
         const container = document.getElementById(containerId);
         dinoList.forEach(dino => {
@@ -369,17 +402,36 @@
     buildDinoCards(dinos.carns, 'carn-container');
     buildDinoCards(dinos.omnis, 'omni-container');
 
+    // 🟢 3-DINO LIMIT AND BORDER LOGIC
+    let openCards = { herb: [], carn: [], omni: [] };
+
     DOM.mainGrid.addEventListener('click', e => {
         if (e.target.classList.contains('call-btn')) play(e.target.dataset.file);
         else if (e.target.closest('.dino-toggle')) {
             const currentCard = e.target.closest('.dino-card');
-            const column = currentCard.parentElement;
-            if (currentCard.classList.contains('active')) { currentCard.classList.remove('active'); return; }
-            column.querySelectorAll('.dino-card.active').forEach(c => c.classList.remove('active'));
-            currentCard.classList.add('active');
+            const colId = currentCard.closest('.column-wrapper').id.split('-')[0]; // herb, carn, omni
+            
+            if (currentCard.classList.contains('active')) {
+                currentCard.classList.remove('active', 'recent-1', 'recent-2', 'recent-3');
+                openCards[colId] = openCards[colId].filter(c => c !== currentCard);
+            } else {
+                if (openCards[colId].length >= 3) {
+                    const oldest = openCards[colId].shift();
+                    oldest.classList.remove('active', 'recent-1', 'recent-2', 'recent-3');
+                }
+                openCards[colId].push(currentCard);
+                currentCard.classList.add('active');
+            }
+            
+            // Reapply styling
+            openCards[colId].forEach((c, idx) => {
+                c.classList.remove('recent-1', 'recent-2', 'recent-3');
+                c.classList.add(`recent-${openCards[colId].length - idx}`);
+            });
         }
     });
 
+    // --- QUIZ LOGIC ---
     let currentQuizPool = [], currentQuestionIndex = 0, score = 0;
     let attemptsConfig = 3, currentAttemptsLeft = 3, isQuestionLocked = false;
 
