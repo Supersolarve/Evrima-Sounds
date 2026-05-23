@@ -63,62 +63,38 @@
         .dino-card.active .dino-panel { display: block; }
         .dino-card.active .arrow { transform: rotate(180deg); }
 
-        /* Row Layout */
-        .stage-row { display: block; padding: 10px 12px; border-bottom: 1px solid #1f2d26; transition: border-color 0.3s ease; position: relative; }
+        /* --- Row Layout & Text Wrap --- */
+        .stage-row { display: block; padding: 10px 12px; border-bottom: 1px solid #1f2d26; transition: background-color 0.3s ease; position: relative; }
         .stage-row:last-child { border-bottom: none; }
-        .stage-row::after { content: ""; display: table; clear: both; }
-        .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; display: block; margin-bottom: 4px; }
-
-        /* Button Cluster (L-Shape top right quadrant) */
-        .call-cluster {
-            float: right;
-            margin-left: 12px;
-            padding: 8px;
-            margin-top: -8px; /* Offsets padding so buttons align with label */
-            margin-right: 0;
-            border: 1px solid transparent;
-            border-bottom: none;
-            border-radius: 6px 6px 0 0;
-            position: relative;
-            z-index: 10;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
+        .stage-row::after { content: ""; display: table; clear: both; } /* Clearfix */
         
-        .btn-group { display: flex; gap: 4px; }
+        /* Highlight the row slightly when details are shown */
+        body.show-info .stage-row { background-color: #131b17; border-radius: 6px; }
+
+        /* Right Side - Buttons */
+        .btn-group { float: right; display: flex; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 10; }
         .call-col { display: flex; flex-direction: column; gap: 4px; }
         
         .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; width: 100%; }
         .call-btn:hover { background-color: #314a3d; border-color: #4ade80; color: #ffffff; transform: translateY(-1px); }
         .call-btn:active { transform: translateY(1px); }
 
-        /* Alt Call Buttons */
         .call-btn-alt { background-color: #1a3024; border-color: #244232; color: #10b981; display: none; }
         .call-btn-alt:hover { background-color: #234231; border-color: #10b981; color: #ffffff; }
         body.show-alt-calls .call-btn-alt { display: block; }
 
-        /* Masking trick for L-shape wrap border */
-        body.show-info .call-cluster {
-            background-color: #131b17;
-            border-color: #1f2d26;
-        }
-
-        /* The info box (Bottom quadrant of L-shape) */
-        .stage-info { 
-            display: none; 
-            background-color: #131b17; 
-            border: 1px solid #1f2d26; 
-            border-radius: 6px 0 6px 6px; /* Flat top-right to merge seamlessly */
-            padding: 10px; 
-            margin-top: 2px; 
-            transition: all 0.3s ease; 
-            position: relative;
-            z-index: 5; /* Stays under call-cluster so the borders merge */
-        }
-        body.show-info .stage-info { display: block; }
+        /* Left Side - Label & Images (L-Shape Cutout) */
+        .left-wrap { float: left; margin-right: 12px; width: 65px; }
+        .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; margin-bottom: 6px; }
         
-        .info-images { float: left; margin-right: 12px; margin-bottom: 4px; display: flex; flex-direction: column; gap: 4px; }
-        .img-placeholder { width: 55px; height: 26px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
-        .info-text { color: #a5d6b8; font-size: 11px; line-height: 1.5; text-align: justify; }
+        .info-images { display: none; flex-direction: column; gap: 4px; margin-bottom: 4px; }
+        body.show-info .info-images { display: flex; }
+        
+        .img-placeholder { width: 100%; height: 26px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
+        
+        /* The Text - Flows naturally into dead space */
+        .info-text { display: none; color: #a5d6b8; font-size: 11px; line-height: 1.5; text-align: justify; }
+        body.show-info .info-text { display: block; }
 
         /* Quiz UI */
         .quiz-container { background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 30px; max-width: 900px; margin: 0 auto; text-align: center; transition: all 0.3s ease; }
@@ -169,8 +145,7 @@
         body.dark-mode .spacer { border-color: #141d19; }
         body.dark-mode .img-placeholder { background-color: #050806; border-color: #1a2520; }
         body.dark-mode .quiz-setting select, body.dark-mode .checkbox-group { background-color: #050806; border-color: #141d19; }
-        body.dark-mode .stage-info { background-color: #0a0e0c; border-color: #141d19; }
-        body.dark-mode.show-info .call-cluster { background-color: #0a0e0c; border-color: #141d19; }
+        body.dark-mode.show-info .stage-row { background-color: #0a0e0c; }
 
         /* Mobile */
         @media (max-width: 768px) {
@@ -192,10 +167,10 @@
             .play-mystery-btn { padding: 15px; font-size: 16px; }
             
             /* Break L-Shape layout for mobile to prevent text squishing */
-            .call-cluster { float: none; margin: 0 0 10px 0; padding: 0; border: none !important; background: transparent !important; }
-            .btn-group { flex-wrap: wrap; }
-            .stage-info { border-radius: 6px; margin-top: 0; }
-            .info-images { float: none; flex-direction: row; margin-bottom: 8px; }
+            .left-wrap { float: none; width: 100%; margin-bottom: 8px; }
+            .btn-group { float: none; margin-left: 0; width: 100%; justify-content: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
+            .info-images { flex-direction: row; margin-bottom: 8px; }
+            .img-placeholder { width: 55px; }
             .info-text { text-align: left; }
         }
     </style>
@@ -413,19 +388,17 @@
                 
                 stagesHtml += `
                     <div class="stage-row">
-                        <div class="call-cluster">
-                            <div class="btn-group">${buttonsHtml}</div>
-                        </div>
-                        <div class="stage-label">${stage.label}</div>
-                        <div class="stage-info">
+                        <div class="btn-group">${buttonsHtml}</div>
+                        <div class="left-wrap">
+                            <div class="stage-label">${stage.label}</div>
                             <div class="info-images">
                                 <div class="img-placeholder">Base</div>
                                 <div class="img-placeholder">Prime</div>
                             </div>
-                            <div class="info-text">
-                                <strong style="color: #ffffff;">${dino} (${stage.label.split(' ')[0]})</strong><br>
-                                Description, diet requirements, or stats can go here. When expanded, this details block wraps dynamically with the buttons above it to form a single, fully-outlined L-Shape.
-                            </div>
+                        </div>
+                        <div class="info-text">
+                            <strong style="color: #ffffff;">${dino} (${stage.label.split(' ')[0]})</strong><br>
+                            Description, diet requirements, or stats can go here. This text dynamically utilizes the dead space right next to the label, wrapping naturally around the Base/Prime blocks to form a clean L-shape on the left.
                         </div>
                     </div>`;
             });
