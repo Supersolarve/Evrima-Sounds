@@ -63,14 +63,28 @@
         .dino-card.active .dino-panel { display: block; }
         .dino-card.active .arrow { transform: rotate(180deg); }
 
-        /* L-Shape Layout Styles */
-        .stage-row { display: block; padding: 10px 12px; border-bottom: 1px solid #1f2d26; transition: border-color 0.3s ease; }
+        /* Row Layout */
+        .stage-row { display: block; padding: 10px 12px; border-bottom: 1px solid #1f2d26; transition: border-color 0.3s ease; position: relative; }
         .stage-row:last-child { border-bottom: none; }
-        .stage-row::after { content: ""; display: table; clear: both; } /* Clearfix for floats */
-        .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; display: block; margin-bottom: 6px; }
+        .stage-row::after { content: ""; display: table; clear: both; }
+        .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; display: block; margin-bottom: 4px; }
 
-        /* Button Groups & Stacking */
-        .btn-group { float: right; display: flex; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 2; }
+        /* Button Cluster (L-Shape top right quadrant) */
+        .call-cluster {
+            float: right;
+            margin-left: 12px;
+            padding: 8px;
+            margin-top: -8px; /* Offsets padding so buttons align with label */
+            margin-right: 0;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 6px 6px 0 0;
+            position: relative;
+            z-index: 10;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .btn-group { display: flex; gap: 4px; }
         .call-col { display: flex; flex-direction: column; gap: 4px; }
         
         .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; width: 100%; }
@@ -82,9 +96,26 @@
         .call-btn-alt:hover { background-color: #234231; border-color: #10b981; color: #ffffff; }
         body.show-alt-calls .call-btn-alt { display: block; }
 
-        /* Integrated Info Content (L-Shape Wrap) */
-        .stage-info { display: none; margin-top: 6px; transition: opacity 0.3s ease; }
+        /* Masking trick for L-shape wrap border */
+        body.show-info .call-cluster {
+            background-color: #131b17;
+            border-color: #1f2d26;
+        }
+
+        /* The info box (Bottom quadrant of L-shape) */
+        .stage-info { 
+            display: none; 
+            background-color: #131b17; 
+            border: 1px solid #1f2d26; 
+            border-radius: 6px 0 6px 6px; /* Flat top-right to merge seamlessly */
+            padding: 10px; 
+            margin-top: 2px; 
+            transition: all 0.3s ease; 
+            position: relative;
+            z-index: 5; /* Stays under call-cluster so the borders merge */
+        }
         body.show-info .stage-info { display: block; }
+        
         .info-images { float: left; margin-right: 12px; margin-bottom: 4px; display: flex; flex-direction: column; gap: 4px; }
         .img-placeholder { width: 55px; height: 26px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
         .info-text { color: #a5d6b8; font-size: 11px; line-height: 1.5; text-align: justify; }
@@ -129,7 +160,7 @@
         ::-webkit-scrollbar-thumb { background: #2a3d34; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #354d41; }
 
-        /* OLED DARK MODE */
+        /* DARK MODE */
         body.dark-mode { background-color: #000000; }
         body.dark-mode .discord-banner, body.dark-mode .controls-bar, body.dark-mode .column-wrapper, body.dark-mode .quiz-container, body.dark-mode .tab-btn { background-color: #080c0a; border-color: #141d19; }
         body.dark-mode .dino-card { background-color: #0d1411; border-color: #1a2520; }
@@ -138,6 +169,8 @@
         body.dark-mode .spacer { border-color: #141d19; }
         body.dark-mode .img-placeholder { background-color: #050806; border-color: #1a2520; }
         body.dark-mode .quiz-setting select, body.dark-mode .checkbox-group { background-color: #050806; border-color: #141d19; }
+        body.dark-mode .stage-info { background-color: #0a0e0c; border-color: #141d19; }
+        body.dark-mode.show-info .call-cluster { background-color: #0a0e0c; border-color: #141d19; }
 
         /* Mobile */
         @media (max-width: 768px) {
@@ -158,8 +191,10 @@
             .guess-grid { grid-template-columns: repeat(2, 1fr); }
             .play-mystery-btn { padding: 15px; font-size: 16px; }
             
-            /* Break layout for mobile to prevent squeezing text */
-            .btn-group { float: none; margin-left: 0; width: 100%; justify-content: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
+            /* Break L-Shape layout for mobile to prevent text squishing */
+            .call-cluster { float: none; margin: 0 0 10px 0; padding: 0; border: none !important; background: transparent !important; }
+            .btn-group { flex-wrap: wrap; }
+            .stage-info { border-radius: 6px; margin-top: 0; }
             .info-images { float: none; flex-direction: row; margin-bottom: 8px; }
             .info-text { text-align: left; }
         }
@@ -378,7 +413,9 @@
                 
                 stagesHtml += `
                     <div class="stage-row">
-                        <div class="btn-group">${buttonsHtml}</div>
+                        <div class="call-cluster">
+                            <div class="btn-group">${buttonsHtml}</div>
+                        </div>
                         <div class="stage-label">${stage.label}</div>
                         <div class="stage-info">
                             <div class="info-images">
@@ -387,7 +424,7 @@
                             </div>
                             <div class="info-text">
                                 <strong style="color: #ffffff;">${dino} (${stage.label.split(' ')[0]})</strong><br>
-                                Description, diet requirements, or stats can go here. When expanded, this details block dynamically wraps around the call buttons above, forming a space-saving L-shape layout that looks much cleaner.
+                                Description, diet requirements, or stats can go here. When expanded, this details block wraps dynamically with the buttons above it to form a single, fully-outlined L-Shape.
                             </div>
                         </div>
                     </div>`;
