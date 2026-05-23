@@ -63,14 +63,13 @@
         .dino-card.active .dino-panel { display: block; }
         .dino-card.active .arrow { transform: rotate(180deg); }
 
-        /* L-Shape Layout Styles */
-        .stage-row { display: block; padding: 10px 12px; border-bottom: 1px solid #1f2d26; transition: border-color 0.3s ease; }
+        .stage-row { display: flex; flex-direction: column; padding: 8px 0; border-bottom: 1px solid #1f2d26; transition: border-color 0.3s ease; }
         .stage-row:last-child { border-bottom: none; }
-        .stage-row::after { content: ""; display: table; clear: both; } /* Clearfix for floats */
-        .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; display: block; margin-bottom: 6px; }
+        .stage-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .stage-label { font-size: 11px; color: #ffffff; font-weight: bold; flex-shrink: 0; width: 75px; }
 
         /* Button Groups & Stacking */
-        .btn-group { float: right; display: flex; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 2; }
+        .btn-group { display: flex; gap: 4px; }
         .call-col { display: flex; flex-direction: column; gap: 4px; }
         
         .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; width: 100%; }
@@ -82,12 +81,12 @@
         .call-btn-alt:hover { background-color: #234231; border-color: #10b981; color: #ffffff; }
         body.show-alt-calls .call-btn-alt { display: block; }
 
-        /* Integrated Info Content (L-Shape Wrap) */
-        .stage-info { display: none; margin-top: 6px; transition: opacity 0.3s ease; }
-        body.show-info .stage-info { display: block; }
-        .info-images { float: left; margin-right: 12px; margin-bottom: 4px; display: flex; flex-direction: column; gap: 4px; }
-        .img-placeholder { width: 55px; height: 26px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
-        .info-text { color: #a5d6b8; font-size: 11px; line-height: 1.5; text-align: justify; }
+        /* Info Boxes */
+        .stage-info { display: none; background-color: #131b17; border: 1px solid #1f2d26; border-radius: 6px; padding: 8px; margin-top: 8px; gap: 10px; transition: all 0.3s ease; }
+        body.show-info .stage-info { display: flex; }
+        .info-images { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+        .img-placeholder { width: 50px; height: 25px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
+        .info-text { color: #a5d6b8; font-size: 11px; line-height: 1.4; flex-grow: 1; }
 
         /* Quiz UI */
         .quiz-container { background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 30px; max-width: 900px; margin: 0 auto; text-align: center; transition: all 0.3s ease; }
@@ -136,6 +135,7 @@
         body.dark-mode .dino-panel { background-color: #050806; border-top-color: #141d19; }
         body.dark-mode .stage-row, body.dark-mode .quiz-header, body.dark-mode .quiz-setting-row { border-color: #141d19; }
         body.dark-mode .spacer { border-color: #141d19; }
+        body.dark-mode .stage-info { background-color: #0a0e0c; border-color: #141d19; }
         body.dark-mode .img-placeholder { background-color: #050806; border-color: #1a2520; }
         body.dark-mode .quiz-setting select, body.dark-mode .checkbox-group { background-color: #050806; border-color: #141d19; }
 
@@ -157,11 +157,6 @@
             .quiz-container { padding: 20px 15px; }
             .guess-grid { grid-template-columns: repeat(2, 1fr); }
             .play-mystery-btn { padding: 15px; font-size: 16px; }
-            
-            /* Break layout for mobile to prevent squeezing text */
-            .btn-group { float: none; margin-left: 0; width: 100%; justify-content: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
-            .info-images { float: none; flex-direction: row; margin-bottom: 8px; }
-            .info-text { text-align: left; }
         }
     </style>
 </head>
@@ -201,7 +196,7 @@
         </div>
         <div class="spacer"></div>
         <div class="toggle-wrapper">
-            <label for="darkModeToggle">Dark Mode</label>
+            <label for="darkModeToggle">OLED</label>
             <label class="switch">
                 <input type="checkbox" id="darkModeToggle">
                 <span class="slider"></span>
@@ -375,11 +370,12 @@
                         <button class="call-btn call-btn-alt" data-file="${file2}">${call}</button>
                     </div>`;
                 });
-                
                 stagesHtml += `
                     <div class="stage-row">
-                        <div class="btn-group">${buttonsHtml}</div>
-                        <div class="stage-label">${stage.label}</div>
+                        <div class="stage-header">
+                            <span class="stage-label">${stage.label}</span>
+                            <div class="btn-group">${buttonsHtml}</div>
+                        </div>
                         <div class="stage-info">
                             <div class="info-images">
                                 <div class="img-placeholder">Base</div>
@@ -387,7 +383,7 @@
                             </div>
                             <div class="info-text">
                                 <strong style="color: #ffffff;">${dino} (${stage.label.split(' ')[0]})</strong><br>
-                                Description, diet requirements, or stats can go here. When expanded, this details block dynamically wraps around the call buttons above, forming a space-saving L-shape layout that looks much cleaner.
+                                Description, diet requirements, or stats can go here.
                             </div>
                         </div>
                     </div>`;
