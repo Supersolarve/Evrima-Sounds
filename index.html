@@ -28,14 +28,14 @@
         .view-section.active { display: block; }
 
         /* Control Bar */
-        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; }
+        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; flex-wrap: wrap; }
         .controls-bar label { font-weight: bold; color: #a5d6b8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
         .volume-slider { flex-grow: 1; max-width: 250px; cursor: pointer; accent-color: #4ade80; }
         .spacer { width: 20px; border-right: 1px solid #23332c; height: 20px; transition: border-color 0.3s ease; }
 
         /* Toggle Switch */
         .toggle-wrapper { display: flex; align-items: center; gap: 10px; }
-        .switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+        .switch { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #23332c; transition: .3s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: #728f80; transition: .3s; border-radius: 50%; }
@@ -68,10 +68,18 @@
         .stage-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .stage-label { font-size: 11px; color: #ffffff; font-weight: bold; flex-shrink: 0; width: 75px; }
 
+        /* Button Groups & Stacking */
         .btn-group { display: flex; gap: 4px; }
-        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; }
+        .call-col { display: flex; flex-direction: column; gap: 4px; }
+        
+        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; width: 100%; }
         .call-btn:hover { background-color: #314a3d; border-color: #4ade80; color: #ffffff; transform: translateY(-1px); }
         .call-btn:active { transform: translateY(1px); }
+
+        /* Alt Call Buttons */
+        .call-btn-alt { background-color: #1a3024; border-color: #244232; color: #10b981; display: none; }
+        .call-btn-alt:hover { background-color: #234231; border-color: #10b981; color: #ffffff; }
+        body.show-alt-calls .call-btn-alt { display: block; }
 
         /* Info Boxes */
         .stage-info { display: none; background-color: #131b17; border: 1px solid #1f2d26; border-radius: 6px; padding: 8px; margin-top: 8px; gap: 10px; transition: all 0.3s ease; }
@@ -137,10 +145,10 @@
             .discord-banner { flex-direction: column; text-align: center; gap: 12px; padding: 15px; }
             .discord-link { width: 100%; padding: 10px; }
             .tab-btn { flex: 1; text-align: center; }
-            .controls-bar { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; padding: 12px 15px; gap: 15px; }
+            .controls-bar { flex-direction: row; justify-content: space-between; align-items: flex-end; padding: 12px 15px; gap: 15px; }
             .controls-bar > div:first-child { flex: 1; min-width: 130px; display: flex; flex-direction: column; gap: 8px; }
             .volume-slider { width: 100%; margin: 0; }
-            .toggle-wrapper { flex: 1; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 100px; }
+            .toggle-wrapper { flex: 1; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 80px; }
             .controls-bar label { font-size: 11px; }
             .controls-bar .spacer { display: none; }
             .soundboard-grid { flex-direction: column; }
@@ -172,7 +180,15 @@
         </div>
         <div class="spacer"></div>
         <div class="toggle-wrapper">
-            <label for="infoToggle">Show Details</label>
+            <label for="altCallToggle">Alt Calls</label>
+            <label class="switch">
+                <input type="checkbox" id="altCallToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="spacer"></div>
+        <div class="toggle-wrapper">
+            <label for="infoToggle">Details</label>
             <label class="switch">
                 <input type="checkbox" id="infoToggle">
                 <span class="slider"></span>
@@ -180,7 +196,7 @@
         </div>
         <div class="spacer"></div>
         <div class="toggle-wrapper">
-            <label for="darkModeToggle">Dark Mode</label>
+            <label for="darkModeToggle">OLED</label>
             <label class="switch">
                 <input type="checkbox" id="darkModeToggle">
                 <span class="slider"></span>
@@ -273,6 +289,7 @@
 
     const DOM = {
         volume: document.getElementById('masterVolume'),
+        altCallToggle: document.getElementById('altCallToggle'),
         infoToggle: document.getElementById('infoToggle'),
         darkModeToggle: document.getElementById('darkModeToggle'),
         quizSetup: document.getElementById('quiz-setup'),
@@ -296,6 +313,10 @@
     DOM.volume.addEventListener('input', e => {
         currentVolume = e.target.value;
         activeAudio.volume = currentVolume;
+    });
+
+    DOM.altCallToggle.addEventListener('change', e => {
+        document.body.classList.toggle('show-alt-calls', e.target.checked);
     });
 
     DOM.infoToggle.addEventListener('change', e => {
@@ -340,8 +361,14 @@
             stages.forEach(stage => {
                 let buttonsHtml = '';
                 calls.forEach(call => {
-                    const fileName = `${dino} ${stage.num} ${call} Call`;
-                    buttonsHtml += `<button class="call-btn" data-file="${fileName}">${call}</button>`;
+                    const file1 = `${dino} ${stage.num} ${call} Call 1`;
+                    const file2 = `${dino} ${stage.num} ${call} Call 2`;
+                    
+                    buttonsHtml += `
+                    <div class="call-col">
+                        <button class="call-btn" data-file="${file1}">${call}</button>
+                        <button class="call-btn call-btn-alt" data-file="${file2}">${call}</button>
+                    </div>`;
                 });
                 stagesHtml += `
                     <div class="stage-row">
@@ -392,7 +419,11 @@
         DOM.tabSoundboard.disabled = true;
 
         let possibleCalls = [];
-        activeDinos.forEach(dino => activeStages.forEach(s => calls.forEach(c => possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call` }))));
+        activeDinos.forEach(dino => activeStages.forEach(s => calls.forEach(c => {
+            // Include both versions in the quiz pool
+            possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call 1` });
+            possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call 2` });
+        })));
         
         DOM.guessGrid.innerHTML = '';
         activeDinos.sort().forEach(dino => {
