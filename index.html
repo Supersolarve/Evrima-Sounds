@@ -52,41 +52,73 @@
         .carn-column .column-title { background-color: #4a2727; color: #d6a5a5; }
         .omni-column .column-title { background-color: #3b2a47; color: #c4a5d6; }
 
-        /* Accordion Styles */
-        .dino-card { background-color: #1b2822; border: 1px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; }
+        /* General Accordion Styles (Base Fallbacks) */
+        .dino-card { margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; border: 1px solid transparent; }
         .dino-toggle { width: 100%; background-color: transparent; border: none; color: #ffffff; padding: 10px 14px; text-align: left; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.3s ease; }
-        .dino-toggle:hover { background-color: #24352d; }
         .arrow { font-size: 10px; color: #728f80; transition: transform 0.3s ease; }
-        .dino-panel { display: none; background-color: #16201b; padding: 6px 10px; border-top: 1px solid #23332c; transition: all 0.3s ease; }
-        .dino-card.active { border-color: #3a5448; }
-        .dino-card.active .dino-toggle { background-color: #213029; }
+        .dino-panel { display: none; padding: 6px 10px; border-top: 1px solid transparent; transition: all 0.3s ease; }
         .dino-card.active .dino-panel { display: block; }
         .dino-card.active .arrow { transform: rotate(180deg); }
 
-        .stage-row { display: flex; flex-direction: column; padding: 8px 0; border-bottom: 1px solid #1f2d26; transition: border-color 0.3s ease; }
-        .stage-row:last-child { border-bottom: none; }
-        .stage-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .stage-label { font-size: 11px; color: #ffffff; font-weight: bold; flex-shrink: 0; width: 75px; }
+        /* --- Diet Specific Theming - Herbivores (Green) --- */
+        .herb-column .dino-card { background-color: #1b2822; border-color: #283a32; }
+        .herb-column .dino-toggle:hover { background-color: #24352d; }
+        .herb-column .dino-card.active { border-color: #3a5448; }
+        .herb-column .dino-card.active .dino-toggle { background-color: #213029; }
+        .herb-column .dino-panel { background-color: #16201b; border-top-color: #23332c; }
+        .herb-column .stage-row { border-bottom-color: #1f2d26; }
+        body.show-info .herb-column .stage-row { background-color: #131b17; }
 
-        /* Button Groups & Stacking */
-        .btn-group { display: flex; gap: 4px; }
+        /* --- Diet Specific Theming - Carnivores (Red) --- */
+        .carn-column .dino-card { background-color: #281c1c; border-color: #3a2828; }
+        .carn-column .dino-toggle:hover { background-color: #352525; }
+        .carn-column .dino-card.active { border-color: #543a3a; }
+        .carn-column .dino-card.active .dino-toggle { background-color: #302121; }
+        .carn-column .dino-panel { background-color: #201616; border-top-color: #332323; }
+        .carn-column .stage-row { border-bottom-color: #2d1f1f; }
+        body.show-info .carn-column .stage-row { background-color: #1c1313; }
+
+        /* --- Diet Specific Theming - Omnivores (Purple) --- */
+        .omni-column .dino-card { background-color: #231c28; border-color: #34283a; }
+        .omni-column .dino-toggle:hover { background-color: #2f2535; }
+        .omni-column .dino-card.active { border-color: #4a3a54; }
+        .omni-column .dino-card.active .dino-toggle { background-color: #2a2130; }
+        .omni-column .dino-panel { background-color: #1c1620; border-top-color: #2e2333; }
+        .omni-column .stage-row { border-bottom-color: #281f2d; }
+        body.show-info .omni-column .stage-row { background-color: #19131c; }
+
+        /* --- Row Layout & Text Wrap --- */
+        .stage-row { display: block; padding: 10px 12px; border-bottom: 1px solid transparent; transition: background-color 0.3s ease; position: relative; }
+        .stage-row:last-child { border-bottom: none; }
+        .stage-row::after { content: ""; display: table; clear: both; } /* Clearfix */
+        
+        /* Highlight the row slightly when details are shown (Colors set in diet specific styles above) */
+        body.show-info .stage-row { border-radius: 6px; }
+
+        /* Right Side - Buttons */
+        .btn-group { float: right; display: flex; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 10; }
         .call-col { display: flex; flex-direction: column; gap: 4px; }
         
         .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; width: 100%; }
         .call-btn:hover { background-color: #314a3d; border-color: #4ade80; color: #ffffff; transform: translateY(-1px); }
         .call-btn:active { transform: translateY(1px); }
 
-        /* Alt Call Buttons */
         .call-btn-alt { background-color: #1a3024; border-color: #244232; color: #10b981; display: none; }
         .call-btn-alt:hover { background-color: #234231; border-color: #10b981; color: #ffffff; }
         body.show-alt-calls .call-btn-alt { display: block; }
 
-        /* Info Boxes */
-        .stage-info { display: none; background-color: #131b17; border: 1px solid #1f2d26; border-radius: 6px; padding: 8px; margin-top: 8px; gap: 10px; transition: all 0.3s ease; }
-        body.show-info .stage-info { display: flex; }
-        .info-images { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
-        .img-placeholder { width: 50px; height: 25px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
-        .info-text { color: #a5d6b8; font-size: 11px; line-height: 1.4; flex-grow: 1; }
+        /* Left Side - Label & Images (L-Shape Cutout) */
+        .left-wrap { float: left; margin-right: 12px; width: 65px; }
+        .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; margin-bottom: 6px; }
+        
+        .info-images { display: none; flex-direction: column; gap: 4px; margin-bottom: 4px; }
+        body.show-info .info-images { display: flex; }
+        
+        .img-placeholder { width: 100%; height: 26px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
+        
+        /* The Text - Flows naturally into dead space */
+        .info-text { display: none; color: #a5d6b8; font-size: 11px; line-height: 1.5; text-align: justify; }
+        body.show-info .info-text { display: block; }
 
         /* Quiz UI */
         .quiz-container { background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 30px; max-width: 900px; margin: 0 auto; text-align: center; transition: all 0.3s ease; }
@@ -128,16 +160,28 @@
         ::-webkit-scrollbar-thumb { background: #2a3d34; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #354d41; }
 
-        /* OLED DARK MODE */
+        /* DARK MODE */
         body.dark-mode { background-color: #000000; }
         body.dark-mode .discord-banner, body.dark-mode .controls-bar, body.dark-mode .column-wrapper, body.dark-mode .quiz-container, body.dark-mode .tab-btn { background-color: #080c0a; border-color: #141d19; }
-        body.dark-mode .dino-card { background-color: #0d1411; border-color: #1a2520; }
-        body.dark-mode .dino-panel { background-color: #050806; border-top-color: #141d19; }
-        body.dark-mode .stage-row, body.dark-mode .quiz-header, body.dark-mode .quiz-setting-row { border-color: #141d19; }
-        body.dark-mode .spacer { border-color: #141d19; }
-        body.dark-mode .stage-info { background-color: #0a0e0c; border-color: #141d19; }
+        body.dark-mode .quiz-header, body.dark-mode .quiz-setting-row { border-color: #141d19; }
         body.dark-mode .img-placeholder { background-color: #050806; border-color: #1a2520; }
         body.dark-mode .quiz-setting select, body.dark-mode .checkbox-group { background-color: #050806; border-color: #141d19; }
+
+        /* DARK MODE - Diet Specific Fallbacks */
+        body.dark-mode .herb-column .dino-card { background-color: #0d1411; border-color: #1a2520; }
+        body.dark-mode .herb-column .dino-panel { background-color: #050806; border-top-color: #141d19; }
+        body.dark-mode .herb-column .stage-row { border-bottom-color: #141d19; }
+        body.dark-mode.show-info .herb-column .stage-row { background-color: #0a0e0c; }
+        
+        body.dark-mode .carn-column .dino-card { background-color: #140d0d; border-color: #251a1a; }
+        body.dark-mode .carn-column .dino-panel { background-color: #080505; border-top-color: #1d1414; }
+        body.dark-mode .carn-column .stage-row { border-bottom-color: #1d1414; }
+        body.dark-mode.show-info .carn-column .stage-row { background-color: #0e0a0a; }
+
+        body.dark-mode .omni-column .dino-card { background-color: #110d14; border-color: #201a25; }
+        body.dark-mode .omni-column .dino-panel { background-color: #060508; border-top-color: #19141d; }
+        body.dark-mode .omni-column .stage-row { border-bottom-color: #19141d; }
+        body.dark-mode.show-info .omni-column .stage-row { background-color: #0c0a0e; }
 
         /* Mobile */
         @media (max-width: 768px) {
@@ -157,6 +201,13 @@
             .quiz-container { padding: 20px 15px; }
             .guess-grid { grid-template-columns: repeat(2, 1fr); }
             .play-mystery-btn { padding: 15px; font-size: 16px; }
+            
+            /* Break L-Shape layout for mobile to prevent text squishing */
+            .left-wrap { float: none; width: 100%; margin-bottom: 8px; }
+            .btn-group { float: none; margin-left: 0; width: 100%; justify-content: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
+            .info-images { flex-direction: row; margin-bottom: 8px; }
+            .img-placeholder { width: 55px; }
+            .info-text { text-align: left; }
         }
     </style>
 </head>
@@ -370,21 +421,20 @@
                         <button class="call-btn call-btn-alt" data-file="${file2}">${call}</button>
                     </div>`;
                 });
+                
                 stagesHtml += `
                     <div class="stage-row">
-                        <div class="stage-header">
-                            <span class="stage-label">${stage.label}</span>
-                            <div class="btn-group">${buttonsHtml}</div>
-                        </div>
-                        <div class="stage-info">
+                        <div class="btn-group">${buttonsHtml}</div>
+                        <div class="left-wrap">
+                            <div class="stage-label">${stage.label}</div>
                             <div class="info-images">
                                 <div class="img-placeholder">Base</div>
                                 <div class="img-placeholder">Prime</div>
                             </div>
-                            <div class="info-text">
-                                <strong style="color: #ffffff;">${dino} (${stage.label.split(' ')[0]})</strong><br>
-                                Description, diet requirements, or stats can go here.
-                            </div>
+                        </div>
+                        <div class="info-text">
+                            <strong style="color: #ffffff;">${dino} (${stage.label.split(' ')[0]})</strong><br>
+                            Description, diet requirements, or stats can go here.
                         </div>
                     </div>`;
             });
