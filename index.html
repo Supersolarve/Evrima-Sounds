@@ -53,54 +53,39 @@
         .omni-column .column-title { background-color: #3b2a47; color: #c4a5d6; }
 
         /* General Accordion Styles */
-        .dino-card { margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; border: 1px solid transparent; }
+        .dino-card { background-color: #1b2822; border: 1px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; }
         .dino-toggle { width: 100%; background-color: transparent; border: none; color: #ffffff; padding: 10px 14px; text-align: left; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.3s ease; }
+        .dino-toggle:hover { background-color: #24352d; }
         .arrow { font-size: 10px; color: #728f80; transition: transform 0.3s ease; }
-        .dino-panel { display: none; padding: 6px 10px; border-top: 1px solid transparent; transition: all 0.3s ease; }
+        .dino-panel { display: none; background-color: #16201b; padding: 6px 10px; border-top: 1px solid #23332c; transition: all 0.3s ease; }
+        .dino-card.active { border-color: #3a5448; }
         .dino-card.active .dino-panel { display: block; }
         .dino-card.active .arrow { transform: rotate(180deg); }
 
-        /* --- Diet Specific Base Theming --- */
-        .herb-column .dino-card { background-color: #1b2822; border-color: #283a32; }
-        .herb-column .dino-toggle:hover { background-color: #24352d; }
-        .herb-column .dino-panel { background-color: #16201b; border-top-color: #23332c; }
-        .herb-column .stage-row { border-bottom-color: #1f2d26; }
-        body.show-info .herb-column .stage-row { background-color: #131b17; }
-
-        .carn-column .dino-card { background-color: #281c1c; border-color: #3a2828; }
-        .carn-column .dino-toggle:hover { background-color: #352525; }
-        .carn-column .dino-panel { background-color: #201616; border-top-color: #332323; }
-        .carn-column .stage-row { border-bottom-color: #2d1f1f; }
-        body.show-info .carn-column .stage-row { background-color: #1c1313; }
-
-        .omni-column .dino-card { background-color: #231c28; border-color: #34283a; }
-        .omni-column .dino-toggle:hover { background-color: #2f2535; }
-        .omni-column .dino-panel { background-color: #1c1620; border-top-color: #2e2333; }
-        .omni-column .stage-row { border-bottom-color: #281f2d; }
-        body.show-info .omni-column .stage-row { background-color: #19131c; }
-
         /* --- Chronological Active Coloring (Ages) --- */
+        
         /* Herbivores */
-        .herb-column .dino-card.active.age-0 .dino-toggle { background-color: #457a5b; color: #ffffff; } /* Newest: Bright natural green */
-        .herb-column .dino-card.active.age-1 .dino-toggle { background-color: #2f543e; } /* Middle */
-        .herb-column .dino-card.active.age-2 .dino-toggle { background-color: #213029; } /* Oldest: Back to base active */
+        #herb-container .dino-card.active.age-0 .dino-toggle { background-color: #2c4737; color: #ffffff; } /* Newest */
+        #herb-container .dino-card.active.age-1 .dino-toggle { background-color: #263b2f; color: #ffffff; } /* Middle */
+        #herb-container .dino-card.active.age-2 .dino-toggle { background-color: #213029; color: #ffffff; } /* Oldest */
 
         /* Carnivores */
-        .carn-column .dino-card.active.age-0 .dino-toggle { background-color: #7a4545; color: #ffffff; } /* Newest */
-        .carn-column .dino-card.active.age-1 .dino-toggle { background-color: #542f2f; }
-        .carn-column .dino-card.active.age-2 .dino-toggle { background-color: #302121; }
+        #carn-container .dino-card.active.age-0 .dino-toggle { background-color: #422727; color: #ffffff; }
+        #carn-container .dino-card.active.age-1 .dino-toggle { background-color: #382323; color: #ffffff; }
+        #carn-container .dino-card.active.age-2 .dino-toggle { background-color: #2e1e1e; color: #ffffff; }
 
         /* Omnivores */
-        .omni-column .dino-card.active.age-0 .dino-toggle { background-color: #68457a; color: #ffffff; } /* Newest */
-        .omni-column .dino-card.active.age-1 .dino-toggle { background-color: #482f54; }
-        .omni-column .dino-card.active.age-2 .dino-toggle { background-color: #2a2130; }
+        #omni-container .dino-card.active.age-0 .dino-toggle { background-color: #372742; color: #ffffff; }
+        #omni-container .dino-card.active.age-1 .dino-toggle { background-color: #2f2338; color: #ffffff; }
+        #omni-container .dino-card.active.age-2 .dino-toggle { background-color: #261e2e; color: #ffffff; }
 
         /* --- Row Layout & Text Wrap --- */
-        .stage-row { display: block; padding: 10px 12px; border-bottom: 1px solid transparent; transition: background-color 0.3s ease; position: relative; }
+        .stage-row { display: block; padding: 10px 12px; border-bottom: 1px solid #1f2d26; transition: background-color 0.3s ease; position: relative; }
         .stage-row:last-child { border-bottom: none; }
-        .stage-row::after { content: ""; display: table; clear: both; }
+        .stage-row::after { content: ""; display: table; clear: both; } /* Clearfix */
         
-        body.show-info .stage-row { border-radius: 6px; }
+        /* Highlight the row slightly when details are shown */
+        body.show-info .stage-row { background-color: #131b17; border-radius: 6px; }
 
         /* Right Side - Buttons */
         .btn-group { float: right; display: flex; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 10; }
@@ -114,7 +99,7 @@
         .call-btn-alt:hover { background-color: #234231; border-color: #10b981; color: #ffffff; }
         body.show-alt-calls .call-btn-alt { display: block; }
 
-        /* Left Side - Label & Images */
+        /* Left Side - Label & Images (L-Shape Cutout) */
         .left-wrap { float: left; margin-right: 12px; width: 80px; }
         .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; margin-bottom: 6px; white-space: nowrap; }
         
@@ -123,7 +108,7 @@
         
         .img-placeholder { width: 100%; height: 26px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
         
-        /* The Text */
+        /* The Text - Flows naturally into dead space */
         .info-text { display: none; color: #a5d6b8; font-size: 11px; line-height: 1.5; text-align: justify; }
         body.show-info .info-text { display: block; }
 
@@ -174,34 +159,25 @@
         body.dark-mode .img-placeholder { background-color: #050806; border-color: #1a2520; }
         body.dark-mode .quiz-setting select, body.dark-mode .checkbox-group { background-color: #050806; border-color: #141d19; }
 
-        /* DARK MODE - Diet Specific Fallbacks */
-        body.dark-mode .herb-column .dino-card { background-color: #0d1411; border-color: #1a2520; }
-        body.dark-mode .herb-column .dino-panel { background-color: #050806; border-top-color: #141d19; }
-        body.dark-mode .herb-column .stage-row { border-bottom-color: #141d19; }
-        body.dark-mode.show-info .herb-column .stage-row { background-color: #0a0e0c; }
-        
-        body.dark-mode .carn-column .dino-card { background-color: #140d0d; border-color: #251a1a; }
-        body.dark-mode .carn-column .dino-panel { background-color: #080505; border-top-color: #1d1414; }
-        body.dark-mode .carn-column .stage-row { border-bottom-color: #1d1414; }
-        body.dark-mode.show-info .carn-column .stage-row { background-color: #0e0a0a; }
-
-        body.dark-mode .omni-column .dino-card { background-color: #110d14; border-color: #201a25; }
-        body.dark-mode .omni-column .dino-panel { background-color: #060508; border-top-color: #19141d; }
-        body.dark-mode .omni-column .stage-row { border-bottom-color: #19141d; }
-        body.dark-mode.show-info .omni-column .stage-row { background-color: #0c0a0e; }
+        /* DARK MODE - Base Card Reversions */
+        body.dark-mode .dino-card { background-color: #0d1411; border-color: #1a2520; }
+        body.dark-mode .dino-card.active { border-color: #2a3d34; }
+        body.dark-mode .dino-panel { background-color: #050806; border-top-color: #141d19; }
+        body.dark-mode .stage-row { border-bottom-color: #141d19; }
+        body.dark-mode.show-info .stage-row { background-color: #0a0e0c; }
 
         /* DARK MODE - Chronological Coloring */
-        body.dark-mode .herb-column .dino-card.active.age-0 .dino-toggle { background-color: #2d523c; }
-        body.dark-mode .herb-column .dino-card.active.age-1 .dino-toggle { background-color: #1d3627; }
-        body.dark-mode .herb-column .dino-card.active.age-2 .dino-toggle { background-color: #0c1711; }
+        body.dark-mode #herb-container .dino-card.active.age-0 .dino-toggle { background-color: #1a2a20; }
+        body.dark-mode #herb-container .dino-card.active.age-1 .dino-toggle { background-color: #142018; }
+        body.dark-mode #herb-container .dino-card.active.age-2 .dino-toggle { background-color: #0e1711; }
 
-        body.dark-mode .carn-column .dino-card.active.age-0 .dino-toggle { background-color: #522d2d; }
-        body.dark-mode .carn-column .dino-card.active.age-1 .dino-toggle { background-color: #361d1d; }
-        body.dark-mode .carn-column .dino-card.active.age-2 .dino-toggle { background-color: #170c0c; }
+        body.dark-mode #carn-container .dino-card.active.age-0 .dino-toggle { background-color: #2a1a1a; }
+        body.dark-mode #carn-container .dino-card.active.age-1 .dino-toggle { background-color: #201414; }
+        body.dark-mode #carn-container .dino-card.active.age-2 .dino-toggle { background-color: #170e0e; }
 
-        body.dark-mode .omni-column .dino-card.active.age-0 .dino-toggle { background-color: #432d52; }
-        body.dark-mode .omni-column .dino-card.active.age-1 .dino-toggle { background-color: #2a1d36; }
-        body.dark-mode .omni-column .dino-card.active.age-2 .dino-toggle { background-color: #130c17; }
+        body.dark-mode #omni-container .dino-card.active.age-0 .dino-toggle { background-color: #221a2a; }
+        body.dark-mode #omni-container .dino-card.active.age-1 .dino-toggle { background-color: #1a1420; }
+        body.dark-mode #omni-container .dino-card.active.age-2 .dino-toggle { background-color: #110e17; }
 
         /* Mobile */
         @media (max-width: 768px) {
