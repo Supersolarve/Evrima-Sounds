@@ -52,7 +52,7 @@
         .carn-column .column-title { background-color: #4a2727; color: #d6a5a5; }
         .omni-column .column-title { background-color: #3b2a47; color: #c4a5d6; }
 
-        /* General Accordion Styles (Base Fallbacks) */
+        /* General Accordion Styles */
         .dino-card { margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; border: 1px solid transparent; }
         .dino-toggle { width: 100%; background-color: transparent; border: none; color: #ffffff; padding: 10px 14px; text-align: left; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.3s ease; }
         .arrow { font-size: 10px; color: #728f80; transition: transform 0.3s ease; }
@@ -60,39 +60,46 @@
         .dino-card.active .dino-panel { display: block; }
         .dino-card.active .arrow { transform: rotate(180deg); }
 
-        /* --- Diet Specific Theming - Herbivores (Green) --- */
+        /* --- Diet Specific Base Theming --- */
         .herb-column .dino-card { background-color: #1b2822; border-color: #283a32; }
         .herb-column .dino-toggle:hover { background-color: #24352d; }
-        .herb-column .dino-card.active { border-color: #3a5448; }
-        .herb-column .dino-card.active .dino-toggle { background-color: #213029; }
         .herb-column .dino-panel { background-color: #16201b; border-top-color: #23332c; }
         .herb-column .stage-row { border-bottom-color: #1f2d26; }
         body.show-info .herb-column .stage-row { background-color: #131b17; }
 
-        /* --- Diet Specific Theming - Carnivores (Red) --- */
         .carn-column .dino-card { background-color: #281c1c; border-color: #3a2828; }
         .carn-column .dino-toggle:hover { background-color: #352525; }
-        .carn-column .dino-card.active { border-color: #543a3a; }
-        .carn-column .dino-card.active .dino-toggle { background-color: #302121; }
         .carn-column .dino-panel { background-color: #201616; border-top-color: #332323; }
         .carn-column .stage-row { border-bottom-color: #2d1f1f; }
         body.show-info .carn-column .stage-row { background-color: #1c1313; }
 
-        /* --- Diet Specific Theming - Omnivores (Purple) --- */
         .omni-column .dino-card { background-color: #231c28; border-color: #34283a; }
         .omni-column .dino-toggle:hover { background-color: #2f2535; }
-        .omni-column .dino-card.active { border-color: #4a3a54; }
-        .omni-column .dino-card.active .dino-toggle { background-color: #2a2130; }
         .omni-column .dino-panel { background-color: #1c1620; border-top-color: #2e2333; }
         .omni-column .stage-row { border-bottom-color: #281f2d; }
         body.show-info .omni-column .stage-row { background-color: #19131c; }
 
+        /* --- Chronological Active Coloring (Ages) --- */
+        /* Herbivores */
+        .herb-column .dino-card.active.age-0 .dino-toggle { background-color: #457a5b; color: #ffffff; } /* Newest: Bright natural green */
+        .herb-column .dino-card.active.age-1 .dino-toggle { background-color: #2f543e; } /* Middle */
+        .herb-column .dino-card.active.age-2 .dino-toggle { background-color: #213029; } /* Oldest: Back to base active */
+
+        /* Carnivores */
+        .carn-column .dino-card.active.age-0 .dino-toggle { background-color: #7a4545; color: #ffffff; } /* Newest */
+        .carn-column .dino-card.active.age-1 .dino-toggle { background-color: #542f2f; }
+        .carn-column .dino-card.active.age-2 .dino-toggle { background-color: #302121; }
+
+        /* Omnivores */
+        .omni-column .dino-card.active.age-0 .dino-toggle { background-color: #68457a; color: #ffffff; } /* Newest */
+        .omni-column .dino-card.active.age-1 .dino-toggle { background-color: #482f54; }
+        .omni-column .dino-card.active.age-2 .dino-toggle { background-color: #2a2130; }
+
         /* --- Row Layout & Text Wrap --- */
         .stage-row { display: block; padding: 10px 12px; border-bottom: 1px solid transparent; transition: background-color 0.3s ease; position: relative; }
         .stage-row:last-child { border-bottom: none; }
-        .stage-row::after { content: ""; display: table; clear: both; } /* Clearfix */
+        .stage-row::after { content: ""; display: table; clear: both; }
         
-        /* Highlight the row slightly when details are shown (Colors set in diet specific styles above) */
         body.show-info .stage-row { border-radius: 6px; }
 
         /* Right Side - Buttons */
@@ -107,7 +114,7 @@
         .call-btn-alt:hover { background-color: #234231; border-color: #10b981; color: #ffffff; }
         body.show-alt-calls .call-btn-alt { display: block; }
 
-        /* Left Side - Label & Images (L-Shape Cutout) */
+        /* Left Side - Label & Images */
         .left-wrap { float: left; margin-right: 12px; width: 80px; }
         .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; margin-bottom: 6px; white-space: nowrap; }
         
@@ -116,7 +123,7 @@
         
         .img-placeholder { width: 100%; height: 26px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
         
-        /* The Text - Flows naturally into dead space */
+        /* The Text */
         .info-text { display: none; color: #a5d6b8; font-size: 11px; line-height: 1.5; text-align: justify; }
         body.show-info .info-text { display: block; }
 
@@ -182,6 +189,19 @@
         body.dark-mode .omni-column .dino-panel { background-color: #060508; border-top-color: #19141d; }
         body.dark-mode .omni-column .stage-row { border-bottom-color: #19141d; }
         body.dark-mode.show-info .omni-column .stage-row { background-color: #0c0a0e; }
+
+        /* DARK MODE - Chronological Coloring */
+        body.dark-mode .herb-column .dino-card.active.age-0 .dino-toggle { background-color: #2d523c; }
+        body.dark-mode .herb-column .dino-card.active.age-1 .dino-toggle { background-color: #1d3627; }
+        body.dark-mode .herb-column .dino-card.active.age-2 .dino-toggle { background-color: #0c1711; }
+
+        body.dark-mode .carn-column .dino-card.active.age-0 .dino-toggle { background-color: #522d2d; }
+        body.dark-mode .carn-column .dino-card.active.age-1 .dino-toggle { background-color: #361d1d; }
+        body.dark-mode .carn-column .dino-card.active.age-2 .dino-toggle { background-color: #170c0c; }
+
+        body.dark-mode .omni-column .dino-card.active.age-0 .dino-toggle { background-color: #432d52; }
+        body.dark-mode .omni-column .dino-card.active.age-1 .dino-toggle { background-color: #2a1d36; }
+        body.dark-mode .omni-column .dino-card.active.age-2 .dino-toggle { background-color: #130c17; }
 
         /* Mobile */
         @media (max-width: 768px) {
@@ -361,7 +381,6 @@
     let activeAudio = new Audio(); 
     let currentVolume = DOM.volume.value;
 
-    // Object to track active cards per column for the max-3 rule
     const openCardQueues = {};
 
     DOM.volume.addEventListener('input', e => {
@@ -449,6 +468,19 @@
     buildDinoCards(dinos.carns, 'carn-container');
     buildDinoCards(dinos.omnis, 'omni-container');
 
+    // Function to apply chronological coloring
+    function updateAges(colId) {
+        if (!openCardQueues[colId]) return;
+        const queue = openCardQueues[colId];
+        const len = queue.length;
+        
+        queue.forEach((card, index) => {
+            card.classList.remove('age-0', 'age-1', 'age-2');
+            const age = (len - 1) - index; 
+            card.classList.add(`age-${age}`);
+        });
+    }
+
     DOM.mainGrid.addEventListener('click', e => {
         if (e.target.classList.contains('call-btn')) {
             play(e.target.dataset.file);
@@ -457,23 +489,21 @@
             const column = currentCard.parentElement;
             const colId = column.id;
             
-            // Initialize tracking array for this column if it doesn't exist
             if (!openCardQueues[colId]) openCardQueues[colId] = [];
             
             if (currentCard.classList.contains('active')) {
-                // If manually closing, remove it from the active list and tracking array
-                currentCard.classList.remove('active');
+                currentCard.classList.remove('active', 'age-0', 'age-1', 'age-2');
                 openCardQueues[colId] = openCardQueues[colId].filter(c => c !== currentCard);
+                updateAges(colId);
             } else {
-                // If opening, add to tracking array
                 currentCard.classList.add('active');
                 openCardQueues[colId].push(currentCard);
                 
-                // Enforce max 3 limit
                 if (openCardQueues[colId].length > 3) {
-                    const oldestCard = openCardQueues[colId].shift(); // Remove oldest from array
-                    oldestCard.classList.remove('active'); // Close it in the UI
+                    const oldestCard = openCardQueues[colId].shift(); 
+                    oldestCard.classList.remove('active', 'age-0', 'age-1', 'age-2'); 
                 }
+                updateAges(colId);
             }
         }
     });
@@ -491,7 +521,6 @@
 
         let possibleCalls = [];
         activeDinos.forEach(dino => activeStages.forEach(s => calls.forEach(c => {
-            // Include both versions in the quiz pool
             possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call 1` });
             possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call 2` });
         })));
