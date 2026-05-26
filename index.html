@@ -108,8 +108,8 @@
         body.show-alt-calls .call-btn-alt { display: block; }
 
         /* Left Side - Label & Images (L-Shape Cutout) */
-        .left-wrap { float: left; margin-right: 12px; width: 80px; } /* Increased width from 65px to 80px */
-        .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; margin-bottom: 6px; white-space: nowrap; } /* Added nowrap */
+        .left-wrap { float: left; margin-right: 12px; width: 80px; }
+        .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; margin-bottom: 6px; white-space: nowrap; }
         
         .info-images { display: none; flex-direction: column; gap: 4px; margin-bottom: 4px; }
         body.show-info .info-images { display: flex; }
@@ -361,6 +361,9 @@
     let activeAudio = new Audio(); 
     let currentVolume = DOM.volume.value;
 
+    // Object to track active cards per column for the max-3 rule
+    const openCardQueues = {};
+
     DOM.volume.addEventListener('input', e => {
         currentVolume = e.target.value;
         activeAudio.volume = currentVolume;
@@ -447,13 +450,31 @@
     buildDinoCards(dinos.omnis, 'omni-container');
 
     DOM.mainGrid.addEventListener('click', e => {
-        if (e.target.classList.contains('call-btn')) play(e.target.dataset.file);
-        else if (e.target.closest('.dino-toggle')) {
+        if (e.target.classList.contains('call-btn')) {
+            play(e.target.dataset.file);
+        } else if (e.target.closest('.dino-toggle')) {
             const currentCard = e.target.closest('.dino-card');
             const column = currentCard.parentElement;
-            if (currentCard.classList.contains('active')) { currentCard.classList.remove('active'); return; }
-            column.querySelectorAll('.dino-card.active').forEach(c => c.classList.remove('active'));
-            currentCard.classList.add('active');
+            const colId = column.id;
+            
+            // Initialize tracking array for this column if it doesn't exist
+            if (!openCardQueues[colId]) openCardQueues[colId] = [];
+            
+            if (currentCard.classList.contains('active')) {
+                // If manually closing, remove it from the active list and tracking array
+                currentCard.classList.remove('active');
+                openCardQueues[colId] = openCardQueues[colId].filter(c => c !== currentCard);
+            } else {
+                // If opening, add to tracking array
+                currentCard.classList.add('active');
+                openCardQueues[colId].push(currentCard);
+                
+                // Enforce max 3 limit
+                if (openCardQueues[colId].length > 3) {
+                    const oldestCard = openCardQueues[colId].shift(); // Remove oldest from array
+                    oldestCard.classList.remove('active'); // Close it in the UI
+                }
+            }
         }
     });
 
