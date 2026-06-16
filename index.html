@@ -334,7 +334,6 @@
 </div>
 
 <script>
-    // 🟢 UPDATED: Data Object now targets a specific stage ("75") for its special calls
     const dinos = {
         herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"],
         carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", { name: "Rex", specialCalls: { "75": ["Paleo Call 1", "Paleo Call 2"] } }, "Troodon"],
@@ -412,7 +411,6 @@
         }
     }
 
-    // 🟢 UPDATED: builder accepts dietClass and places special calls inside the correct stage row
     function buildDinoCards(dinoList, containerId, dietClass) {
         const container = document.getElementById(containerId);
         dinoList.forEach(dinoItem => {
@@ -432,22 +430,32 @@
                     </div>`;
                 });
 
-                // 🟢 NEW: Inject Special Calls into this specific stage row if they exist for it
+                // Set up the right side of the row
+                let rightSideHtml = `<div class="btn-group">${buttonsHtml}</div>`;
+
+                // 🟢 FIXED: Safely append the special buttons below the standard ones via clear: right
                 if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[stage.num]) {
+                    let specialBtnsHtml = '';
                     dinoItem.specialCalls[stage.num].forEach(sc => {
-                        const fileName = `${dino} ${stage.num} ${sc}`; // e.g. "Rex 75 Paleo Call 1"
-                        const shortName = sc.replace(' Call ', ' '); // Formats "Paleo Call 1" to "Paleo 1"
+                        const fileName = `${dino} ${stage.num} ${sc}`;
+                        const shortName = sc.replace(' Call ', ' '); 
                         
-                        buttonsHtml += `
+                        specialBtnsHtml += `
                         <div class="call-col">
                             <button class="call-btn" data-file="${fileName}">${shortName}</button>
                         </div>`;
                     });
+                    
+                    // Creates a separate, right-aligned block underneath the main calls
+                    rightSideHtml = `
+                        <div class="btn-group">${buttonsHtml}</div>
+                        <div class="btn-group" style="clear: right; margin-bottom: 0; margin-top: 4px;">${specialBtnsHtml}</div>
+                    `;
                 }
                 
                 stagesHtml += `
                     <div class="stage-row">
-                        <div class="btn-group">${buttonsHtml}</div>
+                        ${rightSideHtml}
                         <div class="left-wrap">
                             <div class="stage-label">${stage.label}</div>
                             <div class="info-images">
@@ -462,17 +470,14 @@
                     </div>`;
             });
 
-            // 🟢 NEW: Added dietClass to the wrapper div
             container.insertAdjacentHTML('beforeend', `<div class="dino-card ${dietClass}"><button class="dino-toggle"><span>${dino}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`);
         });
     }
 
-    // Pass the diet class when building
     buildDinoCards(dinos.herbs, 'herb-container', 'herb');
     buildDinoCards(dinos.carns, 'carn-container', 'carn');
     buildDinoCards(dinos.omnis, 'omni-container', 'omni');
 
-    // Function to apply chronological coloring
     function updateAges(colId) {
         if (!openCardQueues[colId]) return;
         const queue = openCardQueues[colId];
@@ -525,18 +530,15 @@
 
         let possibleCalls = [];
         
-        // 🟢 UPDATED: Build quiz pool safely checking if special calls are tied to active stages
         activeDinos.forEach(dinoItem => {
             const dino = typeof dinoItem === 'string' ? dinoItem : dinoItem.name;
             
             activeStages.forEach(s => {
-                // Add standard calls for this active stage
                 calls.forEach(c => {
                     possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call 1` });
                     possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call 2` });
                 });
 
-                // Add special calls ONLY if the stage is active and has special calls tied to it
                 if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[s]) {
                     dinoItem.specialCalls[s].forEach(sc => {
                         possibleCalls.push({ species: dino, file: `${dino} ${s} ${sc}` });
