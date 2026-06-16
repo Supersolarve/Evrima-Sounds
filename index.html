@@ -72,17 +72,14 @@
         .dino-card.active .arrow { transform: rotate(180deg); }
 
         /* --- Chronological Active Coloring (Ages) --- */
-        /* Herbivores */
-        #herb-container .dino-card.active.age-0 .dino-toggle { background-color: #2c4737 !important; color: #ffffff; } /* Newest */
-        #herb-container .dino-card.active.age-1 .dino-toggle { background-color: #263b2f !important; color: #ffffff; } /* Middle */
-        #herb-container .dino-card.active.age-2 .dino-toggle { background-color: #213029 !important; color: #ffffff; } /* Oldest */
+        #herb-container .dino-card.active.age-0 .dino-toggle { background-color: #2c4737 !important; color: #ffffff; }
+        #herb-container .dino-card.active.age-1 .dino-toggle { background-color: #263b2f !important; color: #ffffff; }
+        #herb-container .dino-card.active.age-2 .dino-toggle { background-color: #213029 !important; color: #ffffff; }
 
-        /* Carnivores */
         #carn-container .dino-card.active.age-0 .dino-toggle { background-color: #422727 !important; color: #ffffff; }
         #carn-container .dino-card.active.age-1 .dino-toggle { background-color: #382323 !important; color: #ffffff; }
         #carn-container .dino-card.active.age-2 .dino-toggle { background-color: #2e1e1e !important; color: #ffffff; }
 
-        /* Omnivores */
         #omni-container .dino-card.active.age-0 .dino-toggle { background-color: #372742 !important; color: #ffffff; }
         #omni-container .dino-card.active.age-1 .dino-toggle { background-color: #2f2338 !important; color: #ffffff; }
         #omni-container .dino-card.active.age-2 .dino-toggle { background-color: #261e2e !important; color: #ffffff; }
@@ -92,17 +89,19 @@
         .stage-row:last-child { border-bottom: none; }
         .stage-row::after { content: ""; display: table; clear: both; } /* Clearfix */
         
-        /* Highlight the row slightly when details are shown */
         body.show-info .stage-row { background-color: #131b17; border-radius: 6px; }
 
         /* Right Side - Buttons */
         .btn-group { float: right; display: flex; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 10; }
         
-        /* 🟢 FIXED: align-items center prevents the buttons from stretching horizontally */
-        .call-col { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+        /* 🟢 NEW: Wrapper to neatly stack multiple button rows without breaking layout */
+        .btn-wrapper { float: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 10; }
+        .btn-row { display: flex; gap: 4px; }
+
+        /* 🟢 RESTORED: Standard perfectly square button columns */
+        .call-col { display: flex; flex-direction: column; gap: 4px; }
         
-        /* 🟢 FIXED: Removed width: 100% so the buttons size naturally based on padding */
-        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; }
+        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; width: 100%; }
         .call-btn:hover { background-color: #314a3d; border-color: #4ade80; color: #ffffff; transform: translateY(-1px); }
         .call-btn:active { transform: translateY(1px); }
 
@@ -110,7 +109,7 @@
         .call-btn-alt:hover { background-color: #234231; border-color: #10b981; color: #ffffff; }
         body.show-alt-calls .call-btn-alt { display: block; }
 
-        /* Left Side - Label & Images (L-Shape Cutout) */
+        /* Left Side - Label & Images */
         .left-wrap { float: left; margin-right: 12px; width: 80px; }
         .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; margin-bottom: 6px; white-space: nowrap; }
         
@@ -119,7 +118,6 @@
         
         .img-placeholder { width: 100%; height: 26px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
         
-        /* The Text - Flows naturally into dead space */
         .info-text { display: none; color: #a5d6b8; font-size: 11px; line-height: 1.5; text-align: justify; }
         body.show-info .info-text { display: block; }
 
@@ -169,23 +167,18 @@
         body.dark-mode .quiz-header, body.dark-mode .quiz-setting-row { border-color: #141d19; }
         body.dark-mode .img-placeholder { background-color: #050806; border-color: #1a2520; }
         body.dark-mode .quiz-setting select, body.dark-mode .checkbox-group { background-color: #050806; border-color: #141d19; }
-
-        /* DARK MODE - Base Card Reversions */
         body.dark-mode .dino-card { background-color: #0d1411; border-color: #1a2520; }
         body.dark-mode .dino-card.active { border-color: #2a3d34; }
         body.dark-mode .dino-panel { background-color: #050806; border-top-color: #141d19; }
         body.dark-mode .stage-row { border-bottom-color: #141d19; }
         body.dark-mode.show-info .stage-row { background-color: #0a0e0c; }
 
-        /* DARK MODE - Chronological Coloring */
         body.dark-mode #herb-container .dino-card.active.age-0 .dino-toggle { background-color: #1a2a20 !important; }
         body.dark-mode #herb-container .dino-card.active.age-1 .dino-toggle { background-color: #142018 !important; }
         body.dark-mode #herb-container .dino-card.active.age-2 .dino-toggle { background-color: #0e1711 !important; }
-
         body.dark-mode #carn-container .dino-card.active.age-0 .dino-toggle { background-color: #2a1a1a !important; }
         body.dark-mode #carn-container .dino-card.active.age-1 .dino-toggle { background-color: #201414 !important; }
         body.dark-mode #carn-container .dino-card.active.age-2 .dino-toggle { background-color: #170e0e !important; }
-
         body.dark-mode #omni-container .dino-card.active.age-0 .dino-toggle { background-color: #221a2a !important; }
         body.dark-mode #omni-container .dino-card.active.age-1 .dino-toggle { background-color: #1a1420 !important; }
         body.dark-mode #omni-container .dino-card.active.age-2 .dino-toggle { background-color: #110e17 !important; }
@@ -212,6 +205,11 @@
             /* Break L-Shape layout for mobile to prevent text squishing */
             .left-wrap { float: none; width: 100%; margin-bottom: 8px; }
             .btn-group { float: none; margin-left: 0; width: 100%; justify-content: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
+            
+            /* 🟢 NEW: Added mobile rule for the new wrapper */
+            .btn-wrapper { float: none; margin-left: 0; width: 100%; align-items: flex-start; margin-bottom: 10px; }
+            .btn-row { flex-wrap: wrap; justify-content: flex-start; }
+            
             .info-images { flex-direction: row; margin-bottom: 8px; }
             .img-placeholder { width: 55px; }
             .info-text { text-align: left; }
@@ -337,15 +335,16 @@
 </div>
 
 <script>
+    // 🟢 UPDATED: Data structure cleanly stores the labels you want
     const dinos = {
         herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"],
         carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", { 
             name: "Rex", 
             specialCalls: { 
-                "75": { 
-                    "1": { label: "Paleo 1", file: "Paleo Call 1" }, 
-                    "F": { label: "Paleo F", file: "Paleo Call 2" } 
-                } 
+                "75": [
+                    { label: "Paleo 1", file: "Paleo Call 1" },
+                    { label: "Paleo F", file: "Paleo Call 2" }
+                ] 
             } 
         }, "Troodon"],
         omnis: ["Beipi", "Galli"]
@@ -395,7 +394,6 @@
         document.body.classList.toggle('dark-mode', e.target.checked);
     });
 
-    // --- TAB LOGIC ---
     function switchTab(tabName) {
         if (isQuizActive && tabName === 'soundboard') {
             alert("Finish your training first!");
@@ -434,24 +432,36 @@
                     const file1 = `${dino} ${stage.num} ${call} Call 1`;
                     const file2 = `${dino} ${stage.num} ${call} Call 2`;
                     
-                    let specialBtnHtml = '';
-                    if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[stage.num] && dinoItem.specialCalls[stage.num][call]) {
-                        const sc = dinoItem.specialCalls[stage.num][call];
-                        const fileName = `${dino} ${stage.num} ${sc.file}`;
-                        specialBtnHtml = `<button class="call-btn" data-file="${fileName}">${sc.label}</button>`;
-                    }
-                    
                     buttonsHtml += `
                     <div class="call-col">
                         <button class="call-btn" data-file="${file1}">${call}</button>
                         <button class="call-btn call-btn-alt" data-file="${file2}">${call}</button>
-                        ${specialBtnHtml}
                     </div>`;
                 });
+
+                let rightSideHtml = `<div class="btn-group">${buttonsHtml}</div>`;
+
+                // 🟢 FIXED: The wrapper cleanly separates the two rows so standard buttons stay square!
+                if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[stage.num]) {
+                    let specialBtnsHtml = '';
+                    dinoItem.specialCalls[stage.num].forEach(sc => {
+                        const fileName = `${dino} ${stage.num} ${sc.file}`;
+                        specialBtnsHtml += `
+                        <div class="call-col">
+                            <button class="call-btn" data-file="${fileName}">${sc.label}</button>
+                        </div>`;
+                    });
+                    
+                    rightSideHtml = `
+                    <div class="btn-wrapper">
+                        <div class="btn-row">${buttonsHtml}</div>
+                        <div class="btn-row">${specialBtnsHtml}</div>
+                    </div>`;
+                }
                 
                 stagesHtml += `
                     <div class="stage-row">
-                        <div class="btn-group">${buttonsHtml}</div>
+                        ${rightSideHtml}
                         <div class="left-wrap">
                             <div class="stage-label">${stage.label}</div>
                             <div class="info-images">
@@ -536,7 +546,7 @@
                 });
 
                 if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[s]) {
-                    Object.values(dinoItem.specialCalls[s]).forEach(sc => {
+                    dinoItem.specialCalls[s].forEach(sc => {
                         possibleCalls.push({ species: dino, file: `${dino} ${s} ${sc.file}` });
                     });
                 }
