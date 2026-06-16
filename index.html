@@ -334,16 +334,16 @@
 </div>
 
 <script>
-    // 🟢 UPDATED: Data Object now targets specific columns ("1" and "F")
+    // 🟢 UPDATED: Data Object sets the precise labels and filenames you want
     const dinos = {
         herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"],
         carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", { 
             name: "Rex", 
             specialCalls: { 
-                "75": { 
-                    "1": { label: "Paleo 1", file: "Paleo Call 1" }, 
-                    "F": { label: "Paleo F", file: "Paleo Call 2" } 
-                } 
+                "75": [
+                    { label: "Paleo 1", file: "Paleo Call 1" },
+                    { label: "Paleo F", file: "Paleo Call 2" }
+                ] 
             } 
         }, "Troodon"],
         omnis: ["Beipi", "Galli"]
@@ -420,7 +420,6 @@
         }
     }
 
-    // 🟢 UPDATED: Injects special calls into the specific .call-col grid columns
     function buildDinoCards(dinoList, containerId, dietClass) {
         const container = document.getElementById(containerId);
         dinoList.forEach(dinoItem => {
@@ -433,25 +432,37 @@
                     const file1 = `${dino} ${stage.num} ${call} Call 1`;
                     const file2 = `${dino} ${stage.num} ${call} Call 2`;
                     
-                    // 🟢 Check if there is a special call tied to this specific column (1, 2, 3, 4, F)
-                    let specialBtnHtml = '';
-                    if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[stage.num] && dinoItem.specialCalls[stage.num][call]) {
-                        const sc = dinoItem.specialCalls[stage.num][call];
-                        const fileName = `${dino} ${stage.num} ${sc.file}`;
-                        specialBtnHtml = `<button class="call-btn" data-file="${fileName}">${sc.label}</button>`;
-                    }
-                    
                     buttonsHtml += `
                     <div class="call-col">
                         <button class="call-btn" data-file="${file1}">${call}</button>
                         <button class="call-btn call-btn-alt" data-file="${file2}">${call}</button>
-                        ${specialBtnHtml}
                     </div>`;
                 });
+
+                let rightSideHtml = `<div class="btn-group">${buttonsHtml}</div>`;
+
+                // 🟢 FIXED: We use flex-wrap with a flex-basis break to cleanly push Paleo buttons to row 2 right-aligned
+                if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[stage.num]) {
+                    let specialBtnsHtml = '';
+                    dinoItem.specialCalls[stage.num].forEach(sc => {
+                        const fileName = `${dino} ${stage.num} ${sc.file}`;
+                        specialBtnsHtml += `
+                        <div class="call-col">
+                            <button class="call-btn" data-file="${fileName}">${sc.label}</button>
+                        </div>`;
+                    });
+                    
+                    rightSideHtml = `
+                    <div class="btn-group" style="flex-wrap: wrap; justify-content: flex-end;">
+                        ${buttonsHtml}
+                        <div style="flex-basis: 100%; height: 0;"></div>
+                        ${specialBtnsHtml}
+                    </div>`;
+                }
                 
                 stagesHtml += `
                     <div class="stage-row">
-                        <div class="btn-group">${buttonsHtml}</div>
+                        ${rightSideHtml}
                         <div class="left-wrap">
                             <div class="stage-label">${stage.label}</div>
                             <div class="info-images">
@@ -526,7 +537,6 @@
 
         let possibleCalls = [];
         
-        // 🟢 UPDATED: Quiz pool adapts to new Object structure
         activeDinos.forEach(dinoItem => {
             const dino = typeof dinoItem === 'string' ? dinoItem : dinoItem.name;
             
@@ -537,7 +547,7 @@
                 });
 
                 if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[s]) {
-                    Object.values(dinoItem.specialCalls[s]).forEach(sc => {
+                    dinoItem.specialCalls[s].forEach(sc => {
                         possibleCalls.push({ species: dino, file: `${dino} ${s} ${sc.file}` });
                     });
                 }
