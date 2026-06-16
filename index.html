@@ -97,9 +97,12 @@
 
         /* Right Side - Buttons */
         .btn-group { float: right; display: flex; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 10; }
-        .call-col { display: flex; flex-direction: column; gap: 4px; }
         
-        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; width: 100%; }
+        /* 🟢 FIXED: align-items center prevents the buttons from stretching horizontally */
+        .call-col { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+        
+        /* 🟢 FIXED: Removed width: 100% so the buttons size naturally based on padding */
+        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; }
         .call-btn:hover { background-color: #314a3d; border-color: #4ade80; color: #ffffff; transform: translateY(-1px); }
         .call-btn:active { transform: translateY(1px); }
 
