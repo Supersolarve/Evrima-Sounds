@@ -442,38 +442,13 @@
                     <div class="call-col">
                         <button class="call-btn" data-file="${file1}">${call}</button>
                         <button class="call-btn call-btn-alt" data-file="${file2}">${call}</button>
+                        ${specialBtnHtml}
                     </div>`;
                 });
-
-                let rightSideHtml = `<div class="btn-group">${buttonsHtml}</div>`;
-
-                // 🟢 FIXED: We use a column flex container so it doesn't force 100% width and break the left label
-                if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[stage.num]) {
-                    let specialBtnsHtml = '';
-                    calls.forEach(call => {
-                        if (dinoItem.specialCalls[stage.num][call]) {
-                            const sc = dinoItem.specialCalls[stage.num][call];
-                            const fileName = `${dino} ${stage.num} ${sc.file}`;
-                            specialBtnsHtml += `
-                            <div class="call-col">
-                                <button class="call-btn" data-file="${fileName}">${sc.label}</button>
-                            </div>`;
-                        } else {
-                            // Empty block to maintain grid spacing underneath buttons that don't have a special call
-                            specialBtnsHtml += `<div class="call-col" style="visibility: hidden;"><button class="call-btn">Empty</button></div>`;
-                        }
-                    });
-                    
-                    rightSideHtml = `
-                    <div class="btn-group" style="flex-direction: column; align-items: flex-end; gap: 4px;">
-                        <div style="display: flex; gap: 4px;">${buttonsHtml}</div>
-                        <div style="display: flex; gap: 4px;">${specialBtnsHtml}</div>
-                    </div>`;
-                }
                 
                 stagesHtml += `
                     <div class="stage-row">
-                        ${rightSideHtml}
+                        <div class="btn-group">${buttonsHtml}</div>
                         <div class="left-wrap">
                             <div class="stage-label">${stage.label}</div>
                             <div class="info-images">
