@@ -28,14 +28,14 @@
         .view-section.active { display: block; }
 
         /* Control Bar */
-        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; flex-wrap: wrap; }
+        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; }
         .controls-bar label { font-weight: bold; color: #a5d6b8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
         .volume-slider { flex-grow: 1; max-width: 250px; cursor: pointer; accent-color: #4ade80; }
         .spacer { width: 20px; border-right: 1px solid #23332c; height: 20px; transition: border-color 0.3s ease; }
 
         /* Toggle Switch */
         .toggle-wrapper { display: flex; align-items: center; gap: 10px; }
-        .switch { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
+        .switch { position: relative; display: inline-block; width: 36px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #23332c; transition: .3s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: #728f80; transition: .3s; border-radius: 50%; }
@@ -52,65 +52,43 @@
         .carn-column .column-title { background-color: #4a2727; color: #d6a5a5; }
         .omni-column .column-title { background-color: #3b2a47; color: #c4a5d6; }
 
-        /* General Accordion Styles */
-        .dino-card { background-color: #1b2822; border: 1px solid #283a32; margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; }
-        .dino-toggle { width: 100%; background-color: transparent; border: none; color: #ffffff; padding: 10px 14px; text-align: left; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background-color 0.3s ease; }
-        .dino-toggle:hover { background-color: #24352d; }
+        /* Accordion Styles */
+        .dino-card { margin-bottom: 8px; border-radius: 8px; overflow: hidden; transition: all 0.3s ease; border: 2px solid #283a32; }
+        
+        /* Diet Base Colors */
+        .herb .dino-toggle { background-color: #213029; }
+        .carn .dino-toggle { background-color: #302121; }
+        .omni .dino-toggle { background-color: #282130; }
+
+        .dino-toggle { width: 100%; border: none; color: #ffffff; padding: 10px 14px; text-align: left; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: filter 0.2s ease; }
+        .dino-toggle:hover { filter: brightness(1.2); }
         .arrow { font-size: 10px; color: #728f80; transition: transform 0.3s ease; }
-        .dino-panel { display: none; background-color: #16201b; padding: 6px 10px; border-top: 1px solid #23332c; transition: all 0.3s ease; }
+        
+        .dino-panel { display: none; padding: 6px 10px; background-color: #16201b; border-top: 1px solid #23332c; }
+        .herb .dino-panel { background-color: #16201b; }
+        .carn .dino-panel { background-color: #201616; }
+        .omni .dino-panel { background-color: #1c1620; }
+        
         .dino-card.active { border-color: #3a5448; }
         .dino-card.active .dino-panel { display: block; }
         .dino-card.active .arrow { transform: rotate(180deg); }
 
-        /* --- Chronological Active Coloring (Ages) --- */
-        
-        /* Herbivores */
-        #herb-container .dino-card.active.age-0 .dino-toggle { background-color: #2c4737; color: #ffffff; } /* Newest */
-        #herb-container .dino-card.active.age-1 .dino-toggle { background-color: #263b2f; color: #ffffff; } /* Middle */
-        #herb-container .dino-card.active.age-2 .dino-toggle { background-color: #213029; color: #ffffff; } /* Oldest */
-
-        /* Carnivores */
-        #carn-container .dino-card.active.age-0 .dino-toggle { background-color: #422727; color: #ffffff; }
-        #carn-container .dino-card.active.age-1 .dino-toggle { background-color: #382323; color: #ffffff; }
-        #carn-container .dino-card.active.age-2 .dino-toggle { background-color: #2e1e1e; color: #ffffff; }
-
-        /* Omnivores */
-        #omni-container .dino-card.active.age-0 .dino-toggle { background-color: #372742; color: #ffffff; }
-        #omni-container .dino-card.active.age-1 .dino-toggle { background-color: #2f2338; color: #ffffff; }
-        #omni-container .dino-card.active.age-2 .dino-toggle { background-color: #261e2e; color: #ffffff; }
-
-        /* --- Row Layout & Text Wrap --- */
-        .stage-row { display: block; padding: 10px 12px; border-bottom: 1px solid #1f2d26; transition: background-color 0.3s ease; position: relative; }
+        .stage-row { display: flex; flex-direction: column; padding: 8px 0; border-bottom: 1px solid #1f2d26; transition: border-color 0.3s ease; }
         .stage-row:last-child { border-bottom: none; }
-        .stage-row::after { content: ""; display: table; clear: both; } /* Clearfix */
-        
-        /* Highlight the row slightly when details are shown */
-        body.show-info .stage-row { background-color: #131b17; border-radius: 6px; }
+        .stage-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .stage-label { font-size: 11px; color: #ffffff; font-weight: bold; flex-shrink: 0; width: 75px; }
 
-        /* Right Side - Buttons */
-        .btn-group { float: right; display: flex; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 10; }
-        .call-col { display: flex; flex-direction: column; gap: 4px; }
-        
-        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; width: 100%; }
+        .btn-group { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+        .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; }
         .call-btn:hover { background-color: #314a3d; border-color: #4ade80; color: #ffffff; transform: translateY(-1px); }
         .call-btn:active { transform: translateY(1px); }
 
-        .call-btn-alt { background-color: #1a3024; border-color: #244232; color: #10b981; display: none; }
-        .call-btn-alt:hover { background-color: #234231; border-color: #10b981; color: #ffffff; }
-        body.show-alt-calls .call-btn-alt { display: block; }
-
-        /* Left Side - Label & Images (L-Shape Cutout) */
-        .left-wrap { float: left; margin-right: 12px; width: 80px; }
-        .stage-label { font-size: 13px; color: #ffffff; font-weight: bold; margin-bottom: 6px; white-space: nowrap; }
-        
-        .info-images { display: none; flex-direction: column; gap: 4px; margin-bottom: 4px; }
-        body.show-info .info-images { display: flex; }
-        
-        .img-placeholder { width: 100%; height: 26px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
-        
-        /* The Text - Flows naturally into dead space */
-        .info-text { display: none; color: #a5d6b8; font-size: 11px; line-height: 1.5; text-align: justify; }
-        body.show-info .info-text { display: block; }
+        /* Info Boxes */
+        .stage-info { display: none; background-color: #131b17; border: 1px solid #1f2d26; border-radius: 6px; padding: 8px; margin-top: 8px; gap: 10px; transition: all 0.3s ease; }
+        body.show-info .stage-info { display: flex; }
+        .info-images { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+        .img-placeholder { width: 50px; height: 25px; background-color: #1a2520; border: 1px dashed #2e4539; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #728f80; text-transform: uppercase; transition: all 0.3s ease; }
+        .info-text { color: #a5d6b8; font-size: 11px; line-height: 1.4; flex-grow: 1; }
 
         /* Quiz UI */
         .quiz-container { background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 30px; max-width: 900px; margin: 0 auto; text-align: center; transition: all 0.3s ease; }
@@ -152,32 +130,16 @@
         ::-webkit-scrollbar-thumb { background: #2a3d34; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #354d41; }
 
-        /* DARK MODE */
+        /* OLED DARK MODE */
         body.dark-mode { background-color: #000000; }
         body.dark-mode .discord-banner, body.dark-mode .controls-bar, body.dark-mode .column-wrapper, body.dark-mode .quiz-container, body.dark-mode .tab-btn { background-color: #080c0a; border-color: #141d19; }
-        body.dark-mode .quiz-header, body.dark-mode .quiz-setting-row { border-color: #141d19; }
+        body.dark-mode .dino-card { background-color: #0d1411; border-color: #1a2520; }
+        body.dark-mode .dino-panel { background-color: #050806; border-top-color: #141d19; }
+        body.dark-mode .stage-row, body.dark-mode .quiz-header, body.dark-mode .quiz-setting-row { border-color: #141d19; }
+        body.dark-mode .spacer { border-color: #141d19; }
+        body.dark-mode .stage-info { background-color: #0a0e0c; border-color: #141d19; }
         body.dark-mode .img-placeholder { background-color: #050806; border-color: #1a2520; }
         body.dark-mode .quiz-setting select, body.dark-mode .checkbox-group { background-color: #050806; border-color: #141d19; }
-
-        /* DARK MODE - Base Card Reversions */
-        body.dark-mode .dino-card { background-color: #0d1411; border-color: #1a2520; }
-        body.dark-mode .dino-card.active { border-color: #2a3d34; }
-        body.dark-mode .dino-panel { background-color: #050806; border-top-color: #141d19; }
-        body.dark-mode .stage-row { border-bottom-color: #141d19; }
-        body.dark-mode.show-info .stage-row { background-color: #0a0e0c; }
-
-        /* DARK MODE - Chronological Coloring */
-        body.dark-mode #herb-container .dino-card.active.age-0 .dino-toggle { background-color: #1a2a20; }
-        body.dark-mode #herb-container .dino-card.active.age-1 .dino-toggle { background-color: #142018; }
-        body.dark-mode #herb-container .dino-card.active.age-2 .dino-toggle { background-color: #0e1711; }
-
-        body.dark-mode #carn-container .dino-card.active.age-0 .dino-toggle { background-color: #2a1a1a; }
-        body.dark-mode #carn-container .dino-card.active.age-1 .dino-toggle { background-color: #201414; }
-        body.dark-mode #carn-container .dino-card.active.age-2 .dino-toggle { background-color: #170e0e; }
-
-        body.dark-mode #omni-container .dino-card.active.age-0 .dino-toggle { background-color: #221a2a; }
-        body.dark-mode #omni-container .dino-card.active.age-1 .dino-toggle { background-color: #1a1420; }
-        body.dark-mode #omni-container .dino-card.active.age-2 .dino-toggle { background-color: #110e17; }
 
         /* Mobile */
         @media (max-width: 768px) {
@@ -185,10 +147,10 @@
             .discord-banner { flex-direction: column; text-align: center; gap: 12px; padding: 15px; }
             .discord-link { width: 100%; padding: 10px; }
             .tab-btn { flex: 1; text-align: center; }
-            .controls-bar { flex-direction: row; justify-content: space-between; align-items: flex-end; padding: 12px 15px; gap: 15px; }
+            .controls-bar { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; padding: 12px 15px; gap: 15px; }
             .controls-bar > div:first-child { flex: 1; min-width: 130px; display: flex; flex-direction: column; gap: 8px; }
             .volume-slider { width: 100%; margin: 0; }
-            .toggle-wrapper { flex: 1; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 80px; }
+            .toggle-wrapper { flex: 1; flex-direction: column; align-items: flex-end; gap: 8px; min-width: 100px; }
             .controls-bar label { font-size: 11px; }
             .controls-bar .spacer { display: none; }
             .soundboard-grid { flex-direction: column; }
@@ -197,13 +159,6 @@
             .quiz-container { padding: 20px 15px; }
             .guess-grid { grid-template-columns: repeat(2, 1fr); }
             .play-mystery-btn { padding: 15px; font-size: 16px; }
-            
-            /* Break L-Shape layout for mobile to prevent text squishing */
-            .left-wrap { float: none; width: 100%; margin-bottom: 8px; }
-            .btn-group { float: none; margin-left: 0; width: 100%; justify-content: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
-            .info-images { flex-direction: row; margin-bottom: 8px; }
-            .img-placeholder { width: 55px; }
-            .info-text { text-align: left; }
         }
     </style>
 </head>
@@ -227,15 +182,7 @@
         </div>
         <div class="spacer"></div>
         <div class="toggle-wrapper">
-            <label for="altCallToggle">Alt Calls</label>
-            <label class="switch">
-                <input type="checkbox" id="altCallToggle">
-                <span class="slider"></span>
-            </label>
-        </div>
-        <div class="spacer"></div>
-        <div class="toggle-wrapper">
-            <label for="infoToggle">Details</label>
+            <label for="infoToggle">Show Details</label>
             <label class="switch">
                 <input type="checkbox" id="infoToggle">
                 <span class="slider"></span>
@@ -326,9 +273,10 @@
 </div>
 
 <script>
+    // 🟢 UPDATED: Data Objects to support special calls
     const dinos = {
         herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"],
-        carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", "Rex", "Troodon"],
+        carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", { name: "Rex", specialCalls: ["Paleo Call 1", "Paleo Call 2"] }, "Troodon"],
         omnis: ["Beipi", "Galli"]
     };
     const stages = [ { label: "Juvie - 25%", num: "25" }, { label: "Sub - 50%", num: "50" }, { label: "Adult - 75%", num: "75" } ];
@@ -336,7 +284,6 @@
 
     const DOM = {
         volume: document.getElementById('masterVolume'),
-        altCallToggle: document.getElementById('altCallToggle'),
         infoToggle: document.getElementById('infoToggle'),
         darkModeToggle: document.getElementById('darkModeToggle'),
         quizSetup: document.getElementById('quiz-setup'),
@@ -357,15 +304,9 @@
     let activeAudio = new Audio(); 
     let currentVolume = DOM.volume.value;
 
-    const openCardQueues = {};
-
     DOM.volume.addEventListener('input', e => {
         currentVolume = e.target.value;
         activeAudio.volume = currentVolume;
-    });
-
-    DOM.altCallToggle.addEventListener('change', e => {
-        document.body.classList.toggle('show-alt-calls', e.target.checked);
     });
 
     DOM.infoToggle.addEventListener('change', e => {
@@ -403,90 +344,81 @@
         }
     }
 
-    function buildDinoCards(dinoList, containerId) {
+    // 🟢 UPDATED: Builder handles both Strings and Objects
+    function buildDinoCards(dinoList, containerId, dietClass) {
         const container = document.getElementById(containerId);
-        dinoList.forEach(dino => {
+        dinoList.forEach(dinoObj => {
+            // Determine if dino is a string or an object with special properties
+            const dino = typeof dinoObj === 'string' ? dinoObj : dinoObj.name;
             let stagesHtml = '';
+            
+            // Build standard stages
             stages.forEach(stage => {
                 let buttonsHtml = '';
                 calls.forEach(call => {
-                    const file1 = `${dino} ${stage.num} ${call} Call 1`;
-                    const file2 = `${dino} ${stage.num} ${call} Call 2`;
-                    
-                    buttonsHtml += `
-                    <div class="call-col">
-                        <button class="call-btn" data-file="${file1}">${call}</button>
-                        <button class="call-btn call-btn-alt" data-file="${file2}">${call}</button>
-                    </div>`;
+                    const fileName = `${dino} ${stage.num} ${call} Call`;
+                    buttonsHtml += `<button class="call-btn" data-file="${fileName}">${call}</button>`;
                 });
-                
                 stagesHtml += `
                     <div class="stage-row">
-                        <div class="btn-group">${buttonsHtml}</div>
-                        <div class="left-wrap">
-                            <div class="stage-label">${stage.label}</div>
+                        <div class="stage-header">
+                            <span class="stage-label">${stage.label}</span>
+                            <div class="btn-group">${buttonsHtml}</div>
+                        </div>
+                        <div class="stage-info">
                             <div class="info-images">
                                 <div class="img-placeholder">Base</div>
                                 <div class="img-placeholder">Prime</div>
                             </div>
-                        </div>
-                        <div class="info-text">
-                            <strong style="color: #ffffff;">${dino} (${stage.label.split(' ')[0]})</strong><br>
-                            Description, diet requirements, or stats can go here.
+                            <div class="info-text">
+                                <strong style="color: #ffffff;">${dino} (${stage.label.split(' ')[0]})</strong><br>
+                                Description, diet requirements, or stats can go here.
+                            </div>
                         </div>
                     </div>`;
             });
-            container.insertAdjacentHTML('beforeend', `<div class="dino-card"><button class="dino-toggle"><span>${dino}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`);
+
+            // 🟢 UPDATED: Build Special Calls if they exist on the object
+            if (typeof dinoObj !== 'string' && dinoObj.specialCalls) {
+                let specialBtnsHtml = '';
+                dinoObj.specialCalls.forEach(specialCall => {
+                    const fileName = `${dino} ${specialCall}`;
+                    const shortLabel = specialCall.replace(' Call ', ' '); // Formats "Paleo Call 1" to "Paleo 1"
+                    specialBtnsHtml += `<button class="call-btn" data-file="${fileName}">${shortLabel}</button>`;
+                });
+                stagesHtml += `
+                    <div class="stage-row" style="border-top: 1px dashed #2e4539; padding-top: 10px; margin-top: 4px;">
+                        <div class="stage-header">
+                            <span class="stage-label" style="color: #a5d6b8;">Special</span>
+                            <div class="btn-group">${specialBtnsHtml}</div>
+                        </div>
+                    </div>`;
+            }
+
+            // Inject the exact class needed for the diet colors
+            container.insertAdjacentHTML('beforeend', `<div class="dino-card ${dietClass}"><button class="dino-toggle"><span>${dino}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`);
         });
     }
 
-    buildDinoCards(dinos.herbs, 'herb-container');
-    buildDinoCards(dinos.carns, 'carn-container');
-    buildDinoCards(dinos.omnis, 'omni-container');
-
-    // Function to apply chronological coloring
-    function updateAges(colId) {
-        if (!openCardQueues[colId]) return;
-        const queue = openCardQueues[colId];
-        const len = queue.length;
-        
-        queue.forEach((card, index) => {
-            card.classList.remove('age-0', 'age-1', 'age-2');
-            const age = (len - 1) - index; 
-            card.classList.add(`age-${age}`);
-        });
-    }
+    buildDinoCards(dinos.herbs, 'herb-container', 'herb');
+    buildDinoCards(dinos.carns, 'carn-container', 'carn');
+    buildDinoCards(dinos.omnis, 'omni-container', 'omni');
 
     DOM.mainGrid.addEventListener('click', e => {
-        if (e.target.classList.contains('call-btn')) {
-            play(e.target.dataset.file);
-        } else if (e.target.closest('.dino-toggle')) {
+        if (e.target.classList.contains('call-btn')) play(e.target.dataset.file);
+        else if (e.target.closest('.dino-toggle')) {
             const currentCard = e.target.closest('.dino-card');
             const column = currentCard.parentElement;
-            const colId = column.id;
-            
-            if (!openCardQueues[colId]) openCardQueues[colId] = [];
-            
-            if (currentCard.classList.contains('active')) {
-                currentCard.classList.remove('active', 'age-0', 'age-1', 'age-2');
-                openCardQueues[colId] = openCardQueues[colId].filter(c => c !== currentCard);
-                updateAges(colId);
-            } else {
-                currentCard.classList.add('active');
-                openCardQueues[colId].push(currentCard);
-                
-                if (openCardQueues[colId].length > 3) {
-                    const oldestCard = openCardQueues[colId].shift(); 
-                    oldestCard.classList.remove('active', 'age-0', 'age-1', 'age-2'); 
-                }
-                updateAges(colId);
-            }
+            if (currentCard.classList.contains('active')) { currentCard.classList.remove('active'); return; }
+            column.querySelectorAll('.dino-card.active').forEach(c => c.classList.remove('active'));
+            currentCard.classList.add('active');
         }
     });
 
     let currentQuizPool = [], currentQuestionIndex = 0, score = 0;
     let attemptsConfig = 3, currentAttemptsLeft = 3, isQuestionLocked = false;
 
+    // 🟢 UPDATED: Quiz Engine pulls names and special calls
     function startQuiz() {
         const activeDinos = [...(document.getElementById('toggle-herbs').checked ? dinos.herbs : []), ...(document.getElementById('toggle-carns').checked ? dinos.carns : []), ...(document.getElementById('toggle-omnis').checked ? dinos.omnis : [])];
         const activeStages = [...(document.getElementById('toggle-juvie').checked ? ["25"] : []), ...(document.getElementById('toggle-sub').checked ? ["50"] : []), ...(document.getElementById('toggle-adult').checked ? ["75"] : [])];
@@ -496,17 +428,27 @@
         DOM.tabSoundboard.disabled = true;
 
         let possibleCalls = [];
-        activeDinos.forEach(dino => activeStages.forEach(s => calls.forEach(c => {
-            possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call 1` });
-            possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call 2` });
-        })));
+        activeDinos.forEach(dinoObj => {
+            const dinoName = typeof dinoObj === 'string' ? dinoObj : dinoObj.name;
+            
+            // Standard Calls into Quiz Pool
+            activeStages.forEach(s => calls.forEach(c => possibleCalls.push({ species: dinoName, file: `${dinoName} ${s} ${c} Call` })));
+            
+            // Special Calls into Quiz Pool
+            if (typeof dinoObj !== 'string' && dinoObj.specialCalls) {
+                dinoObj.specialCalls.forEach(sc => possibleCalls.push({ species: dinoName, file: `${dinoName} ${sc}` }));
+            }
+        });
         
         DOM.guessGrid.innerHTML = '';
-        activeDinos.sort().forEach(dino => {
+        
+        // Extract names cleanly and build the guess buttons
+        const activeNames = activeDinos.map(d => typeof d === 'string' ? d : d.name).sort();
+        activeNames.forEach(dinoName => {
             const btn = document.createElement('button');
             btn.className = 'guess-btn';
-            btn.innerText = dino;
-            btn.onclick = () => handleGuess(dino, btn);
+            btn.innerText = dinoName;
+            btn.onclick = () => handleGuess(dinoName, btn);
             DOM.guessGrid.appendChild(btn);
         });
         
