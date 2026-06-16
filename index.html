@@ -334,16 +334,15 @@
 </div>
 
 <script>
-    // 🟢 UPDATED: Data Object sets the precise labels and filenames you want
     const dinos = {
         herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"],
         carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", { 
             name: "Rex", 
             specialCalls: { 
-                "75": [
-                    { label: "Paleo 1", file: "Paleo Call 1" },
-                    { label: "Paleo F", file: "Paleo Call 2" }
-                ] 
+                "75": { 
+                    "1": { label: "Paleo 1", file: "Paleo Call 1" }, 
+                    "F": { label: "Paleo F", file: "Paleo Call 2" } 
+                } 
             } 
         }, "Troodon"],
         omnis: ["Beipi", "Galli"]
@@ -432,6 +431,13 @@
                     const file1 = `${dino} ${stage.num} ${call} Call 1`;
                     const file2 = `${dino} ${stage.num} ${call} Call 2`;
                     
+                    let specialBtnHtml = '';
+                    if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[stage.num] && dinoItem.specialCalls[stage.num][call]) {
+                        const sc = dinoItem.specialCalls[stage.num][call];
+                        const fileName = `${dino} ${stage.num} ${sc.file}`;
+                        specialBtnHtml = `<button class="call-btn" data-file="${fileName}">${sc.label}</button>`;
+                    }
+                    
                     buttonsHtml += `
                     <div class="call-col">
                         <button class="call-btn" data-file="${file1}">${call}</button>
@@ -441,22 +447,27 @@
 
                 let rightSideHtml = `<div class="btn-group">${buttonsHtml}</div>`;
 
-                // 🟢 FIXED: We use flex-wrap with a flex-basis break to cleanly push Paleo buttons to row 2 right-aligned
+                // 🟢 FIXED: We use a column flex container so it doesn't force 100% width and break the left label
                 if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[stage.num]) {
                     let specialBtnsHtml = '';
-                    dinoItem.specialCalls[stage.num].forEach(sc => {
-                        const fileName = `${dino} ${stage.num} ${sc.file}`;
-                        specialBtnsHtml += `
-                        <div class="call-col">
-                            <button class="call-btn" data-file="${fileName}">${sc.label}</button>
-                        </div>`;
+                    calls.forEach(call => {
+                        if (dinoItem.specialCalls[stage.num][call]) {
+                            const sc = dinoItem.specialCalls[stage.num][call];
+                            const fileName = `${dino} ${stage.num} ${sc.file}`;
+                            specialBtnsHtml += `
+                            <div class="call-col">
+                                <button class="call-btn" data-file="${fileName}">${sc.label}</button>
+                            </div>`;
+                        } else {
+                            // Empty block to maintain grid spacing underneath buttons that don't have a special call
+                            specialBtnsHtml += `<div class="call-col" style="visibility: hidden;"><button class="call-btn">Empty</button></div>`;
+                        }
                     });
                     
                     rightSideHtml = `
-                    <div class="btn-group" style="flex-wrap: wrap; justify-content: flex-end;">
-                        ${buttonsHtml}
-                        <div style="flex-basis: 100%; height: 0;"></div>
-                        ${specialBtnsHtml}
+                    <div class="btn-group" style="flex-direction: column; align-items: flex-end; gap: 4px;">
+                        <div style="display: flex; gap: 4px;">${buttonsHtml}</div>
+                        <div style="display: flex; gap: 4px;">${specialBtnsHtml}</div>
                     </div>`;
                 }
                 
@@ -547,7 +558,7 @@
                 });
 
                 if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[s]) {
-                    dinoItem.specialCalls[s].forEach(sc => {
+                    Object.values(dinoItem.specialCalls[s]).forEach(sc => {
                         possibleCalls.push({ species: dino, file: `${dino} ${s} ${sc.file}` });
                     });
                 }
