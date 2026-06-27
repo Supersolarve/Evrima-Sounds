@@ -8,7 +8,7 @@
         /* Global Theme */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body { background-color: #1a2520; min-height: 100vh; transition: background-color 0.3s ease; }
-        body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; }
+        body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; display: flex; flex-direction: column; }
 
         /* Banner */
         .discord-banner { background-color: #131b17; border: 1px solid #23332c; border-radius: 8px; padding: 12px 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
@@ -24,7 +24,7 @@
         .tab-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
         /* View Controllers */
-        .view-section { display: none; }
+        .view-section { display: none; flex-grow: 1; }
         .view-section.active { display: block; }
 
         /* Control Bar */
@@ -94,11 +94,9 @@
         /* Right Side - Buttons */
         .btn-group { float: right; display: flex; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 10; }
         
-        /* 🟢 NEW: Wrapper to neatly stack multiple button rows without breaking layout */
         .btn-wrapper { float: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin-left: 12px; margin-bottom: 4px; position: relative; z-index: 10; }
         .btn-row { display: flex; gap: 4px; }
 
-        /* 🟢 RESTORED: Standard perfectly square button columns */
         .call-col { display: flex; flex-direction: column; gap: 4px; }
         
         .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; width: 100%; }
@@ -156,6 +154,19 @@
         .score-text { font-size: 48px; font-weight: bold; color: #4ade80; }
         .pun-text { font-size: 20px; font-weight: bold; color: #ffffff; font-style: italic; margin-bottom: 20px; text-align: center; }
 
+        /* Bug Report Footer */
+        .bug-report { 
+            position: fixed; 
+            bottom: 20px; 
+            left: 20px; 
+            font-size: 13px; 
+            color: #728f80; 
+            font-weight: bold; 
+            letter-spacing: 0.5px; 
+            z-index: 50; 
+        }
+        .bug-report .highlight { color: #4ade80; }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #2a3d34; border-radius: 10px; }
@@ -201,18 +212,16 @@
             .quiz-container { padding: 20px 15px; }
             .guess-grid { grid-template-columns: repeat(2, 1fr); }
             .play-mystery-btn { padding: 15px; font-size: 16px; }
-            
-            /* Break L-Shape layout for mobile to prevent text squishing */
             .left-wrap { float: none; width: 100%; margin-bottom: 8px; }
             .btn-group { float: none; margin-left: 0; width: 100%; justify-content: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
-            
-            /* 🟢 NEW: Added mobile rule for the new wrapper */
             .btn-wrapper { float: none; margin-left: 0; width: 100%; align-items: flex-start; margin-bottom: 10px; }
             .btn-row { flex-wrap: wrap; justify-content: flex-start; }
-            
             .info-images { flex-direction: row; margin-bottom: 8px; }
             .img-placeholder { width: 55px; }
             .info-text { text-align: left; }
+            
+            /* Reposition bug report on small screens so it doesn't overlap content */
+            .bug-report { position: static; text-align: center; margin-top: 20px; margin-bottom: 10px; font-size: 12px; }
         }
     </style>
 </head>
@@ -334,8 +343,11 @@
     </div>
 </div>
 
+<div class="bug-report">
+    If You Find A Bug, Please Contact <span class="highlight">@Supersolarve</span> On Discord
+</div>
+
 <script>
-    // 🟢 UPDATED: Data structure cleanly stores the labels you want
     const dinos = {
         herbs: ["Diablo", "Dryo", "Hypsi", "Maia", "Pachy", "Stego", "Tenno", "Trike"],
         carns: ["Allo", "Carno", "Cerato", "Deino", "Dilo", "Herrera", "Omni", "Ptera", { 
@@ -441,7 +453,6 @@
 
                 let rightSideHtml = `<div class="btn-group">${buttonsHtml}</div>`;
 
-                // 🟢 FIXED: The wrapper cleanly separates the two rows so standard buttons stay square!
                 if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[stage.num]) {
                     let specialBtnsHtml = '';
                     dinoItem.specialCalls[stage.num].forEach(sc => {
