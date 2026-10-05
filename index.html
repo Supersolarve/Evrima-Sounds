@@ -11,10 +11,17 @@
         body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; display: flex; flex-direction: column; }
 
         /* Banner */
-        .discord-banner { background-color: #131b17; border: 1px solid #23332c; border-radius: 8px; padding: 12px 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
-        .discord-text { font-size: 14px; font-weight: bold; color: #ffffff; }
-        .discord-link { background-color: #27a35b; color: #ffffff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-weight: bold; transition: background 0.2s ease; white-space: nowrap; }
+        .discord-banner { background-color: #131b17; border: 1px solid #23332c; border-radius: 8px; padding: 16px 18px; margin: 0 auto 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.2); max-width: 1220px; width: 100%; }
+        .discord-banner-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 10px; }
+        .discord-text { font-size: 16px; font-weight: bold; color: #ffffff; }
+        .discord-link { background-color: #27a35b; color: #ffffff; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; transition: background 0.2s ease; white-space: nowrap; font-size: 14px; }
         .discord-link:hover { background-color: #1f8549; }
+
+        .server-connects { max-width: 1220px; width: 100%; margin: 0 auto 20px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+        .server-button { display: flex; align-items: center; justify-content: center; min-height: 52px; padding: 10px 12px; border: 1px solid #2e4539; border-radius: 8px; background-color: #1c2d25; color: #d8e3dd; text-decoration: none; text-align: center; font-size: 13px; font-weight: bold; letter-spacing: 0.2px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+        .server-button:hover { background-color: #233a30; border-color: #4ade80; transform: translateY(-1px); }
+        .server-button.is-disabled { opacity: 0.7; cursor: not-allowed; pointer-events: none; background-color: #272d2c; color: #b9c4be; border-color: #3a433f; }
+        .server-button strong { color: #4ade80; }
 
         /* Tab Navigation */
         .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
@@ -197,8 +204,10 @@
         /* Mobile */
         @media (max-width: 768px) {
             body { padding: 10px; }
-            .discord-banner { flex-direction: column; text-align: center; gap: 12px; padding: 15px; }
+            .discord-banner { padding: 15px; }
+            .discord-banner-inner { flex-direction: column; text-align: center; }
             .discord-link { width: 100%; padding: 10px; }
+            .server-connects { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .tab-btn { flex: 1; text-align: center; }
             .controls-bar { flex-direction: row; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; padding: 12px 15px; gap: 15px; }
             .controls-bar > div:first-child { flex: 1; min-width: 130px; display: flex; flex-direction: column; gap: 8px; }
@@ -228,8 +237,17 @@
 <body>
 
 <div class="discord-banner">
-    <div class="discord-text">Looking for a pack or need help with The Isle?</div>
-    <a href="https://discord.gg/Noobz" target="_blank" class="discord-link">Join discord.gg/Noobz</a>
+    <div class="discord-banner-inner">
+        <div class="discord-text">Looking for a pack or need help with The Isle?</div>
+        <a href="https://discord.gg/Noobz" target="_blank" class="discord-link">Join discord.gg/Noobz</a>
+    </div>
+</div>
+
+<div class="server-connects">
+    <a class="server-button is-disabled" href="#" aria-disabled="true" title="IP pending">Join Noobz Evrima Server<br><small>IP pending</small></a>
+    <a class="server-button" href="steam://connect/66.85.80.98:27015" target="_blank">Join Legacy Deathmatch</a>
+    <a class="server-button" href="steam://connect/15.204.158.70:7777" target="_blank">Join Legacy Server 1</a>
+    <a class="server-button" href="steam://connect/104.243.46.211:7780" target="_blank">Join Legacy Server 2</a>
 </div>
 
 <div class="tab-container">
