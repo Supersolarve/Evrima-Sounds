@@ -1,0 +1,413 @@
+{
+ "Acro": {
+  "Adult": {
+   "Attract": 1,
+   "Broadcast": 1,
+   "Danger": 1,
+   "Generic": 5,
+   "Threaten": 2
+  }
+ },
+ "Albertosaurus": {
+  "Adult": {
+   "Attract": 2,
+   "Broadcast": 1,
+   "Danger": 3,
+   "Generic": 3,
+   "Threaten": 1
+  }
+ },
+ "Allosaurus": {
+  "Adult": {
+   "Attract": 2,
+   "Broadcast": 2,
+   "Danger": 2,
+   "Generic": 6,
+   "Threaten": 4
+  },
+  "Juvenile": {
+   "Attract": 2,
+   "Broadcast": 2,
+   "Danger": 2,
+   "Generic": 4,
+   "Threaten": 2
+  }
+ },
+ "Ankylosaurus": {
+  "Adult": {
+   "Attract": 4,
+   "Broadcast": 2,
+   "Danger": 4,
+   "Generic": 5,
+   "Threaten": 3
+  }
+ },
+ "Austro": {
+  "Adult": {
+   "Attract": 4,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Generic": 5,
+   "Threaten": 2
+  }
+ },
+ "Ava": {
+  "Adult": {
+   "Attract": 3,
+   "Broadcast": 2,
+   "Danger": 3,
+   "Generic": 7,
+   "Threaten": 2
+  }
+ },
+ "Baryonyx": {
+  "Adult": {
+   "Attract": 3,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Generic": 4,
+   "Threaten": 2
+  }
+ },
+ "Camaro": {
+  "Adult": {
+   "Attract": 4,
+   "Broadcast": 1,
+   "Danger": 4,
+   "Generic": 7,
+   "Threaten": 2
+  }
+ },
+ "Carno": {
+  "Adult": {
+   "Attract": 1,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Generic": 3,
+   "Threaten": 2
+  },
+  "Juvenile": {
+   "Attract": 2,
+   "Broadcast": 1,
+   "Danger": 3,
+   "Threaten": 2
+  },
+  "Subadult": {
+   "Attract": 2,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Threaten": 1
+  }
+ },
+ "Cerato": {
+  "Adult": {
+   "Attract": 2,
+   "Broadcast": 1,
+   "Danger": 1,
+   "Generic": 3,
+   "Threaten": 2
+  },
+  "Juvenile": {
+   "Attract": 3,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Generic": 3,
+   "Threaten": 2
+  }
+ },
+ "Diablo": {
+  "Adult": {
+   "Attract": 2,
+   "Broadcast": 1,
+   "Danger": 1,
+   "Generic": 9,
+   "Threaten": 2
+  },
+  "Juvenile": {
+   "Attract": 3,
+   "Broadcast": 2,
+   "Danger": 1,
+   "Threaten": 3
+  }
+ },
+ "Dilophosaurus": {
+  "Adult": {
+   "Attract": 3,
+   "Broadcast": 2,
+   "Danger": 2,
+   "Generic": 3,
+   "Threaten": 4
+  },
+  "Juvenile": {
+   "Attract": 3,
+   "Broadcast": 2,
+   "Danger": 2,
+   "Generic": 3,
+   "Threaten": 2
+  }
+ },
+ "Dryos": {
+  "Adult": {
+   "Attract": 3,
+   "Broadcast": 2,
+   "Danger": 4,
+   "Threaten": 5
+  },
+  "Juvenile": {
+   "Attract": 3,
+   "Broadcast": 2,
+   "Danger": 3,
+   "Threaten": 2
+  }
+ },
+ "Galli": {
+  "Adult": {
+   "Attract": 4,
+   "Broadcast": 1,
+   "Danger": 7,
+   "Threaten": 4
+  },
+  "Juvenile": {
+   "Attract": 2,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Generic": 6,
+   "Threaten": 1
+  }
+ },
+ "Giga": {
+  "Adult": {
+   "Attract": 1,
+   "Broadcast": 1,
+   "Danger": 1,
+   "Generic": 4,
+   "Threaten": 3
+  },
+  "Juvenile": {
+   "Attract": 2,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Generic": 3,
+   "Threaten": 2
+  },
+  "Subadult": {
+   "Attract": 3,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Generic": 6,
+   "Threaten": 1
+  }
+ },
+ "Herrera": {
+  "Adult": {
+   "Attract": 1,
+   "Broadcast": 1,
+   "Danger": 1,
+   "Generic": 6,
+   "Threaten": 1
+  }
+ },
+ "Maia": {
+  "Adult": {
+   "Attract": 3,
+   "Broadcast": 2,
+   "Danger": 2,
+   "Generic": 6,
+   "Threaten": 2
+  },
+  "Juvenile": {
+   "Attract": 2,
+   "Broadcast": 2,
+   "Danger": 2,
+   "Generic": 3,
+   "Threaten": 2
+  }
+ },
+ "Orodromeus": {
+  "Adult": {
+   "Attract": 3,
+   "Broadcast": 1,
+   "Danger": 3,
+   "Generic": 4,
+   "Threaten": 2
+  }
+ },
+ "Pachy": {
+  "Adult": {
+   "Attract": 1,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Generic": 4,
+   "Threaten": 2
+  },
+  "Juvenile": {
+   "Attract": 4,
+   "Broadcast": 3,
+   "Danger": 2,
+   "Generic": 4,
+   "Threaten": 1
+  }
+ },
+ "Parasaurolophus": {
+  "Adult": {
+   "Attract": 3,
+   "Broadcast": 2,
+   "Danger": 2,
+   "Threaten": 1
+  },
+  "Juvenile": {
+   "Attract": 3,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Threaten": 1
+  }
+ },
+ "Psittaco": {
+  "Adult": {
+   "Attract": 2,
+   "Broadcast": 1,
+   "Danger": 7,
+   "Generic": 5,
+   "Threaten": 3
+  }
+ },
+ "Puerta": {
+  "Adult": {
+   "Attract": 2,
+   "Broadcast": 2,
+   "Danger": 2,
+   "Generic": 4,
+   "Threaten": 3
+  }
+ },
+ "Quetz": {
+  "Adult": {
+   "Attract": 3,
+   "Broadcast": 2,
+   "Danger": 1,
+   "Threaten": 1
+  }
+ },
+ "Rex": {
+  "Adult": {
+   "Attract": 4,
+   "Broadcast": 3,
+   "Danger": 1,
+   "Generic": 9,
+   "Threaten": 2
+  },
+  "Juvenile": {
+   "Attract": 4,
+   "Broadcast": 3,
+   "Danger": 2,
+   "Generic": 5,
+   "Threaten": 3
+  },
+  "Subadult": {
+   "Attract": 1,
+   "Broadcast": 2,
+   "Danger": 1,
+   "Generic": 5,
+   "Threaten": 2
+  }
+ },
+ "Shantu": {
+  "Adult": {
+   "Attract": 4,
+   "Broadcast": 1,
+   "Danger": 3,
+   "Generic": 8,
+   "Threaten": 2
+  },
+  "Juvenile": {
+   "Broadcast": 2
+  }
+ },
+ "Spinosaurus": {
+  "Adult": {
+   "Attract": 1,
+   "Broadcast": 2,
+   "Danger": 1,
+   "Generic": 4,
+   "Threaten": 3
+  }
+ },
+ "Stego": {
+  "Adult": {
+   "Attract": 5,
+   "Broadcast": 1,
+   "Danger": 2,
+   "Generic": 3,
+   "Threaten": 4
+  }
+ },
+ "Sucho": {
+  "Adult": {
+   "Attract": 1,
+   "Broadcast": 1,
+   "Danger": 1,
+   "Generic": 4,
+   "Threaten": 1
+  },
+  "Juvenile": {
+   "Attract": 2,
+   "Broadcast": 1,
+   "Danger": 1,
+   "Generic": 3,
+   "Threaten": 2
+  }
+ },
+ "Therizino": {
+  "Adult": {
+   "Attract": 2,
+   "Broadcast": 2,
+   "Danger": 2,
+   "Generic": 9,
+   "Threaten": 2
+  }
+ },
+ "Triceratops": {
+  "Adult": {
+   "Broadcast": 2,
+   "Danger": 1,
+   "Generic": 3,
+   "Threaten": 2
+  },
+  "Juvenile": {
+   "Broadcast": 1,
+   "Danger": 1,
+   "Generic": 1,
+   "Threaten": 1
+  },
+  "Subadult": {
+   "Broadcast": 1,
+   "Danger": 1,
+   "Generic": 3,
+   "Threaten": 2
+  }
+ },
+ "Utahraptor": {
+  "Adult": {
+   "Attract": 3,
+   "Broadcast": 10,
+   "Danger": 2,
+   "Generic": 5,
+   "Threaten": 8
+  },
+  "Juvenile": {
+   "Attract": 3,
+   "Broadcast": 3,
+   "Danger": 1,
+   "Threaten": 1
+  }
+ },
+ "Velociraptor": {
+  "Adult": {
+   "Attract": 8,
+   "Broadcast": 4,
+   "Danger": 3,
+   "Generic": 4,
+   "Threaten": 7
+  }
+ }
+}
