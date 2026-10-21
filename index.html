@@ -146,9 +146,9 @@
 
         /* Legacy call rows: label on top, one column per call type */
         .legacy-calls { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin-top: 6px; }
-        .legacy-calls .call-btn { padding: 5px 2px; }
-        .call-key { display: block; font-size: 13px; line-height: 1.2; }
-        .call-name { display: block; font-size: 9px; font-weight: normal; letter-spacing: 0.2px; opacity: 0.85; }
+        .legacy-calls .call-btn { padding: 3px 2px; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .call-key { font-size: 11px; margin-right: 3px; }
+        .call-name { font-weight: normal; opacity: 0.85; }
         .alt-row { display: none; flex-wrap: wrap; gap: 3px; }
         body.show-alt-calls .alt-row { display: flex; }
         .alt-row .call-btn { flex: 1 0 22px; width: auto; padding: 3px 0; }
@@ -283,7 +283,7 @@
             .guess-grid { grid-template-columns: repeat(2, 1fr); }
             .game-tab { padding: 12px 10px; font-size: 15px; }
             .legacy-calls { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            .legacy-calls .call-btn { padding: 8px 2px; }
+            .legacy-calls .call-btn { padding: 6px 2px; }
             .play-mystery-btn { padding: 15px; font-size: 16px; }
             .left-wrap { float: none; width: 100%; margin-bottom: 8px; }
             .btn-group { float: none; margin-left: 0; width: 100%; justify-content: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
