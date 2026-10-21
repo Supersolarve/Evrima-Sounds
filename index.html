@@ -147,6 +147,8 @@
         /* Legacy call rows: label on top, one column per call type */
         .legacy-calls { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin-top: 6px; }
         .legacy-calls .call-btn { padding: 5px 2px; }
+        .call-key { display: block; font-size: 13px; line-height: 1.2; }
+        .call-name { display: block; font-size: 9px; font-weight: normal; letter-spacing: 0.2px; opacity: 0.85; }
         .alt-row { display: none; flex-wrap: wrap; gap: 3px; }
         body.show-alt-calls .alt-row { display: flex; }
         .alt-row .call-btn { flex: 1 0 22px; width: auto; padding: 3px 0; }
@@ -686,9 +688,10 @@
     }
 
     function onGridClick(e) {
-        if (e.target.classList.contains('call-btn')) {
-            if (e.target === playingBtn) stopAudio();
-            else play(e.target.dataset.file, e.target);
+        const callBtn = e.target.closest('.call-btn');
+        if (callBtn) {
+            if (callBtn === playingBtn) stopAudio();
+            else play(callBtn.dataset.file, callBtn);
         } else if (e.target.closest('.dino-toggle')) {
             const currentCard = e.target.closest('.dino-card');
             const column = currentCard.parentElement;
@@ -735,7 +738,8 @@
         Utahraptor: ["Utah", "Utahraptor", "carn"], Velociraptor: ["Velo", "Velociraptor", "ai"]
     };
     const legacyStages = [["Juvenile", "Juvenile"], ["Subadult", "Sub-Adult"], ["Adult", "Adult"]];
-    const legacyCallTypes = [["Broadcast", "Broadcast"], ["Attract", "Friendly"], ["Threaten", "Threaten"], ["Danger", "Danger"], ["Generic", "Generic"]];
+    // [file type, button label, in-game key]
+    const legacyCallTypes = [["Broadcast", "Broadcast", "1"], ["Attract", "Friendly", "2"], ["Threaten", "Threaten", "3"], ["Danger", "Danger", "4"], ["Generic", "Generic", "F"]];
 
     let legacyLoaded = false;
     async function loadLegacy() {
@@ -761,13 +765,13 @@
         entries.forEach(({ folder, name, fullName, diet }) => {
             const stagesHtml = legacyStages.filter(([stage]) => manifest[folder][stage]).map(([stage, stageLabel]) => {
                 const counts = manifest[folder][stage];
-                const cells = legacyCallTypes.map(([type, label]) => {
+                const cells = legacyCallTypes.map(([type, label, key]) => {
                     const n = counts[type] || 0;
                     if (!n) return '<div class="call-empty" title="No call"></div>';
                     const base = `legacy/${folder} ${stage} ${type}`;
                     let alts = '';
-                    for (let i = 2; i <= n; i++) alts += `<button class="call-btn call-btn-alt" data-file="${base} ${i}" title="${label} ${i}">${i}</button>`;
-                    return `<div class="call-col"><button class="call-btn" data-file="${base} 1" title="${label}">${label}</button>${alts ? `<div class="alt-row">${alts}</div>` : ''}</div>`;
+                    for (let i = 2; i <= n; i++) alts += `<button class="call-btn call-btn-alt" data-file="${base} ${i}" title="${label} (${key}) - variation ${i}">v${i}</button>`;
+                    return `<div class="call-col"><button class="call-btn" data-file="${base} 1" title="${label} (${key})"><span class="call-key">${key}</span><span class="call-name">${label}</span></button>${alts ? `<div class="alt-row">${alts}</div>` : ''}</div>`;
                 }).join('');
                 return `<div class="stage-row"><div class="stage-label">${stageLabel}</div><div class="legacy-calls">${cells}</div></div>`;
             }).join('');
