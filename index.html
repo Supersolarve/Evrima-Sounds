@@ -321,9 +321,13 @@
         /* Title */
         .site-header { text-align: center; margin: 4px auto 16px; max-width: 1220px; width: 100%; }
         .site-title { font-family: 'Lilita One', 'Century Gothic', sans-serif; font-weight: normal; font-size: 46px; letter-spacing: 3px; line-height: 1; text-transform: uppercase; display: inline-flex; align-items: center; gap: 14px;
-            background: linear-gradient(180deg, #d9f99d 0%, #86efac 45%, #22c55e 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
             filter: drop-shadow(0 3px 0 #0b2414) drop-shadow(0 0 18px rgba(74, 222, 128, 0.25)); }
-        .site-title svg { width: 38px; height: 38px; flex-shrink: 0; }
+        /* Gradient only on the text, so the footprint icon renders in every browser */
+        .title-text { background: linear-gradient(180deg, #d9f99d 0%, #86efac 45%, #22c55e 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .site-title svg { width: 46px; height: 46px; flex-shrink: 0; transform: rotate(-12deg); transition: transform 0.2s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+        .site-title svg:hover { transform: rotate(-12deg) scale(1.1); }
+        .site-title svg.stomp { animation: stomp 0.25s ease; }
+        @keyframes stomp { 50% { transform: rotate(-12deg) scale(0.85); } }
         .site-tagline { margin-top: 6px; color: #8fb59d; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; }
         .site-tagline .dot { color: #4ade80; margin: 0 6px; }
 
@@ -355,7 +359,7 @@
 
         @media (max-width: 768px) {
             .site-title { font-size: 32px; gap: 10px; letter-spacing: 2px; }
-            .site-title svg { width: 28px; height: 28px; }
+            .site-title svg { width: 34px; height: 34px; }
             .site-tagline { font-size: 11px; letter-spacing: 1px; }
             .column-title::before { left: 10px; }
             .column-title::after { right: 10px; }
@@ -475,13 +479,14 @@
 
 <header class="site-header">
     <h1 class="site-title">
+        <!-- Three-toed dino track (also the Pirate Easter egg: tap 5 times) -->
         <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="#4ade80">
-            <path d="M32 30c-9 0-16 8-16 17 0 8 7 12 16 12s16-4 16-12c0-9-7-17-16-17z"/>
-            <path d="M18 24c-3-8-1-17 4-19 4-1 7 6 7 13 0 5-2 9-5 10-3 0-5-2-6-4z"/>
-            <path d="M32 20c-3-8-2-17 0-19 3 2 4 11 1 19z" transform="translate(-1 0) scale(1 1.05)"/>
-            <path d="M46 24c3-8 1-17-4-19-4-1-7 6-7 13 0 5 2 9 5 10 3 0 5-2 6-4z"/>
+            <path d="M32 33c-7 0-12 6-12 13 0 8 5 14 12 14s12-6 12-14c0-7-5-13-12-13z"/>
+            <path d="M28.5 36C28 25 29.5 13 32 3c2.5 10 4 22 3.5 33z"/>
+            <path d="M25 39C20 31 13 23 5 17c5 8 10 17 13.5 26z"/>
+            <path d="M39 39c5-8 12-16 20-22-5 8-10 17-13.5 26z"/>
         </g></svg>
-        Dino Calls
+        <span class="title-text">Dino Calls</span>
     </h1>
     <p class="site-tagline"><span data-i18n="tagline">The Isle Soundboard</span><span class="dot">•</span>Evrima &amp; Legacy</p>
     <label class="lang-picker"><span class="lang-globe" aria-hidden="true">🌐</span><span class="sr-only" data-i18n="language">Language</span><select id="langSelect"></select></label>
@@ -766,7 +771,7 @@
     }
     langSelect.addEventListener('change', () => setLanguage(langSelect.value));
 
-    // Easter egg: tap the title footprint 5 times quickly, or type "arrr", to unlock Pirate
+    // Easter egg: tap the title footprint 5 times within 3 seconds, or type "arrr", to unlock Pirate
     function unlockPirate() {
         if (!pirateUnlocked) {
             pirateUnlocked = true;
@@ -776,9 +781,14 @@
         if (lang !== 'pirate') setLanguage('pirate');
     }
     let footprintTaps = [];
-    document.querySelector('.site-title svg').addEventListener('click', () => {
+    const footprint = document.querySelector('.site-title svg');
+    footprint.addEventListener('animationend', () => footprint.classList.remove('stomp'));
+    footprint.addEventListener('click', () => {
+        footprint.classList.remove('stomp');
+        void footprint.getBoundingClientRect(); // restart the stomp animation on rapid taps
+        footprint.classList.add('stomp');
         const now = Date.now();
-        footprintTaps = footprintTaps.filter(time => now - time < 2000).concat(now);
+        footprintTaps = footprintTaps.filter(time => now - time < 3000).concat(now);
         if (footprintTaps.length >= 5) { footprintTaps = []; unlockPirate(); }
     });
     let typedKeys = '';
