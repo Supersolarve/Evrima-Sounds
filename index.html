@@ -6,6 +6,7 @@
     <title>Evrima Soundboard | Noobz</title>
     <meta name="description" content="A community soundboard for The Isle: Evrima, featuring dinosaur calls, a training quiz, and Noobz server links.">
     <link rel="canonical" href="https://dinocalls.com/">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦖</text></svg>">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://dinocalls.com/">
     <meta property="og:title" content="Evrima Soundboard | Noobz">
@@ -33,13 +34,14 @@
         .discord-link:hover { background-color: #1f8549; }
 
         .server-connects { max-width: 1220px; width: 100%; margin: 0 auto 20px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-        .server-button { display: flex; align-items: center; justify-content: center; min-height: 52px; padding: 10px 12px; border: 1px solid #2e4539; border-radius: 8px; background-color: #1c2d25; color: #d8e3dd; text-decoration: none; text-align: center; font-size: 13px; font-weight: bold; letter-spacing: 0.2px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+        .server-button small { font-weight: normal; color: #728f80; font-size: 11px; margin-top: 2px; }
+        .server-button { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 52px; padding: 10px 12px; border: 1px solid #2e4539; border-radius: 8px; background-color: #1c2d25; color: #d8e3dd; text-decoration: none; text-align: center; font-size: 13px; font-weight: bold; letter-spacing: 0.2px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
         .server-button:hover { background-color: #233a30; border-color: #4ade80; transform: translateY(-1px); }
         .server-button.is-disabled { opacity: 0.7; cursor: not-allowed; pointer-events: none; background-color: #272d2c; color: #b9c4be; border-color: #3a433f; }
         .server-button strong { color: #4ade80; }
 
         /* Tab Navigation */
-        .tab-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-container { display: flex; gap: 10px; margin: 0 auto 20px; max-width: 1220px; width: 100%; }
         .tab-btn { background-color: #141d19; border: 1px solid #23332c; color: #728f80; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; }
         .tab-btn:hover:not(:disabled) { background-color: #1b2822; color: #a5d6b8; }
         .tab-btn.active { background-color: #27a35b; border-color: #27a35b; color: #ffffff; box-shadow: 0 0 10px rgba(39, 163, 91, 0.3); }
@@ -50,7 +52,7 @@
         .view-section.active { display: block; }
 
         /* Control Bar */
-        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; flex-wrap: wrap; }
+        .controls-bar { background-color: #141d19; border: 1px solid #23332c; border-radius: 8px; padding: 10px 20px; margin: 0 auto 20px; max-width: 1220px; display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.3s ease; flex-wrap: wrap; }
         .controls-bar label { font-weight: bold; color: #a5d6b8; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
         .volume-slider { flex-grow: 1; max-width: 250px; cursor: pointer; accent-color: #4ade80; }
         .spacer { width: 20px; border-right: 1px solid #23332c; height: 20px; transition: border-color 0.3s ease; }
@@ -65,7 +67,7 @@
         input:checked + .slider:before { transform: translateX(16px); background-color: #1a2520; }
 
         /* Soundboard Grid */
-        .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
+        .soundboard-grid { display: flex; align-items: flex-start; gap: 15px; width: 100%; max-width: 1220px; margin: 0 auto; flex-wrap: wrap; }
         
         .column-wrapper { flex: 1; min-width: 300px; height: fit-content; max-height: 85vh; overflow-y: auto; background-color: #141d19; border: 1px solid #23332c; border-radius: 12px; padding: 10px; transition: all 0.3s ease; }
         
@@ -124,6 +126,15 @@
         .call-btn { background-color: #25382e; border: 1px solid #2e4539; color: #4ade80; font-weight: bold; font-size: 11px; border-radius: 4px; padding: 4px 12px; cursor: pointer; transition: all 0.2s ease; width: 100%; }
         .call-btn:hover { background-color: #314a3d; border-color: #4ade80; color: #ffffff; transform: translateY(-1px); }
         .call-btn:active { transform: translateY(1px); }
+        .call-btn.is-playing, .call-btn.is-playing:hover { background-color: #4ade80; border-color: #4ade80; color: #0f1a14; animation: playing-pulse 1s ease-in-out infinite; }
+        @keyframes playing-pulse { 50% { box-shadow: 0 0 8px rgba(74, 222, 128, 0.6); } }
+
+        .stop-btn { background-color: #25382e; border: 1px solid #2e4539; color: #d8e3dd; font-weight: bold; font-size: 12px; border-radius: 6px; padding: 6px 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s ease; white-space: nowrap; }
+        .stop-btn:hover:not(:disabled) { border-color: #d6a5a5; color: #d6a5a5; }
+        .stop-btn:disabled { opacity: 0.4; cursor: default; }
+
+        .dino-name { display: flex; align-items: baseline; gap: 8px; }
+        .dino-fullname { font-size: 11px; font-weight: normal; color: #728f80; font-style: italic; }
 
         .call-btn-alt { background-color: #1a3024; border-color: #244232; color: #10b981; display: none; }
         .call-btn-alt:hover { background-color: #234231; border-color: #10b981; color: #ffffff; }
@@ -182,15 +193,14 @@
         .pun-text { font-size: 20px; font-weight: bold; color: #ffffff; font-style: italic; margin-bottom: 20px; text-align: center; }
 
         /* Bug Report Footer */
-        .bug-report { 
-            position: fixed; 
-            bottom: 20px; 
-            left: 20px; 
-            font-size: 13px; 
-            color: #728f80; 
-            font-weight: bold; 
-            letter-spacing: 0.5px; 
-            z-index: 50; 
+        .bug-report {
+            text-align: center;
+            margin-top: 24px;
+            padding-bottom: 6px;
+            font-size: 13px;
+            color: #728f80;
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
         .bug-report .highlight { color: #4ade80; }
 
@@ -255,8 +265,7 @@
             .img-placeholder { width: 55px; }
             .info-text { text-align: left; }
             
-            /* Reposition bug report on small screens so it doesn't overlap content */
-            .bug-report { position: static; text-align: center; margin-top: 20px; margin-bottom: 10px; font-size: 12px; }
+            .bug-report { margin-top: 20px; font-size: 12px; }
         }
     </style>
 </head>
@@ -270,7 +279,7 @@
 </div>
 
 <div class="server-connects">
-    <a class="server-button is-disabled" href="#" aria-disabled="true" title="IP pending">Join Noobz Evrima Server<br><small>IP pending</small></a>
+    <a class="server-button" href="https://discord.gg/Noobz" target="_blank" title="Server IP will be announced on Discord">Noobz Evrima Server<br><small>Coming soon - updates on Discord</small></a>
     <a class="server-button" href="steam://connect/66.85.80.98:27015" target="_blank">Join Legacy Deathmatch</a>
     <a class="server-button" href="steam://connect/15.204.158.70:7777" target="_blank">Join Legacy Server 1</a>
     <a class="server-button" href="steam://connect/104.243.46.211:7780" target="_blank">Join Legacy Server 2</a>
@@ -287,6 +296,7 @@
             <label for="masterVolume">Volume</label>
             <input type="range" id="masterVolume" class="volume-slider" min="0" max="1" step="0.01" value="0.5">
         </div>
+        <button class="stop-btn" id="stopBtn" title="Stop sound (Esc)" disabled>■ Stop</button>
         <div class="spacer"></div>
         <div class="toggle-wrapper">
             <label for="altCallToggle">Alt Calls</label>
@@ -407,6 +417,13 @@
         }, "Troodon"],
         omnis: ["Beipi", "Galli"]
     };
+    const fullNames = {
+        Diablo: "Diabloceratops", Dryo: "Dryosaurus", Hypsi: "Hypsilophodon", Kentro: "Kentrosaurus", Maia: "Maiasaura",
+        Pachy: "Pachycephalosaurus", Stego: "Stegosaurus", Tenno: "Tenontosaurus", Trike: "Triceratops",
+        Allo: "Allosaurus", Carno: "Carnotaurus", Cerato: "Ceratosaurus", Deino: "Deinosuchus", Dilo: "Dilophosaurus",
+        Herrera: "Herrerasaurus", Omni: "Omniraptor", Ptera: "Pteranodon", Rex: "Tyrannosaurus",
+        Beipi: "Beipiaosaurus", Galli: "Gallimimus"
+    };
     const stages = [ { label: "Juvie - 25%", num: "25" }, { label: "Sub - 50%", num: "50" }, { label: "Adult - 75%", num: "75" } ];
     const calls = ["1", "2", "3", "4", "F"];
 
@@ -426,7 +443,8 @@
         finalPun: document.getElementById('final-pun'),
         mainGrid: document.getElementById('main-grid'),
         tabSoundboard: document.getElementById('tab-soundboard'),
-        tabQuiz: document.getElementById('tab-quiz')
+        tabQuiz: document.getElementById('tab-quiz'),
+        stopBtn: document.getElementById('stopBtn')
     };
 
     // Saved settings (localStorage can be unavailable in private windows, so every access is guarded)
@@ -485,19 +503,43 @@
         else DOM.tabQuiz.classList.add('active');
         document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
         document.getElementById(tabName + '-view').classList.add('active');
-        activeAudio.pause();
+        stopAudio();
     }
     DOM.tabSoundboard.addEventListener('click', () => switchTab('soundboard'));
     DOM.tabQuiz.addEventListener('click', () => switchTab('quiz'));
 
-    function play(fileName) {
+    // Soundboard button currently playing (null for quiz calls or when idle)
+    let playingBtn = null;
+    function setPlayingBtn(btn) {
+        if (playingBtn) playingBtn.classList.remove('is-playing');
+        playingBtn = btn || null;
+        if (playingBtn) playingBtn.classList.add('is-playing');
+    }
+
+    function stopAudio() {
+        activeAudio.pause();
+        setPlayingBtn(null);
+        DOM.stopBtn.disabled = true;
+    }
+
+    activeAudio.addEventListener('ended', stopAudio);
+    DOM.stopBtn.addEventListener('click', stopAudio);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') stopAudio(); });
+
+    function play(fileName, btn) {
         activeAudio.pause();
         activeAudio.currentTime = 0;
         activeAudio.src = 'audio/' + encodeURIComponent(fileName) + '.mp3';
-        activeAudio.volume = currentVolume; 
+        activeAudio.volume = currentVolume;
+        setPlayingBtn(btn);
+        DOM.stopBtn.disabled = false;
         const playPromise = activeAudio.play();
         if (playPromise !== undefined) {
-            playPromise.catch(err => { if (err.name !== 'AbortError') console.log("Audio not found: " + fileName); });
+            playPromise.catch(err => {
+                if (err.name === 'AbortError') return;
+                console.log("Audio not found: " + fileName);
+                if (playingBtn === btn) stopAudio();
+            });
         }
     }
 
@@ -556,7 +598,8 @@
                     </div>`;
             });
 
-            container.insertAdjacentHTML('beforeend', `<div class="dino-card ${dietClass}"><button class="dino-toggle"><span>${dino}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`);
+            const fullName = fullNames[dino] ? `<span class="dino-fullname">${fullNames[dino]}</span>` : '';
+            container.insertAdjacentHTML('beforeend', `<div class="dino-card ${dietClass}"><button class="dino-toggle"><span class="dino-name">${dino}${fullName}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`);
         });
     }
 
@@ -578,7 +621,8 @@
 
     DOM.mainGrid.addEventListener('click', e => {
         if (e.target.classList.contains('call-btn')) {
-            play(e.target.dataset.file);
+            if (e.target === playingBtn) stopAudio();
+            else play(e.target.dataset.file, e.target);
         } else if (e.target.closest('.dino-toggle')) {
             const currentCard = e.target.closest('.dino-card');
             const column = currentCard.parentElement;
@@ -735,7 +779,7 @@
 
     function quitQuiz() {
         clearTimeout(quizTimer);
-        activeAudio.pause();
+        stopAudio();
         isQuizActive = false;
         DOM.tabSoundboard.disabled = false;
         DOM.quizActive.style.display = 'none';
