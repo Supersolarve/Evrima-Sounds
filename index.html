@@ -369,8 +369,8 @@
         .site-header { position: relative; }
         .lang-picker { position: absolute; top: 4px; right: 0; display: inline-flex; align-items: center; gap: 6px; background: rgba(17, 29, 22, 0.9); border: 1px solid #2b4a35; border-radius: 8px; padding: 4px 8px; }
         .lang-globe { font-size: 14px; }
-        .lang-picker select { background: transparent; color: #d8e3dd; border: none; font-family: inherit; font-size: 13px; font-weight: bold; cursor: pointer; outline: none; }
-        .lang-picker select option { background: #142318; color: #d8e3dd; }
+        .lang-picker select { background-color: #142318; color: #d8e3dd; color-scheme: dark; border: none; border-radius: 4px; padding: 2px 4px; font-family: inherit; font-size: 13px; font-weight: bold; cursor: pointer; outline: none; min-width: 90px; }
+        .lang-picker select option { background-color: #142318; color: #d8e3dd; }
         .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
         /* Stage rows: label left (wraps if long, e.g. translations), buttons right, details text below */
@@ -647,7 +647,8 @@
     <span data-i18n="bugReport" data-i18n-handle="@Supersolarve">If You Find A Bug, Please Contact <span class="highlight">@Supersolarve</span> On Discord</span>
 </div>
 
-<script src="lang.js"></script>
+<!-- Bump ?v= whenever lang.js changes so browsers and Cloudflare fetch the new copy -->
+<script src="lang.js?v=3"></script>
 <script>
     const dinos = {
         herbs: ["Diablo", "Dryo", "Hypsi", "Kentro", "Maia", "Pachy", "Stego", "Tenno", "Trike"],
@@ -728,7 +729,8 @@
     })();
 
     function t(key, params) {
-        let s = I18N.strings[lang][key] ?? I18N.strings.en[key] ?? key;
+        // Missing language or key (e.g. an outdated cached lang.js) falls back to English instead of crashing
+        let s = (I18N.strings[lang] || {})[key] ?? I18N.strings.en[key] ?? key;
         if (params) s = s.replace(/\{(\w+)\}/g, (m, k) => (k in params ? params[k] : m));
         return s;
     }
@@ -755,8 +757,9 @@
     const langSelect = document.getElementById('langSelect');
     function fillLangSelect() {
         langSelect.replaceChildren();
-        const list = { ...I18N.languages, ...(pirateUnlocked ? I18N.hiddenLanguages : {}) };
+        const list = { ...I18N.languages, ...(pirateUnlocked ? I18N.hiddenLanguages || {} : {}) };
         Object.entries(list).forEach(([code, name]) => langSelect.add(new Option(name, code)));
+        if (!list[lang]) lang = 'en'; // never leave the picker blank
         langSelect.value = lang;
     }
     fillLangSelect();
@@ -773,6 +776,7 @@
 
     // Easter egg: tap the title footprint 5 times within 3 seconds, or type "arrr", to unlock Pirate
     function unlockPirate() {
+        if (!I18N.strings.pirate) return; // outdated lang.js without the pirate strings
         if (!pirateUnlocked) {
             pirateUnlocked = true;
             saveSetting('pirate', true);
