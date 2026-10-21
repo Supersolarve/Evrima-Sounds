@@ -144,18 +144,8 @@
         .stop-btn:hover:not(:disabled) { border-color: #d6a5a5; color: #d6a5a5; }
         .stop-btn:disabled { opacity: 0.4; cursor: default; }
 
-        /* Legacy call rows: label on top, one column per call type */
-        .legacy-calls { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin-top: 6px; }
-        .legacy-calls .call-btn { padding: 3px 2px; font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .call-key { font-size: 11px; margin-right: 3px; }
-        .call-name { font-weight: normal; opacity: 0.85; }
-        .alt-row { display: none; flex-wrap: wrap; gap: 3px; }
-        body.show-alt-calls .alt-row { display: flex; }
-        .alt-row .call-btn { flex: 1 0 22px; width: auto; padding: 3px 0; }
-        .call-empty { border: 1px dashed #23332c; border-radius: 4px; min-height: 24px; }
-        @media (max-width: 1100px) and (min-width: 769px) {
-            .legacy-calls { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        }
+        /* Legacy: key slot with no call for this dino/stage */
+        .call-btn.call-btn-empty, .call-btn.call-btn-empty:hover { background: transparent; border-style: dashed; border-color: #23332c; color: #3a4d43; cursor: default; transform: none; }
         .load-error { color: #d6a5a5; text-align: center; padding: 20px; width: 100%; font-weight: bold; }
 
         .dino-name { display: flex; align-items: baseline; gap: 8px; }
@@ -282,8 +272,6 @@
             .quiz-container { padding: 20px 15px; }
             .guess-grid { grid-template-columns: repeat(2, 1fr); }
             .game-tab { padding: 12px 10px; font-size: 15px; }
-            .legacy-calls { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-            .legacy-calls .call-btn { padding: 6px 2px; }
             .play-mystery-btn { padding: 15px; font-size: 16px; }
             .left-wrap { float: none; width: 100%; margin-bottom: 8px; }
             .btn-group { float: none; margin-left: 0; width: 100%; justify-content: flex-start; margin-bottom: 10px; flex-wrap: wrap; }
@@ -295,9 +283,134 @@
             
             .bug-report { margin-top: 20px; font-size: 12px; }
         }
+
+        /* ===== Jungle theme: CSS + inline SVG only, no image downloads ===== */
+        html, body { background-color: #0d1610; }
+        body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            background:
+                radial-gradient(ellipse 60% 40% at 15% -5%, rgba(163, 230, 53, 0.13), transparent 70%),
+                radial-gradient(ellipse 50% 35% at 85% -5%, rgba(74, 222, 128, 0.10), transparent 70%),
+                radial-gradient(ellipse 80% 50% at 50% 110%, rgba(0, 0, 0, 0.55), transparent 70%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg fill='%2386efac' fill-opacity='0.045'%3E%3Cpath transform='translate(30 20) rotate(-30)' d='M20 0C35 20 38 50 20 80C2 50 5 20 20 0Z'/%3E%3Cpath transform='translate(150 40) rotate(40)' d='M20 0C35 20 38 50 20 80C2 50 5 20 20 0Z'/%3E%3Cpath transform='translate(95 190) rotate(160)' d='M20 0C35 20 38 50 20 80C2 50 5 20 20 0Z'/%3E%3Cpath transform='translate(190 150) rotate(-70)' d='M14 0C25 14 27 35 14 56C1 35 4 14 14 0Z'/%3E%3Cpath transform='translate(40 130) rotate(15)' d='M14 0C25 14 27 35 14 56C1 35 4 14 14 0Z'/%3E%3C/g%3E%3C/svg%3E"),
+                linear-gradient(180deg, #142318 0%, #0f1a13 55%, #0a120d 100%);
+        }
+        body.dark-mode::before { filter: brightness(0.45); }
+        body > *:not(.jungle-decor) { position: relative; z-index: 1; }
+
+        /* Hanging vines + fireflies */
+        .jungle-decor { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+        .vine { position: absolute; top: -10px; width: 190px; height: 380px; opacity: 0.9; }
+        .vine-left { left: -20px; }
+        .vine-right { right: -20px; transform: scaleX(-1); }
+        .vine-sway { transform-origin: top center; animation: vine-sway 7s ease-in-out infinite; }
+        @keyframes vine-sway { 50% { transform: rotate(1.6deg); } }
+        .firefly { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #d9f99d; box-shadow: 0 0 6px 2px rgba(217, 249, 157, 0.55); opacity: 0; animation: firefly 9s ease-in-out infinite; }
+        .firefly:nth-child(3) { left: 8%; top: 62%; animation-delay: 0s; }
+        .firefly:nth-child(4) { left: 92%; top: 48%; animation-delay: 2.2s; }
+        .firefly:nth-child(5) { left: 4%; top: 30%; animation-delay: 4.5s; }
+        .firefly:nth-child(6) { left: 96%; top: 78%; animation-delay: 1.1s; }
+        .firefly:nth-child(7) { left: 50%; top: 92%; animation-delay: 6s; }
+        .firefly:nth-child(8) { left: 12%; top: 88%; animation-delay: 3.3s; }
+        @keyframes firefly { 0%, 100% { opacity: 0; transform: translate(0, 0); } 30% { opacity: 0.25; } 50% { opacity: 0.6; transform: translate(14px, -22px); } 70% { opacity: 0.2; } }
+        body.dark-mode .firefly { background: #ecfccb; box-shadow: 0 0 9px 3px rgba(236, 252, 203, 0.75); }
+        body.dark-mode .firefly { animation-name: firefly-night; }
+        @keyframes firefly-night { 0%, 100% { opacity: 0; transform: translate(0, 0); } 50% { opacity: 1; transform: translate(14px, -22px); } }
+        @media (max-width: 1000px) { .vine { display: none; } }
+        @media (prefers-reduced-motion: reduce) { .vine-sway, .firefly { animation: none; } .firefly { display: none; } }
+
+        /* Title */
+        .site-header { text-align: center; margin: 4px auto 16px; max-width: 1220px; width: 100%; }
+        .site-title { font-family: 'Lilita One', 'Century Gothic', sans-serif; font-weight: normal; font-size: 46px; letter-spacing: 3px; line-height: 1; text-transform: uppercase; display: inline-flex; align-items: center; gap: 14px;
+            background: linear-gradient(180deg, #d9f99d 0%, #86efac 45%, #22c55e 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+            filter: drop-shadow(0 3px 0 #0b2414) drop-shadow(0 0 18px rgba(74, 222, 128, 0.25)); }
+        .site-title svg { width: 38px; height: 38px; flex-shrink: 0; }
+        .site-tagline { margin-top: 6px; color: #8fb59d; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; }
+        .site-tagline .dot { color: #4ade80; margin: 0 6px; }
+
+        /* Mossy panels */
+        .discord-banner, .controls-bar, .column-wrapper, .quiz-container {
+            background: linear-gradient(180deg, rgba(31, 52, 38, 0.92) 0%, rgba(17, 29, 22, 0.94) 100%);
+            border-color: #2b4a35; box-shadow: inset 0 1px 0 rgba(163, 230, 53, 0.10), 0 6px 18px rgba(0, 0, 0, 0.35); }
+        .server-button { background: linear-gradient(180deg, #213a2a 0%, #182b1f 100%); border-color: #2f5139; }
+        .server-button:hover { background: linear-gradient(180deg, #284a33 0%, #1c3324 100%); }
+        .dino-card { border-color: #2a4232; }
+
+        .game-tab { background: linear-gradient(180deg, #1a2c20 0%, #121f17 100%); border-color: #2b4a35; font-family: 'Lilita One', 'Century Gothic', sans-serif; font-weight: normal; letter-spacing: 3px; }
+        .game-tab.active { background: linear-gradient(180deg, #34b862 0%, #1f8549 100%); border-color: #4ade80; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 16px rgba(74, 222, 128, 0.3); text-shadow: 0 2px 0 rgba(0, 0, 0, 0.3); }
+
+        /* Leafy column headers */
+        .column-title { position: relative; font-family: 'Lilita One', 'Century Gothic', sans-serif; font-weight: normal; letter-spacing: 2px; font-size: 18px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -2px 0 rgba(0, 0, 0, 0.25); }
+        .column-title::before, .column-title::after { content: ""; position: absolute; top: 50%; width: 22px; height: 22px; margin-top: -11px; opacity: 0.8;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M6 34C6 16 18 6 36 4C34 22 24 34 6 34Z' fill='%2386efac'/%3E%3Cpath d='M6 34L28 12' stroke='%23142318' stroke-width='2' fill='none'/%3E%3C/svg%3E") center / contain no-repeat; }
+        .column-title::before { left: 12px; }
+        .column-title::after { right: 12px; transform: scaleX(-1); }
+        .herb-column .column-title { background: linear-gradient(180deg, #33593f 0%, #264430 100%); }
+        .carn-column .column-title { background: linear-gradient(180deg, #5a2e2a 0%, #43211f 100%); }
+        .omni-column .column-title { background: linear-gradient(180deg, #46325a 0%, #342443 100%); }
+
+        /* Night jungle (Dark Mode) keeps its darker panels */
+        body.dark-mode .discord-banner, body.dark-mode .controls-bar, body.dark-mode .column-wrapper, body.dark-mode .quiz-container { background: rgba(6, 11, 8, 0.92); border-color: #142219; }
+        body.dark-mode .game-tab:not(.active), body.dark-mode .server-button { background: #080c0a; border-color: #142219; }
+        body.dark-mode .site-tagline { color: #5f7d6a; }
+
+        @media (max-width: 768px) {
+            .site-title { font-size: 32px; gap: 10px; letter-spacing: 2px; }
+            .site-title svg { width: 28px; height: 28px; }
+            .site-tagline { font-size: 11px; letter-spacing: 1px; }
+            .column-title::before { left: 10px; }
+            .column-title::after { right: 10px; }
+        }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
 </head>
 <body>
+
+<div class="jungle-decor" aria-hidden="true">
+    <svg class="vine vine-left" viewBox="0 0 190 380"><g class="vine-sway"><use href="#vine-art"/></g></svg>
+    <svg class="vine vine-right" viewBox="0 0 190 380"><g class="vine-sway" style="animation-delay: -3s"><use href="#vine-art"/></g></svg>
+    <span class="firefly"></span><span class="firefly"></span><span class="firefly"></span>
+    <span class="firefly"></span><span class="firefly"></span><span class="firefly"></span>
+</div>
+
+<svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <defs>
+        <linearGradient id="leaf-fill" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#3f8f52"/><stop offset="1" stop-color="#1d4a2a"/>
+        </linearGradient>
+        <symbol id="leaf" viewBox="0 0 40 80">
+            <path d="M20 0C35 20 38 50 20 80C2 50 5 20 20 0Z" fill="url(#leaf-fill)"/>
+            <path d="M20 6V76" stroke="#173a22" stroke-width="1.5"/>
+        </symbol>
+        <g id="vine-art">
+            <path d="M40 0C70 60 25 110 55 170S40 280 75 370" fill="none" stroke="#24452e" stroke-width="4" stroke-linecap="round"/>
+            <path d="M95 0C110 40 85 80 105 130S95 190 112 230" fill="none" stroke="#1f3d28" stroke-width="3" stroke-linecap="round"/>
+            <use href="#leaf" width="22" height="44" transform="translate(58 30) rotate(55)"/>
+            <use href="#leaf" width="26" height="52" transform="translate(30 80) rotate(-60)"/>
+            <use href="#leaf" width="24" height="48" transform="translate(62 125) rotate(65)"/>
+            <use href="#leaf" width="28" height="56" transform="translate(38 185) rotate(-55)"/>
+            <use href="#leaf" width="22" height="44" transform="translate(64 240) rotate(60)"/>
+            <use href="#leaf" width="26" height="52" transform="translate(52 300) rotate(-50)"/>
+            <use href="#leaf" width="18" height="36" transform="translate(108 60) rotate(50)"/>
+            <use href="#leaf" width="20" height="40" transform="translate(92 120) rotate(-55)"/>
+            <use href="#leaf" width="18" height="36" transform="translate(112 180) rotate(45)"/>
+        </g>
+    </defs>
+</svg>
+
+<header class="site-header">
+    <h1 class="site-title">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><g fill="#4ade80">
+            <path d="M32 30c-9 0-16 8-16 17 0 8 7 12 16 12s16-4 16-12c0-9-7-17-16-17z"/>
+            <path d="M18 24c-3-8-1-17 4-19 4-1 7 6 7 13 0 5-2 9-5 10-3 0-5-2-6-4z"/>
+            <path d="M32 20c-3-8-2-17 0-19 3 2 4 11 1 19z" transform="translate(-1 0) scale(1 1.05)"/>
+            <path d="M46 24c3-8 1-17-4-19-4-1-7 6-7 13 0 5 2 9 5 10 3 0 5-2 6-4z"/>
+        </g></svg>
+        Dino Calls
+    </h1>
+    <p class="site-tagline">The Isle Soundboard<span class="dot">•</span>Evrima &amp; Legacy</p>
+</header>
 
 <div class="discord-banner">
     <div class="discord-banner-inner">
@@ -688,7 +801,7 @@
     }
 
     function onGridClick(e) {
-        const callBtn = e.target.closest('.call-btn');
+        const callBtn = e.target.closest('.call-btn:not(:disabled)');
         if (callBtn) {
             if (callBtn === playingBtn) stopAudio();
             else play(callBtn.dataset.file, callBtn);
@@ -765,15 +878,16 @@
         entries.forEach(({ folder, name, fullName, diet }) => {
             const stagesHtml = legacyStages.filter(([stage]) => manifest[folder][stage]).map(([stage, stageLabel]) => {
                 const counts = manifest[folder][stage];
+                // Same row layout as the Evrima board: stage label left, one small button per key right
                 const cells = legacyCallTypes.map(([type, label, key]) => {
                     const n = counts[type] || 0;
-                    if (!n) return '<div class="call-empty" title="No call"></div>';
+                    if (!n) return `<div class="call-col"><button class="call-btn call-btn-empty" disabled title="No ${label} call">${key}</button></div>`;
                     const base = `legacy/${folder} ${stage} ${type}`;
-                    let alts = '';
-                    for (let i = 2; i <= n; i++) alts += `<button class="call-btn call-btn-alt" data-file="${base} ${i}" title="${label} (${key}) - variation ${i}">v${i}</button>`;
-                    return `<div class="call-col"><button class="call-btn" data-file="${base} 1" title="${label} (${key})"><span class="call-key">${key}</span><span class="call-name">${label}</span></button>${alts ? `<div class="alt-row">${alts}</div>` : ''}</div>`;
+                    let buttons = `<button class="call-btn" data-file="${base} 1" title="${label}">${key}</button>`;
+                    for (let i = 2; i <= n; i++) buttons += `<button class="call-btn call-btn-alt" data-file="${base} ${i}" title="${label} - variation ${i}">${key}</button>`;
+                    return `<div class="call-col">${buttons}</div>`;
                 }).join('');
-                return `<div class="stage-row"><div class="stage-label">${stageLabel}</div><div class="legacy-calls">${cells}</div></div>`;
+                return `<div class="stage-row"><div class="btn-group">${cells}</div><div class="left-wrap"><div class="stage-label">${stageLabel}</div></div></div>`;
             }).join('');
 
             const full = fullName && fullName !== name ? `<span class="dino-fullname">${fullName}</span>` : '';
