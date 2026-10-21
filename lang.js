@@ -4,6 +4,10 @@ window.I18N = {
     languages: {
         en: 'English', es: 'Español', pt: 'Português', fr: 'Français', de: 'Deutsch', ru: 'Русский', pl: 'Polski'
     },
+    // Easter egg: only listed once unlocked (tap the title footprint 5 times, type "arrr", or ?lang=pirate)
+    hiddenLanguages: {
+        pirate: '🏴‍☠️ Pirate'
+    },
     strings: {
         en: {
             language: 'Language',
@@ -235,6 +239,39 @@ window.I18N = {
             alertNoCalls: 'Żadne zawołania nie pasują do tego wyboru. Dodaj inny etap lub grupę.',
             loadError: 'Nie udało się wczytać dźwięków Legacy. Odśwież stronę, aby spróbować ponownie.',
             bugReport: 'Znalazłeś błąd? Napisz do {handle} na Discordzie'
+        },
+        pirate: {
+            language: 'Tongue',
+            tagline: "The Isle's Shanty Board",
+            discordText: "Seekin' a crew or need help on The Isle, matey?",
+            discordJoin: 'Board the ship at discord.gg/Noobz',
+            srvEvrima: 'Noobz Evrima Port', srvSoon: "Comin' soon - word be on Discord", srvSoonTitle: "The port's coordinates be posted on Discord",
+            srvLegacyDM: 'Sail to Legacy Deathmatch', srvLegacy1: 'Sail to Legacy Port 1', srvLegacy2: 'Sail to Legacy Port 2',
+            tabSoundboard: 'Shanty Board', tabQuiz: 'Crew Drills',
+            volume: 'Loudness', stop: '■ Belay', stopTitle: 'Belay that noise! (Esc)',
+            altCalls: 'Other Hollers', details: "Ship's Log [Bein' Built]", darkMode: 'Night Watch',
+            herbivores: 'Leaf Lubbers', carnivores: 'Sea Wolves', omnivores: 'Scavengers', ai: 'Ghost Crew',
+            juvie25: 'Cabin Boy - 25%', sub50: 'Deckhand - 50%', adult75: 'Captain - 75%',
+            juvenile: 'Cabin Boy', subadult: 'Deckhand', adult: 'Captain',
+            quizJuvie: 'Cabin Boy (25%)', quizSub: 'Deckhand (50%)', quizAdult: 'Captain (75%)',
+            callBroadcast: 'Ahoy!', callFriendly: 'Friendly Holler', callThreaten: 'Threat', callDanger: 'Man Overboard!', callGeneric: 'Grumble',
+            noCall: 'No {call} from this beastie', variation: '{call} - take {n}',
+            detailsPlaceholder: "Here be the tale, the grub, an' the stats o' this beastie.", base: 'Base', prime: 'Prime',
+            evrimaTraining: 'Evrima Holler Drills', legacyTraining: 'Legacy Holler Drills',
+            quizIntro: 'Rig yer drills an\' hit Hoist the Sails when ye be ready.',
+            quizLength: "Length o' the Voyage", len5: '5 Hollers (Quick Lookout)', len10: '10 Hollers (Standard Voyage)', len20: '20 Hollers (Long Haul)', len50: "50 Hollers (Davy Jones' Locker)",
+            attempts: 'Guesses per Holler', att1: '1 Guess (Walk the Plank)', att2: '2 Guesses', att3: '3 Guesses (Merciful)',
+            dietsInclude: 'Grub to Include', groupsInclude: 'Crews to Include', stagesInclude: 'Ranks to Include',
+            startQuiz: 'Hoist the Sails', questionOf: 'Holler {n} of {total}', attemptsLeft: 'Guesses Left: {n}',
+            quitQuiz: 'Abandon Ship', playMystery: '🔊 Play the Mystery Holler', correct: 'Aye, that be right!', itWas: 'Arr, that were {name}.',
+            quizComplete: 'Voyage Complete!', playAgain: 'Sail Again',
+            res100: "Dread Pirate o' the Isle! A perfect haul.", res80: 'First Mate! Nearly flawless.', res50: 'Salty Sea Dog. Not bad at all.',
+            res25: "Still a Landlubber. Keep listenin'!", res0: 'Shark Bait... Back to the shanty board with ye!',
+            alertSelect: 'Pick at least one crew an\' one rank, ye scallywag!',
+            alertLegacyLoad: 'The Legacy hollers be lost at sea. Refresh the page an\' try again.',
+            alertNoCalls: 'No hollers match that heading. Add another rank or crew.',
+            loadError: 'The Legacy hollers be lost at sea. Refresh the page to try again.',
+            bugReport: "Spot a bug in the riggin'? Send word to {handle} on Discord"
         }
     }
 };

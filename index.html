@@ -369,8 +369,14 @@
         .lang-picker select option { background: #142318; color: #d8e3dd; }
         .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-        /* Longer translated stage names push the buttons instead of overlapping them */
-        .left-wrap { width: auto; min-width: 80px; }
+        /* Stage rows: label left (wraps if long, e.g. translations), buttons right, details text below */
+        .stage-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0 10px; }
+        .stage-row::after { display: none; }
+        .stage-row .left-wrap { order: 1; flex: 1 1 0; width: auto; min-width: 0; margin: 0; padding-top: 4px; float: none; }
+        .stage-row .btn-group, .stage-row .btn-wrapper { order: 2; flex: 0 0 auto; float: none; margin: 0; }
+        .stage-row .btn-row { justify-content: flex-end; }
+        .stage-row .info-text { order: 3; flex-basis: 100%; margin-top: 6px; }
+        .stage-label { white-space: normal; }
 
         /* Group switcher (phones only) */
         .diet-switch { display: none; gap: 6px; margin: 0 0 10px; }
@@ -412,15 +418,12 @@
             .soundboard-grid .column-title { display: none; }
             .column-wrapper { margin-bottom: 0; padding: 8px; }
 
-            /* Stage rows: label left, buttons right on one line */
-            .stage-row { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 0 8px; padding: 8px 4px; }
-            .stage-row::after { display: none; }
-            .stage-row .left-wrap { order: 1; flex: 1 1 auto; width: auto; min-width: 0; margin: 0; padding-top: 7px; }
-            .stage-row .btn-group, .stage-row .btn-wrapper { order: 2; width: auto; margin: 0; }
+            /* Stage rows: tighter spacing on phones (layout itself is shared with desktop) */
+            .stage-row { gap: 0 8px; padding: 8px 4px; }
+            .stage-row .left-wrap { padding-top: 7px; }
+            .stage-row .btn-group, .stage-row .btn-wrapper { width: auto; }
             .stage-row .btn-wrapper { align-items: flex-end; }
-            .stage-row .btn-row { justify-content: flex-end; }
-            .stage-row .info-text { order: 3; flex-basis: 100%; margin-top: 6px; }
-            .stage-label { font-size: 12px; margin-bottom: 0; white-space: normal; }
+            .stage-label { font-size: 12px; margin-bottom: 0; }
             .call-btn { min-width: 36px; padding: 7px 8px; }
             .info-images { margin: 6px 0 0; }
 
@@ -708,9 +711,13 @@
     document.body.classList.toggle('dark-mode', DOM.darkModeToggle.checked);
 
     // --- Languages (strings live in lang.js) ---
-    // Saved choice first, then the browser's language, then English.
+    // ?lang= in the URL first, then the saved choice, then the browser's language, then English.
+    const urlLang = new URLSearchParams(location.search).get('lang');
+    let pirateUnlocked = !!savedSettings.pirate || urlLang === 'pirate';
+    if (urlLang === 'pirate') saveSetting('pirate', true);
     let lang = (() => {
-        if (savedSettings.lang && I18N.strings[savedSettings.lang]) return savedSettings.lang;
+        if (urlLang && I18N.strings[urlLang]) return urlLang;
+        if (savedSettings.lang && I18N.strings[savedSettings.lang] && (savedSettings.lang !== 'pirate' || pirateUnlocked)) return savedSettings.lang;
         const browser = (navigator.language || 'en').slice(0, 2).toLowerCase();
         return I18N.strings[browser] ? browser : 'en';
     })();
@@ -723,7 +730,7 @@
 
     // Translates every element tagged with data-i18n / data-i18n-title
     function applyLanguage() {
-        document.documentElement.lang = lang;
+        document.documentElement.lang = lang === 'pirate' ? 'en' : lang;
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const text = t(el.dataset.i18n);
             if (el.dataset.i18nHandle) {
@@ -741,14 +748,44 @@
     }
 
     const langSelect = document.getElementById('langSelect');
-    Object.entries(I18N.languages).forEach(([code, name]) => langSelect.add(new Option(name, code)));
-    langSelect.value = lang;
-    langSelect.addEventListener('change', () => {
-        lang = langSelect.value;
-        saveSetting('lang', lang);
+    function fillLangSelect() {
+        langSelect.replaceChildren();
+        const list = { ...I18N.languages, ...(pirateUnlocked ? I18N.hiddenLanguages : {}) };
+        Object.entries(list).forEach(([code, name]) => langSelect.add(new Option(name, code)));
+        langSelect.value = lang;
+    }
+    fillLangSelect();
+
+    function setLanguage(code) {
+        lang = code;
+        langSelect.value = code;
+        saveSetting('lang', code);
         applyLanguage();
         rebuildBoards();
         applyQuizConfig();
+    }
+    langSelect.addEventListener('change', () => setLanguage(langSelect.value));
+
+    // Easter egg: tap the title footprint 5 times quickly, or type "arrr", to unlock Pirate
+    function unlockPirate() {
+        if (!pirateUnlocked) {
+            pirateUnlocked = true;
+            saveSetting('pirate', true);
+            fillLangSelect();
+        }
+        if (lang !== 'pirate') setLanguage('pirate');
+    }
+    let footprintTaps = [];
+    document.querySelector('.site-title svg').addEventListener('click', () => {
+        const now = Date.now();
+        footprintTaps = footprintTaps.filter(time => now - time < 2000).concat(now);
+        if (footprintTaps.length >= 5) { footprintTaps = []; unlockPirate(); }
+    });
+    let typedKeys = '';
+    document.addEventListener('keydown', e => {
+        if (e.target.closest('input, select, textarea') || e.key.length !== 1) return;
+        typedKeys = (typedKeys + e.key.toLowerCase()).slice(-4);
+        if (typedKeys === 'arrr') unlockPirate();
     });
 
     let isQuizActive = false;
