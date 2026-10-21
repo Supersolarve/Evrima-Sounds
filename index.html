@@ -49,7 +49,7 @@
         .game-tab:disabled { opacity: 0.4; cursor: not-allowed; }
         .game-section { display: none; flex-grow: 1; }
         .game-section.active { display: block; }
-        body.quiz-open:not(.legacy-open) .controls-bar { display: none; }
+        body.quiz-open .controls-bar { display: none; }
         body.legacy-open .evrima-only { display: none !important; }
 
         .tab-container { display: flex; gap: 10px; margin: 0 auto 20px; max-width: 1220px; width: 100%; }
@@ -431,7 +431,7 @@
     <button class="game-tab" id="game-legacy">Legacy</button>
 </div>
 
-<div class="tab-container evrima-only">
+<div class="tab-container">
     <button class="tab-btn active" id="tab-soundboard">Soundboard</button>
     <button class="tab-btn" id="tab-quiz">Training Quiz</button>
 </div>
@@ -483,10 +483,27 @@
     </div>
 </div>
 
+</div>
+
+<div id="legacy-game" class="game-section">
+    <div class="soundboard-grid" id="legacy-grid">
+        <div class="column-wrapper herb-column" id="legacy-herb-container">
+            <div class="column-title">Herbivores</div>
+        </div>
+        <div class="column-wrapper carn-column" id="legacy-carn-container">
+            <div class="column-title">Carnivores</div>
+        </div>
+        <div class="column-wrapper omni-column" id="legacy-ai-container">
+            <div class="column-title">AI</div>
+        </div>
+    </div>
+</div>
+
+<!-- Shared training quiz: configured for whichever game is active -->
 <div id="quiz-view" class="view-section">
     <div class="quiz-container">
         <div id="quiz-setup" class="quiz-setup">
-            <h2 style="color: #ffffff; font-size: 24px; text-transform: uppercase;">Evrima Call Training</h2>
+            <h2 id="quiz-title" style="color: #ffffff; font-size: 24px; text-transform: uppercase;">Evrima Call Training</h2>
             <p style="color: #728f80; margin-bottom: 10px;">Configure your training and press <strong>Start Quiz</strong> when ready.</p>
             <div class="quiz-setting-row">
                 <div class="quiz-setting">
@@ -509,19 +526,19 @@
             </div>
             <div class="quiz-setting-row" style="padding-top: 10px; border: none;">
                 <div class="quiz-setting">
-                    <span>Diets to Include</span>
+                    <span id="quiz-group-heading">Diets to Include</span>
                     <div class="checkbox-group">
-                        <label><input type="checkbox" id="toggle-herbs" checked> Herbivores</label>
-                        <label><input type="checkbox" id="toggle-carns" checked> Carnivores</label>
-                        <label><input type="checkbox" id="toggle-omnis" checked> Omnivores</label>
+                        <label><input type="checkbox" id="toggle-herbs" checked> <span id="quiz-group-0">Herbivores</span></label>
+                        <label><input type="checkbox" id="toggle-carns" checked> <span id="quiz-group-1">Carnivores</span></label>
+                        <label><input type="checkbox" id="toggle-omnis" checked> <span id="quiz-group-2">Omnivores</span></label>
                     </div>
                 </div>
                 <div class="quiz-setting">
                     <span>Stages to Include</span>
                     <div class="checkbox-group">
-                        <label><input type="checkbox" id="toggle-juvie" checked> Juvie (25%)</label>
-                        <label><input type="checkbox" id="toggle-sub" checked> Sub (50%)</label>
-                        <label><input type="checkbox" id="toggle-adult" checked> Adult (75%)</label>
+                        <label><input type="checkbox" id="toggle-juvie" checked> <span id="quiz-stage-0">Juvie (25%)</span></label>
+                        <label><input type="checkbox" id="toggle-sub" checked> <span id="quiz-stage-1">Sub (50%)</span></label>
+                        <label><input type="checkbox" id="toggle-adult" checked> <span id="quiz-stage-2">Adult (75%)</span></label>
                     </div>
                 </div>
             </div>
@@ -542,21 +559,6 @@
             <div id="final-score" class="score-text">0 / 10</div>
             <div id="final-pun" class="pun-text"></div>
             <button class="action-btn" onclick="resetQuizUI()">Play Again</button>
-        </div>
-    </div>
-</div>
-</div>
-
-<div id="legacy-game" class="game-section">
-    <div class="soundboard-grid" id="legacy-grid">
-        <div class="column-wrapper herb-column" id="legacy-herb-container">
-            <div class="column-title">Herbivores</div>
-        </div>
-        <div class="column-wrapper carn-column" id="legacy-carn-container">
-            <div class="column-title">Carnivores</div>
-        </div>
-        <div class="column-wrapper omni-column" id="legacy-ai-container">
-            <div class="column-title">AI</div>
         </div>
     </div>
 </div>
@@ -658,32 +660,40 @@
         saveSetting('darkMode', e.target.checked);
     });
 
+    // Evrima and Legacy are separate games, each with a Soundboard and a Training Quiz tab.
+    // The quiz screen is shared and reconfigured for whichever game is active.
+    let currentGame = 'evrima', currentTab = 'soundboard';
+
+    function render() {
+        const onQuiz = currentTab === 'quiz';
+        DOM.gameEvrima.classList.toggle('active', currentGame === 'evrima');
+        DOM.gameLegacy.classList.toggle('active', currentGame === 'legacy');
+        DOM.tabSoundboard.classList.toggle('active', !onQuiz);
+        DOM.tabQuiz.classList.toggle('active', onQuiz);
+        document.getElementById('evrima-game').classList.toggle('active', !onQuiz && currentGame === 'evrima');
+        document.getElementById('legacy-game').classList.toggle('active', !onQuiz && currentGame === 'legacy');
+        document.getElementById('quiz-view').classList.toggle('active', onQuiz);
+        document.body.classList.toggle('legacy-open', currentGame === 'legacy');
+        document.body.classList.toggle('quiz-open', onQuiz);
+        applyQuizConfig();
+    }
+
     function switchTab(tabName) {
-        if (isQuizActive && tabName === 'soundboard') {
-            alert("Finish your training first!");
-            return;
-        }
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        if (tabName === 'soundboard') DOM.tabSoundboard.classList.add('active');
-        else DOM.tabQuiz.classList.add('active');
-        document.querySelectorAll('.view-section').forEach(view => view.classList.remove('active'));
-        document.getElementById(tabName + '-view').classList.add('active');
-        document.body.classList.toggle('quiz-open', tabName === 'quiz');
+        if (isQuizActive) return;
+        currentTab = tabName;
         stopAudio();
+        render();
     }
     DOM.tabSoundboard.addEventListener('click', () => switchTab('soundboard'));
     DOM.tabQuiz.addEventListener('click', () => switchTab('quiz'));
 
-    // Evrima and Legacy are separate soundboards; only one is ever shown
     function switchGame(game) {
         if (isQuizActive) return;
-        DOM.gameEvrima.classList.toggle('active', game === 'evrima');
-        DOM.gameLegacy.classList.toggle('active', game === 'legacy');
-        document.getElementById('evrima-game').classList.toggle('active', game === 'evrima');
-        document.getElementById('legacy-game').classList.toggle('active', game === 'legacy');
-        document.body.classList.toggle('legacy-open', game === 'legacy');
+        currentGame = game;
         stopAudio();
         if (game === 'legacy') loadLegacy();
+        resetQuizUI();
+        render();
         saveSetting('game', game);
     }
     DOM.gameEvrima.addEventListener('click', () => switchGame('evrima'));
@@ -854,18 +864,20 @@
     // [file type, button label, in-game key]
     const legacyCallTypes = [["Broadcast", "Broadcast", "1"], ["Attract", "Friendly", "2"], ["Threaten", "Threaten", "3"], ["Danger", "Danger", "4"], ["Generic", "Generic", "F"]];
 
-    let legacyLoaded = false;
-    async function loadLegacy() {
-        if (legacyLoaded) return;
-        legacyLoaded = true;
-        try {
-            const res = await fetch('audio/legacy/manifest.json');
-            if (!res.ok) throw new Error(res.status);
-            buildLegacyCards(await res.json());
-        } catch (err) {
-            legacyLoaded = false;
-            DOM.legacyGrid.insertAdjacentHTML('afterbegin', '<p class="load-error">Could not load the Legacy calls. Refresh the page to try again.</p>');
+    // Loads the manifest once; the soundboard and the quiz both use it
+    let legacyManifest = null, legacyLoading = null;
+    function loadLegacy() {
+        if (!legacyLoading) {
+            legacyLoading = fetch('audio/legacy/manifest.json')
+                .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
+                .then(manifest => { legacyManifest = manifest; buildLegacyCards(manifest); return manifest; })
+                .catch(err => {
+                    legacyLoading = null;
+                    DOM.legacyGrid.insertAdjacentHTML('afterbegin', '<p class="load-error">Could not load the Legacy calls. Refresh the page to try again.</p>');
+                    return null;
+                });
         }
+        return legacyLoading;
     }
 
     function buildLegacyCards(manifest) {
@@ -898,42 +910,106 @@
         });
     }
 
-    if (savedSettings.game === 'legacy') switchGame('legacy');
-
     let currentQuizPool = [], currentQuestionIndex = 0, score = 0;
     let attemptsConfig = 3, currentAttemptsLeft = 3, isQuestionLocked = false, quizTimer = null;
 
-    function startQuiz() {
-        const activeDinos = [...(document.getElementById('toggle-herbs').checked ? dinos.herbs : []), ...(document.getElementById('toggle-carns').checked ? dinos.carns : []), ...(document.getElementById('toggle-omnis').checked ? dinos.omnis : [])];
-        const activeStages = [...(document.getElementById('toggle-juvie').checked ? ["25"] : []), ...(document.getElementById('toggle-sub').checked ? ["50"] : []), ...(document.getElementById('toggle-adult').checked ? ["75"] : [])];
-        if (activeDinos.length === 0 || activeStages.length === 0) return alert("Select at least one Diet and Stage!");
-        
-        isQuizActive = true;
-        DOM.tabSoundboard.disabled = true;
-        DOM.gameLegacy.disabled = true;
-
-        let possibleCalls = [];
-        
-        activeDinos.forEach(dinoItem => {
-            const dino = typeof dinoItem === 'string' ? dinoItem : dinoItem.name;
-            
-            activeStages.forEach(s => {
-                calls.forEach(c => {
-                    possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call 1` });
-                    possibleCalls.push({ species: dino, file: `${dino} ${s} ${c} Call 2` });
-                });
-
-                if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[s]) {
-                    dinoItem.specialCalls[s].forEach(sc => {
-                        possibleCalls.push({ species: dino, file: `${dino} ${s} ${sc.file}` });
+    // Per-game quiz setup. Each buildPool gets the three group and three stage checkbox states
+    // and returns every possible call as { species, file }.
+    const quizConfigs = {
+        evrima: {
+            title: 'Evrima Call Training',
+            groupHeading: 'Diets to Include',
+            groups: ['Herbivores', 'Carnivores', 'Omnivores'],
+            stages: ['Juvie (25%)', 'Sub (50%)', 'Adult (75%)'],
+            buildPool(groupOn, stageOn) {
+                const pool = [];
+                const groupDinos = [dinos.herbs, dinos.carns, dinos.omnis].filter((g, i) => groupOn[i]).flat();
+                const stageNums = ['25', '50', '75'].filter((s, i) => stageOn[i]);
+                groupDinos.forEach(dinoItem => {
+                    const dino = typeof dinoItem === 'string' ? dinoItem : dinoItem.name;
+                    stageNums.forEach(s => {
+                        calls.forEach(c => {
+                            pool.push({ species: dino, file: `${dino} ${s} ${c} Call 1` });
+                            pool.push({ species: dino, file: `${dino} ${s} ${c} Call 2` });
+                        });
+                        if (typeof dinoItem === 'object' && dinoItem.specialCalls && dinoItem.specialCalls[s]) {
+                            dinoItem.specialCalls[s].forEach(sc => pool.push({ species: dino, file: `${dino} ${s} ${sc.file}` }));
+                        }
                     });
-                }
-            });
-        });
-        
+                });
+                return pool;
+            }
+        },
+        legacy: {
+            title: 'Legacy Call Training',
+            groupHeading: 'Groups to Include',
+            groups: ['Herbivores', 'Carnivores', 'AI'],
+            stages: ['Juvenile', 'Sub-Adult', 'Adult'],
+            buildPool(groupOn, stageOn) {
+                const pool = [];
+                const diets = ['herb', 'carn', 'ai'].filter((d, i) => groupOn[i]);
+                const stageKeys = ['Juvenile', 'Subadult', 'Adult'].filter((s, i) => stageOn[i]);
+                Object.keys(legacyManifest || {}).forEach(folder => {
+                    const [name, , diet] = legacySpecies[folder] || [folder, '', 'carn'];
+                    if (!diets.includes(diet)) return;
+                    stageKeys.forEach(stage => {
+                        const counts = legacyManifest[folder][stage];
+                        if (!counts) return;
+                        Object.keys(counts).forEach(type => {
+                            for (let i = 1; i <= counts[type]; i++) pool.push({ species: name, file: `legacy/${folder} ${stage} ${type} ${i}` });
+                        });
+                    });
+                });
+                return pool;
+            }
+        }
+    };
+
+    function applyQuizConfig() {
+        const cfg = quizConfigs[currentGame];
+        document.getElementById('quiz-title').textContent = cfg.title;
+        document.getElementById('quiz-group-heading').textContent = cfg.groupHeading;
+        cfg.groups.forEach((label, i) => { document.getElementById(`quiz-group-${i}`).textContent = label; });
+        cfg.stages.forEach((label, i) => { document.getElementById(`quiz-stage-${i}`).textContent = label; });
+    }
+
+    // Pick questions species-first so a dino with many recorded calls (e.g. Legacy Rex) isn't over-represented
+    function pickQuestions(pool, length) {
+        const bySpecies = {};
+        pool.forEach(c => (bySpecies[c.species] = bySpecies[c.species] || []).push(c));
+        Object.values(bySpecies).forEach(shuffle);
+        const picked = [];
+        while (picked.length < length) {
+            const remaining = shuffle(Object.keys(bySpecies).filter(s => bySpecies[s].length));
+            if (remaining.length === 0) break;
+            for (const s of remaining) {
+                if (picked.length >= length) break;
+                picked.push(bySpecies[s].pop());
+            }
+        }
+        return shuffle(picked);
+    }
+
+    function setQuizLock(locked) {
+        isQuizActive = locked;
+        DOM.tabSoundboard.disabled = locked;
+        DOM.gameEvrima.disabled = locked;
+        DOM.gameLegacy.disabled = locked;
+    }
+
+    async function startQuiz() {
+        const groupOn = ['toggle-herbs', 'toggle-carns', 'toggle-omnis'].map(id => document.getElementById(id).checked);
+        const stageOn = ['toggle-juvie', 'toggle-sub', 'toggle-adult'].map(id => document.getElementById(id).checked);
+        if (!groupOn.includes(true) || !stageOn.includes(true)) return alert("Select at least one group and one stage!");
+        if (currentGame === 'legacy' && !(await loadLegacy())) return alert("Couldn't load the Legacy calls. Refresh the page and try again.");
+
+        const possibleCalls = quizConfigs[currentGame].buildPool(groupOn, stageOn);
+        if (possibleCalls.length === 0) return alert("No calls match those choices. Try adding another stage or group.");
+
+        setQuizLock(true);
         DOM.guessGrid.innerHTML = '';
-        
-        const activeNames = activeDinos.map(d => typeof d === 'string' ? d : d.name);
+
+        const activeNames = [...new Set(possibleCalls.map(c => c.species))];
         activeNames.sort().forEach(dino => {
             const btn = document.createElement('button');
             btn.className = 'guess-btn';
@@ -947,7 +1023,7 @@
         
         let length = Math.min(parseInt(document.getElementById('quizLength').value), possibleCalls.length);
         attemptsConfig = parseInt(document.getElementById('quizAttempts').value);
-        currentQuizPool = shuffle([...possibleCalls]).slice(0, length);
+        currentQuizPool = pickQuestions(possibleCalls, length);
         currentQuestionIndex = 0;
         score = 0;
         loadQuestion();
@@ -1015,9 +1091,7 @@
     }
 
     function showResults() {
-        isQuizActive = false;
-        DOM.tabSoundboard.disabled = false;
-        DOM.gameLegacy.disabled = false;
+        setQuizLock(false);
         DOM.quizActive.style.display = 'none';
         DOM.quizResults.style.display = 'flex';
         DOM.finalScore.innerText = `${score} / ${currentQuizPool.length}`;
@@ -1035,9 +1109,7 @@
     function quitQuiz() {
         clearTimeout(quizTimer);
         stopAudio();
-        isQuizActive = false;
-        DOM.tabSoundboard.disabled = false;
-        DOM.gameLegacy.disabled = false;
+        setQuizLock(false);
         DOM.quizActive.style.display = 'none';
         resetQuizUI();
     }
@@ -1046,6 +1118,8 @@
         DOM.quizResults.style.display = 'none';
         DOM.quizSetup.style.display = 'flex';
     }
+
+    if (savedSettings.game === 'legacy') switchGame('legacy');
 </script>
 </body>
 </html>
