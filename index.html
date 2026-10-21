@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evrima Soundboard | Noobz</title>
     <meta name="description" content="A community soundboard for The Isle: Evrima, featuring dinosaur calls, a training quiz, and Noobz server links.">
     <link rel="canonical" href="https://dinocalls.com/">
@@ -21,6 +21,7 @@
     <style>
         /* Global Theme */
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        [hidden] { display: none !important; }
         html, body { background-color: #1a2520; min-height: 100vh; transition: background-color 0.3s ease; }
         body { color: #d8e3dd; font-family: 'Century Gothic', 'Segoe UI', Arial, sans-serif; font-size: 13px; padding: 15px; overflow-x: hidden; display: flex; flex-direction: column; }
 
@@ -165,6 +166,11 @@
         .guess-btn { background-color: #1b2822; border: 1px solid #283a32; color: #ffffff; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .guess-btn:hover { background-color: #2a4734; border-color: #4ade80; }
         .guess-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .guess-btn.is-correct { background-color: #27a35b; border-color: #27a35b; }
+        .guess-btn.is-wrong { background-color: #4a2727; border-color: #5a3030; }
+
+        .quit-btn { background: none; border: 1px solid #3a433f; color: #728f80; padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
+        .quit-btn:hover { border-color: #d6a5a5; color: #d6a5a5; }
 
         .quiz-feedback { font-size: 18px; font-weight: bold; min-height: 24px; margin-top: 10px; text-align: center; }
         .feedback-correct { color: #4ade80; }
@@ -196,6 +202,7 @@
         /* DARK MODE */
         body.dark-mode { background-color: #000000; }
         body.dark-mode .discord-banner, body.dark-mode .controls-bar, body.dark-mode .column-wrapper, body.dark-mode .quiz-container, body.dark-mode .tab-btn { background-color: #080c0a; border-color: #141d19; }
+        body.dark-mode .tab-btn.active { background-color: #1f8549; border-color: #1f8549; color: #ffffff; }
         body.dark-mode .quiz-header, body.dark-mode .quiz-setting-row { border-color: #141d19; }
         body.dark-mode .img-placeholder { background-color: #050806; border-color: #1a2520; }
         body.dark-mode .quiz-setting select, body.dark-mode .checkbox-group { background-color: #050806; border-color: #141d19; }
@@ -204,6 +211,11 @@
         body.dark-mode .dino-panel { background-color: #050806; border-top-color: #141d19; }
         body.dark-mode .stage-row { border-bottom-color: #141d19; }
         body.dark-mode.show-info .stage-row { background-color: #0a0e0c; }
+        body.dark-mode .guess-btn, body.dark-mode .play-mystery-btn { background-color: #0d1411; border-color: #1a2520; }
+        body.dark-mode .play-mystery-btn { border-color: #4ade80; }
+        body.dark-mode .guess-btn:hover:not(:disabled) { background-color: #1a2a20; border-color: #4ade80; }
+        body.dark-mode .guess-btn.is-correct { background-color: #1f8549; border-color: #1f8549; }
+        body.dark-mode .guess-btn.is-wrong { background-color: #2a1a1a; border-color: #3a2020; }
 
         body.dark-mode #herb-container .dino-card.active.age-0 .dino-toggle { background-color: #1a2a20 !important; }
         body.dark-mode #herb-container .dino-card.active.age-1 .dino-toggle { background-color: #142018 !important; }
@@ -283,8 +295,9 @@
                 <span class="slider"></span>
             </label>
         </div>
-        <div class="spacer"></div>
-        <div class="toggle-wrapper">
+        <!-- Details toggle hidden until the dino descriptions are written; remove `hidden` to bring it back -->
+        <div class="spacer" hidden></div>
+        <div class="toggle-wrapper" hidden>
             <label for="infoToggle">Details [Under Construction]</label>
             <label class="switch">
                 <input type="checkbox" id="infoToggle">
@@ -362,6 +375,7 @@
                 <span id="quiz-progress-text">Question 1 of 10</span>
                 <span id="quiz-attempts-text" class="attempts-text">Attempts Left: 3</span>
             </div>
+            <button class="quit-btn" onclick="quitQuiz()">Quit Quiz</button>
             <button class="play-mystery-btn" onclick="playMysteryCall()">🔊 Play Mystery Call</button>
             <div id="quiz-feedback" class="quiz-feedback"></div>
             <div id="guess-grid" class="guess-grid"></div>
@@ -415,8 +429,28 @@
         tabQuiz: document.getElementById('tab-quiz')
     };
 
+    // Saved settings (localStorage can be unavailable in private windows, so every access is guarded)
+    const SETTINGS_KEY = 'evrimaSoundboardSettings';
+    function loadSettings() {
+        try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch { return {}; }
+    }
+    function saveSetting(key, value) {
+        try {
+            const settings = loadSettings();
+            settings[key] = value;
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+        } catch {}
+    }
+
+    const savedSettings = loadSettings();
+    if (typeof savedSettings.volume === 'string') DOM.volume.value = savedSettings.volume;
+    DOM.altCallToggle.checked = !!savedSettings.altCalls;
+    DOM.darkModeToggle.checked = !!savedSettings.darkMode;
+    document.body.classList.toggle('show-alt-calls', DOM.altCallToggle.checked);
+    document.body.classList.toggle('dark-mode', DOM.darkModeToggle.checked);
+
     let isQuizActive = false;
-    let activeAudio = new Audio(); 
+    let activeAudio = new Audio();
     let currentVolume = DOM.volume.value;
 
     const openCardQueues = {};
@@ -424,10 +458,12 @@
     DOM.volume.addEventListener('input', e => {
         currentVolume = e.target.value;
         activeAudio.volume = currentVolume;
+        saveSetting('volume', currentVolume);
     });
 
     DOM.altCallToggle.addEventListener('change', e => {
         document.body.classList.toggle('show-alt-calls', e.target.checked);
+        saveSetting('altCalls', e.target.checked);
     });
 
     DOM.infoToggle.addEventListener('change', e => {
@@ -436,6 +472,7 @@
 
     DOM.darkModeToggle.addEventListener('change', e => {
         document.body.classList.toggle('dark-mode', e.target.checked);
+        saveSetting('darkMode', e.target.checked);
     });
 
     function switchTab(tabName) {
@@ -567,7 +604,7 @@
     });
 
     let currentQuizPool = [], currentQuestionIndex = 0, score = 0;
-    let attemptsConfig = 3, currentAttemptsLeft = 3, isQuestionLocked = false;
+    let attemptsConfig = 3, currentAttemptsLeft = 3, isQuestionLocked = false, quizTimer = null;
 
     function startQuiz() {
         const activeDinos = [...(document.getElementById('toggle-herbs').checked ? dinos.herbs : []), ...(document.getElementById('toggle-carns').checked ? dinos.carns : []), ...(document.getElementById('toggle-omnis').checked ? dinos.omnis : [])];
@@ -612,7 +649,7 @@
         
         let length = Math.min(parseInt(document.getElementById('quizLength').value), possibleCalls.length);
         attemptsConfig = parseInt(document.getElementById('quizAttempts').value);
-        currentQuizPool = [...possibleCalls].sort(() => 0.5 - Math.random()).slice(0, length);
+        currentQuizPool = shuffle([...possibleCalls]).slice(0, length);
         currentQuestionIndex = 0;
         score = 0;
         loadQuestion();
@@ -627,10 +664,22 @@
         DOM.feedback.className = 'quiz-feedback';
         DOM.guessGrid.querySelectorAll('.guess-btn').forEach(btn => {
             btn.disabled = false;
-            btn.style.backgroundColor = '#1b2822';
-            btn.style.borderColor = '#283a32';
+            btn.classList.remove('is-correct', 'is-wrong');
         });
-        setTimeout(playMysteryCall, 500);
+        quizTimer = setTimeout(playMysteryCall, 500);
+    }
+
+    // Fisher-Yates: every call has an equal chance of landing in the quiz
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function withArticle(name) {
+        return (/^[aeiou]/i.test(name) ? 'an ' : 'a ') + name;
     }
 
     function updateAttemptsUI() {
@@ -644,19 +693,19 @@
         if (guessed === currentQuizPool[currentQuestionIndex].species) {
             isQuestionLocked = true;
             score++;
-            btn.style.backgroundColor = '#27a35b';
+            btn.classList.add('is-correct');
             DOM.feedback.innerText = "Correct!";
             DOM.feedback.className = 'quiz-feedback feedback-correct';
-            setTimeout(advanceQuiz, 1500);
+            quizTimer = setTimeout(advanceQuiz, 1500);
         } else {
             currentAttemptsLeft--;
             btn.disabled = true;
-            btn.style.backgroundColor = '#4a2727';
+            btn.classList.add('is-wrong');
             if (currentAttemptsLeft <= 0) {
                 isQuestionLocked = true;
-                DOM.feedback.innerText = `It was a ${currentQuizPool[currentQuestionIndex].species}.`;
+                DOM.feedback.innerText = `It was ${withArticle(currentQuizPool[currentQuestionIndex].species)}.`;
                 DOM.feedback.className = 'quiz-feedback feedback-wrong';
-                setTimeout(advanceQuiz, 2500);
+                quizTimer = setTimeout(advanceQuiz, 2500);
             } else updateAttemptsUI();
         }
     }
@@ -673,7 +722,24 @@
         DOM.quizActive.style.display = 'none';
         DOM.quizResults.style.display = 'flex';
         DOM.finalScore.innerText = `${score} / ${currentQuizPool.length}`;
-        DOM.finalPun.innerText = score === currentQuizPool.length ? "Apex Predator!" : "Keep studying!";
+        DOM.finalPun.innerText = resultMessage(score / currentQuizPool.length);
+    }
+
+    function resultMessage(ratio) {
+        if (ratio === 1) return "Apex Predator! Perfect score.";
+        if (ratio >= 0.8) return "Pack Leader! Nearly flawless.";
+        if (ratio >= 0.5) return "Seasoned Survivor. Not bad at all.";
+        if (ratio >= 0.25) return "Still a Hatchling. Keep listening!";
+        return "Easy Prey... Back to the soundboard!";
+    }
+
+    function quitQuiz() {
+        clearTimeout(quizTimer);
+        activeAudio.pause();
+        isQuizActive = false;
+        DOM.tabSoundboard.disabled = false;
+        DOM.quizActive.style.display = 'none';
+        resetQuizUI();
     }
 
     function resetQuizUI() {
