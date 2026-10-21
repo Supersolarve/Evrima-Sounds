@@ -440,8 +440,8 @@
         <div class="column-wrapper carn-column" id="legacy-carn-container">
             <div class="column-title">Carnivores</div>
         </div>
-        <div class="column-wrapper omni-column" id="legacy-omni-container">
-            <div class="column-title">Omnivores</div>
+        <div class="column-wrapper omni-column" id="legacy-ai-container">
+            <div class="column-title">AI</div>
         </div>
     </div>
 </div>
@@ -719,20 +719,20 @@
     const legacySpecies = {
         Acro: ["Acro", "Acrocanthosaurus", "carn"], Albertosaurus: ["Alberto", "Albertosaurus", "carn"],
         Allosaurus: ["Allo", "Allosaurus", "carn"], Ankylosaurus: ["Anky", "Ankylosaurus", "herb"],
-        Austro: ["Austro", "Austroraptor", "carn"], Ava: ["Ava", "Avaceratops", "herb"],
+        Austro: ["Austro", "Austroraptor", "carn"], Ava: ["Ava", "Avaceratops", "ai"],
         Baryonyx: ["Bary", "Baryonyx", "carn"], Camaro: ["Camara", "Camarasaurus", "herb"],
         Carno: ["Carno", "Carnotaurus", "carn"], Cerato: ["Cerato", "Ceratosaurus", "carn"],
         Diablo: ["Diablo", "Diabloceratops", "herb"], Dilophosaurus: ["Dilo", "Dilophosaurus", "carn"],
-        Dryos: ["Dryo", "Dryosaurus", "herb"], Galli: ["Galli", "Gallimimus", "omni"],
+        Dryos: ["Dryo", "Dryosaurus", "herb"], Galli: ["Galli", "Gallimimus", "herb"],
         Giga: ["Giga", "Giganotosaurus", "carn"], Herrera: ["Herrera", "Herrerasaurus", "carn"],
-        Maia: ["Maia", "Maiasaura", "herb"], Orodromeus: ["Oro", "Orodromeus", "herb"],
+        Maia: ["Maia", "Maiasaura", "herb"], Orodromeus: ["Oro", "Orodromeus", "ai"],
         Pachy: ["Pachy", "Pachycephalosaurus", "herb"], Parasaurolophus: ["Para", "Parasaurolophus", "herb"],
-        Psittaco: ["Psittaco", "Psittacosaurus", "herb"], Puerta: ["Puerta", "Puertasaurus", "herb"],
+        Psittaco: ["Psittaco", "Psittacosaurus", "ai"], Puerta: ["Puerta", "Puertasaurus", "herb"],
         Quetz: ["Quetz", "Quetzalcoatlus", "carn"], Rex: ["Rex", "Tyrannosaurus", "carn"],
         Shantu: ["Shant", "Shantungosaurus", "herb"], Spinosaurus: ["Spino", "Spinosaurus", "carn"],
         Stego: ["Stego", "Stegosaurus", "herb"], Sucho: ["Sucho", "Suchomimus", "carn"],
         Therizino: ["Theri", "Therizinosaurus", "herb"], Triceratops: ["Trike", "Triceratops", "herb"],
-        Utahraptor: ["Utah", "Utahraptor", "carn"], Velociraptor: ["Velo", "Velociraptor", "carn"]
+        Utahraptor: ["Utah", "Utahraptor", "carn"], Velociraptor: ["Velo", "Velociraptor", "ai"]
     };
     const legacyStages = [["Juvenile", "Juvenile"], ["Subadult", "Sub-Adult"], ["Adult", "Adult"]];
     const legacyCallTypes = [["Broadcast", "Broadcast"], ["Attract", "Friendly"], ["Threaten", "Threaten"], ["Danger", "Danger"], ["Generic", "Generic"]];
@@ -773,8 +773,10 @@
             }).join('');
 
             const full = fullName && fullName !== name ? `<span class="dino-fullname">${fullName}</span>` : '';
+            // The AI column reuses the purple omnivore styling
+            const cardStyle = diet === 'ai' ? 'omni' : diet;
             document.getElementById(`legacy-${diet}-container`).insertAdjacentHTML('beforeend',
-                `<div class="dino-card ${diet}"><button class="dino-toggle"><span class="dino-name">${name}${full}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`);
+                `<div class="dino-card ${cardStyle}"><button class="dino-toggle"><span class="dino-name">${name}${full}</span><span class="arrow">▼</span></button><div class="dino-panel">${stagesHtml}</div></div>`);
         });
     }
 
