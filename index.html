@@ -715,12 +715,19 @@
 
     // --- Languages (strings live in lang.js) ---
     // ?lang= in the URL first, then the saved choice, then the browser's language, then English.
-    // Pirate is never picked automatically: it only appears after tapping the title logo 5 times.
+    // Pirate is never picked automatically or remembered between visits:
+    // it only appears after tapping the title logo 5 times, and only for that visit.
     const urlLang = new URLSearchParams(location.search).get('lang');
-    let pirateUnlocked = !!savedSettings.pirate;
+    let pirateUnlocked = false;
+    if ('pirate' in savedSettings || savedSettings.lang === 'pirate') {
+        // Forget Pirate unlocks saved by older versions of the site
+        delete savedSettings.pirate;
+        if (savedSettings.lang === 'pirate') delete savedSettings.lang;
+        try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(savedSettings)); } catch {}
+    }
     let lang = (() => {
-        if (urlLang && I18N.strings[urlLang] && (urlLang !== 'pirate' || pirateUnlocked)) return urlLang;
-        if (savedSettings.lang && I18N.strings[savedSettings.lang] && (savedSettings.lang !== 'pirate' || pirateUnlocked)) return savedSettings.lang;
+        if (urlLang && urlLang !== 'pirate' && I18N.strings[urlLang]) return urlLang;
+        if (savedSettings.lang && I18N.strings[savedSettings.lang]) return savedSettings.lang;
         const browser = (navigator.language || 'en').slice(0, 2).toLowerCase();
         return I18N.strings[browser] ? browser : 'en';
     })();
@@ -764,7 +771,7 @@
     function setLanguage(code) {
         lang = code;
         langSelect.value = code;
-        saveSetting('lang', code);
+        if (code !== 'pirate') saveSetting('lang', code); // Pirate lasts only for this visit
         applyLanguage();
         rebuildBoards();
         applyQuizConfig();
@@ -776,7 +783,6 @@
         if (!I18N.strings.pirate) return; // outdated lang.js without the pirate strings
         if (!pirateUnlocked) {
             pirateUnlocked = true;
-            saveSetting('pirate', true);
             fillLangSelect();
         }
         if (lang !== 'pirate') setLanguage('pirate');

@@ -4,7 +4,7 @@ window.I18N = {
     languages: {
         en: 'English', es: 'Español', pt: 'Português', fr: 'Français', de: 'Deutsch', ru: 'Русский', pl: 'Polski'
     },
-    // Easter egg: only listed once unlocked (tap the title logo 5 times within 3 seconds)
+    // Easter egg: only listed once unlocked (tap the title logo 5 times within 3 seconds; lasts for that visit only)
     hiddenLanguages: {
         pirate: '🏴‍☠️ Pirate'
     },
